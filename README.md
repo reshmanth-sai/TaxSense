@@ -1,7 +1,7 @@
 <div align="center">
 
   <br />
-  <img src="https://raw.githubusercontent.com/reshmanth-sai/TaxSense-2.0/main/public/favicon.svg" alt="TaxSense Logo" width="84" height="84" />
+  <img src="https://raw.githubusercontent.com/reshmanth-sai/TaxSense/main/public/favicon.svg" alt="TaxSense Logo" width="84" height="84" />
   <br />
 
   # TaxSense
@@ -12,8 +12,8 @@
   </p>
 
   <p align="center">
-    <a href="https://github.com/reshmanth-sai/TaxSense-2.0">
-      <img src="https://img.shields.io/badge/GitHub-reshmanth--sai%2FTaxSense--2.0-181717?logo=github&logoColor=white" alt="GitHub Repository" />
+    <a href="https://github.com/reshmanth-sai/TaxSense">
+      <img src="https://img.shields.io/badge/GitHub-reshmanth--sai%2FTaxSense-181717?logo=github&logoColor=white" alt="GitHub Repository" />
     </a>
     <a href="https://react.dev">
       <img src="https://img.shields.io/badge/React-19.0-blue?logo=react&logoColor=white" alt="React 19" />
@@ -31,7 +31,7 @@
 
   <br />
 
-  <img src="docs/assets/dashboard.png" alt="TaxSense 2.0 Command Center Dashboard" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); shadow: 0 20px 50px rgba(0,0,0,0.5);" />
+  <img src="docs/assets/dashboard.png" alt="TaxSense Command Center Dashboard" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); shadow: 0 20px 50px rgba(0,0,0,0.5);" />
 
 </div>
 
@@ -66,7 +66,7 @@
 
 ## 🌐 Live Demo & Walkthrough
 
-- 🔗 **GitHub Repository**: [https://github.com/reshmanth-sai/TaxSense-2.0](https://github.com/reshmanth-sai/TaxSense-2.0)
+- 🔗 **GitHub Repository**: [https://github.com/reshmanth-sai/TaxSense](https://github.com/reshmanth-sai/TaxSense)
 - 🎥 **60-Second Walkthrough**: `docs/assets/walkthrough.gif`
 - 📸 **Interactive Dashboard Preview**: `docs/assets/dashboard.png`
 - 📄 **Sample Form 16 PDF**: `docs/samples/sample_form16.pdf`
@@ -288,8 +288,8 @@ TaxSense is engineered with privacy as a foundational constraint:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/reshmanth-sai/TaxSense-2.0.git
-cd TaxSense-2.0
+git clone https://github.com/reshmanth-sai/TaxSense.git
+cd TaxSense
 ```
 
 ### Step 2: Install Dependencies
@@ -406,5 +406,5 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
 ---
 
 <div align="center">
-  <sub>Made with ❤️ for Indian Taxpayers • <a href="https://github.com/reshmanth-sai/TaxSense-2.0">TaxSense 2.0 Repository</a></sub>
+  <sub>Made with ❤️ for Indian Taxpayers • <a href="https://github.com/reshmanth-sai/TaxSense">TaxSense Repository</a></sub>
 </div>

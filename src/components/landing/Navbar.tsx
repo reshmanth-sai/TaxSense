@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
   const moreLinks = [
     { id: 'tipping-point', label: 'AY 2026-27 Rules' },
     { id: 'faq', label: 'FAQs & Compliance' },
-    { href: 'https://github.com/reshmanth-sai/TaxSense-2.0', label: 'GitHub Repository', external: true },
+    { href: 'https://github.com/reshmanth-sai/TaxSense', label: 'GitHub Repository', external: true },
   ];
 
   return (
