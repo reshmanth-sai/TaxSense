@@ -187,7 +187,7 @@ export const FilingReviewCard: React.FC<FilingReviewCardProps> = React.memo(({ o
         <div className="mt-6 max-w-lg mx-auto bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
           <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">Estimated Tax Savings</span>
           <div className="my-2">
-            <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 dark:from-[#34D399] dark:via-emerald-400 dark:to-cyan-400 font-mono tracking-tight">
+            <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-[#34D399] dark:via-emerald-400 dark:to-cyan-400 font-mono tracking-tight privacy-blur">
               <AnimatedCounter value={savingsAmount} />
             </span>
           </div>

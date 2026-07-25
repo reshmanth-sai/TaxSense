@@ -19,8 +19,6 @@ import {
   RefundFinderWidget
 } from './landing';
 
-import { CTCEfficiencyScorecard } from './dashboard/CTCEfficiencyScorecard';
-
 interface LandingPageProps {
   onStart: () => void;
 }
@@ -92,7 +90,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
     { id: 'tipping-point', label: 'Tipping Point' },
     { id: 'interactive-showcase', label: 'Tax Calculator' },
     { id: 'refund-finder', label: 'Refund Finder' },
-    { id: 'ctc-scorecard', label: 'Flexi Basket' },
     { id: 'journey', label: 'How It Works' },
     { id: 'copilot', label: 'AI Copilot' },
     { id: 'security', label: 'Security' },
@@ -489,14 +486,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         </LazySection>
       </div>
 
-      {/* SECTION 6: CTC FLEXI BASKET SCORECARD (NEW) */}
-      <div id="ctc-scorecard" className="w-full">
-        <LazySection>
-          <CTCEfficiencyScorecard />
-        </LazySection>
-      </div>
-
-      {/* SECTION 7: 4-STEP JOURNEY */}
+      {/* SECTION 6: 4-STEP JOURNEY */}
       <div id="journey" className="w-full">
         <LazySection>
           <JourneySection />

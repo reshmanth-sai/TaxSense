@@ -126,6 +126,16 @@ export interface UserProfile {
   createdAt: string;
 }
 
+export interface TaxProfile {
+  id: string;
+  name: string;
+  relation: 'Self' | 'Spouse' | 'Parent' | 'Dependent';
+  pan?: string;
+  incomeProfile: IncomeProfile;
+  confirmedDeductions: ConfirmedDeductions;
+  uploadedFiles: UploadedFile[];
+}
+
 export type CurrentStep = 'HOME' | 'LANDING' | 'CONFIRM_EXTRACTION' | 'CHAT_QA' | 'FINAL_EXPORT';
 
 export interface TaxStoreState {
@@ -147,6 +157,14 @@ export interface TaxStoreState {
   ingestionState: 'IDLE' | 'UPLOADING' | 'OCR' | 'EXTRACTING' | 'VERIFYING' | 'GENERATING_RETURN' | 'COMPLETED';
   incognito: boolean;
   isFloatingAIChatOpen: boolean;
+
+  taxProfiles: TaxProfile[];
+  activeProfileId: string;
+  switchProfile: (profileId: string) => void;
+  addTaxProfile: (profile: TaxProfile) => void;
+
+  isPrivacyBlurred: boolean;
+  togglePrivacyBlur: () => void;
 
   
   addUploadedFile: (file: UploadedFile) => void;
@@ -252,9 +270,112 @@ I have preloaded a typical salaried profile to start. How can I help you save ta
   }
 ];
 
+const defaultTaxProfiles: TaxProfile[] = [
+  {
+    id: 'self',
+    name: 'Mohit Kumar',
+    relation: 'Self',
+    pan: 'MK*****32F',
+    incomeProfile: defaultIncomeProfile,
+    confirmedDeductions: defaultConfirmedDeductions,
+    uploadedFiles: defaultUploadedFiles
+  },
+  {
+    id: 'spouse',
+    name: 'Priya Sharma',
+    relation: 'Spouse',
+    pan: 'PS*****88A',
+    incomeProfile: {
+      grossSalary: 1250000,
+      basicSalary: 500000,
+      hraReceived: 180000,
+      standardDeduction: 75000,
+      otherIncome: 25000,
+      employerName: 'Global Finance Corp',
+      employeeName: 'Priya Sharma',
+      pan: 'PS*****88A',
+      pfContribution: 60000,
+      tdsDeducted: 45000
+    },
+    confirmedDeductions: {
+      ...defaultConfirmedDeductions,
+      '80C': 150000,
+      '80D': 25000,
+      'HRA exemption': 120000
+    },
+    uploadedFiles: []
+  },
+  {
+    id: 'parent',
+    name: 'Rajesh Kumar',
+    relation: 'Parent',
+    pan: 'RK*****12P',
+    incomeProfile: {
+      grossSalary: 550000,
+      basicSalary: 220000,
+      hraReceived: 0,
+      standardDeduction: 75000,
+      otherIncome: 120000,
+      employerName: 'Senior Citizen Pension & Interest',
+      employeeName: 'Rajesh Kumar',
+      pan: 'RK*****12P',
+      pfContribution: 0,
+      tdsDeducted: 10000
+    },
+    confirmedDeductions: {
+      ...defaultConfirmedDeductions,
+      '80D': 50000,
+      '80TTB': 50000
+    },
+    uploadedFiles: []
+  }
+];
+
 export const useTaxStore = create<TaxStoreState>()(
   persist(
     (set) => ({
+      taxProfiles: defaultTaxProfiles,
+      activeProfileId: 'self',
+
+      switchProfile: (profileId) =>
+        set((state) => {
+          const target = state.taxProfiles.find((p) => p.id === profileId);
+          if (!target) return state;
+
+          // Sync current active profile state back into taxProfiles array
+          const updatedProfiles = state.taxProfiles.map((p) => {
+            if (p.id === state.activeProfileId) {
+              return {
+                ...p,
+                incomeProfile: state.incomeProfile,
+                confirmedDeductions: state.confirmedDeductions,
+                uploadedFiles: state.uploadedFiles,
+              };
+            }
+            return p;
+          });
+
+          return {
+            taxProfiles: updatedProfiles,
+            activeProfileId: profileId,
+            incomeProfile: target.incomeProfile,
+            confirmedDeductions: target.confirmedDeductions,
+            uploadedFiles: target.uploadedFiles,
+          };
+        }),
+
+      addTaxProfile: (newProfile) =>
+        set((state) => ({
+          taxProfiles: [...state.taxProfiles, newProfile],
+          activeProfileId: newProfile.id,
+          incomeProfile: newProfile.incomeProfile,
+          confirmedDeductions: newProfile.confirmedDeductions,
+          uploadedFiles: newProfile.uploadedFiles,
+        })),
+
+      isPrivacyBlurred: false,
+      togglePrivacyBlur: () => set((state) => ({ isPrivacyBlurred: !state.isPrivacyBlurred })),
+
       incomeProfile: defaultIncomeProfile,
       confirmedDeductions: defaultConfirmedDeductions,
       chatHistory: defaultChatHistory,

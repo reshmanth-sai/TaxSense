@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   CheckCircle,
@@ -83,14 +83,14 @@ export const DashboardCard: React.FC<ComponentProps & {
     const getVariantStyles = () => {
       switch (variant) {
         case 'secondary':
-          return 'bg-white/40 dark:bg-white/[0.01] border-slate-200/50 dark:border-white/[0.015] shadow-xs';
+          return 'bg-white/72 dark:bg-white/[0.01] border-slate-200/60 dark:border-white/[0.015] backdrop-blur-md shadow-xs';
         case 'accent-purple':
-          return 'bg-gradient-to-b from-purple-50/50 to-purple-100/30 dark:from-slate-900/40 dark:to-slate-950/30 border-purple-200/40 dark:border-purple-500/15 shadow-[0_8px_32px_0_rgba(168,85,247,0.015)]';
+          return 'bg-gradient-to-b from-purple-50/70 to-purple-100/40 dark:from-slate-900/40 dark:to-slate-950/30 border-purple-200/60 dark:border-purple-500/15 backdrop-blur-md shadow-[0_8px_32px_0_rgba(168,85,247,0.015)]';
         case 'accent-amber':
-          return 'bg-gradient-to-b from-amber-50/50 to-amber-100/30 dark:from-slate-900/30 dark:to-slate-950/20 border-amber-200/40 dark:border-amber-500/15 shadow-[0_8px_32px_0_rgba(245,158,11,0.015)]';
+          return 'bg-gradient-to-b from-amber-50/70 to-amber-100/40 dark:from-slate-900/30 dark:to-slate-950/20 border-amber-200/60 dark:border-amber-500/15 backdrop-blur-md shadow-[0_8px_32px_0_rgba(245,158,11,0.015)]';
         case 'primary':
         default:
-          return 'bg-white/40 dark:bg-slate-900/35 border-slate-200/50 dark:border-white/[0.04] shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)]';
+          return 'bg-white/75 dark:bg-slate-900/35 border-slate-200/60 dark:border-white/[0.04] backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.03)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.3)]';
       }
     };
 
@@ -182,9 +182,34 @@ export const ProgressWidget: React.FC<{
   checklist: Array<{ label: string; completed: boolean; stepNum: number }>;
 }> = ({ percentage, stepsRemaining, estimatedMinutes, checklist }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 select-none relative">
+    <div ref={containerRef} className="flex flex-col items-center justify-center p-2 select-none relative">
       <div className="relative w-24 h-24 filter drop-shadow-[0_0_8px_rgba(16,185,129,0.15)]">
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
           <defs>
@@ -218,7 +243,7 @@ export const ProgressWidget: React.FC<{
           <span className="text-base font-extrabold font-mono leading-none tracking-tight">
             {percentage}%
           </span>
-          <span className="text-[7px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold mt-1">
+          <span className="text-[7.5px] text-slate-700 dark:text-slate-300 uppercase tracking-widest font-extrabold mt-1">
             Complete
           </span>
         </div>
@@ -227,12 +252,12 @@ export const ProgressWidget: React.FC<{
       <div className="relative mt-3.5 flex flex-col items-center">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-[10px] text-slate-650 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 font-semibold tracking-normal cursor-pointer transition-colors flex items-center gap-1 focus:outline-none"
+          className="text-[10.5px] text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-bold tracking-normal cursor-pointer transition-colors flex items-center gap-1 focus:outline-none"
         >
           <span>{stepsRemaining} Steps Remaining</span>
-          <ChevronDown className={`w-3 h-3 opacity-50 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3 h-3 text-slate-600 dark:text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
-        <span className="text-[8.5px] text-slate-550 dark:text-slate-400 font-mono mt-0.5">Est. {estimatedMinutes} mins left</span>
+        <span className="text-[9px] text-slate-600 dark:text-slate-400 font-mono font-medium mt-0.5">Est. {estimatedMinutes} mins left</span>
 
         {/* Hover/Click Checklist Panel */}
         <AnimatePresence>
@@ -242,20 +267,20 @@ export const ProgressWidget: React.FC<{
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 5, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full mt-2 w-56 p-4 bg-white/95 dark:bg-slate-950/95 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 text-left space-y-3 backdrop-blur-md"
+              className="absolute top-full mt-2.5 right-0 md:right-auto md:left-1/2 md:-translate-x-1/2 w-64 md:w-72 p-4 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 text-left space-y-3 backdrop-blur-xl"
             >
-              <span className="text-[8px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider font-mono block">
+              <span className="text-[9px] text-slate-800 dark:text-slate-300 font-black uppercase tracking-wider font-mono block">
                 ITR-1 Checklist
               </span>
-              <div className="space-y-2 text-[10.5px] font-semibold text-slate-700 dark:text-slate-300">
+              <div className="space-y-2 text-[11px]">
                 {checklist.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-2.5">
                     {item.completed ? (
-                      <span className="w-4 h-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-[7px] text-emerald-400">✓</span>
+                      <span className="w-4.5 h-4.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 flex items-center justify-center text-[8.5px] text-emerald-700 dark:text-emerald-400 font-extrabold shrink-0">✓</span>
                     ) : (
-                      <span className="w-4 h-4 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-[8px] text-slate-600 dark:text-slate-400 font-mono">{item.stepNum}</span>
+                      <span className="w-4.5 h-4.5 rounded-full border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-[8.5px] text-slate-700 dark:text-slate-300 font-mono font-bold shrink-0">{item.stepNum}</span>
                     )}
-                    <span className={item.completed ? 'line-through text-slate-400 dark:text-slate-500 font-normal' : 'text-slate-700 dark:text-slate-300'}>
+                    <span className={item.completed ? 'line-through text-slate-600 dark:text-slate-400 font-medium decoration-slate-400 dark:decoration-slate-500' : 'text-slate-900 dark:text-slate-100 font-semibold'}>
                       {item.label}
                     </span>
                   </div>
@@ -281,7 +306,7 @@ export const RecommendationCard: React.FC<{
   onAction: () => void;
 }> = ({ title, description, savings, difficulty, time, documents, confidence, onAction }) => {
   return (
-    <div className="relative bg-white/40 dark:bg-slate-900/30 border border-slate-200/50 dark:border-white/[0.03] shadow-[inset_0_1px_1px_rgba(255,255,255,0.015)] rounded-[20px] p-6 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden group hover:scale-[1.01] hover:border-blue-500/20 hover:bg-white/60 dark:hover:bg-slate-900/40 transition-all duration-300">
+    <div className="relative bg-white/75 dark:bg-slate-900/30 border border-slate-200/60 dark:border-white/[0.03] backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.03)] rounded-[20px] p-6 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden group hover:scale-[1.01] hover:border-blue-500/20 hover:bg-white/85 dark:hover:bg-slate-900/40 transition-all duration-300">
       {/* Spotlight Ambient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/[0.01] via-transparent to-transparent pointer-events-none group-hover:from-blue-500/[0.02]" />
 

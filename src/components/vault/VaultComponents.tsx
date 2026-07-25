@@ -108,6 +108,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
 
   return (
     <div
+      id="vault-dropzone"
       onDragEnter={handleDrag}
       onDragOver={handleDrag}
       onDragLeave={handleDrag}
@@ -186,6 +187,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
               <ArrowRight className="w-4 h-4" />
             </button>
             <input
+              id="vault-file-input"
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}

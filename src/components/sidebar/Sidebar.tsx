@@ -11,13 +11,15 @@ import {
   AlertCircle,
   Sun,
   Moon,
-  Laptop
+  Laptop,
+  SlidersHorizontal
 } from 'lucide-react';
 import { useSidebarStore, SidebarTheme } from './useSidebarStore';
 import { SidebarHeader } from './SidebarHeader';
 import { SidebarItem } from './SidebarItem';
 import { UserProfile } from './UserProfile';
 import { SearchModal } from './SearchModal';
+import { FamilyProfileSwitcher } from '../profile/FamilyProfileSwitcher';
 
 interface SidebarProps {
   activeStep: number;
@@ -35,6 +37,7 @@ interface SidebarProps {
   setIsSettingsOpen: (open: boolean) => void;
   onLogout: () => void;
   onGoogleSignIn: () => void;
+  onOpenWhatIf?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -52,7 +55,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isSettingsOpen,
   setIsSettingsOpen,
   onLogout,
-  onGoogleSignIn
+  onGoogleSignIn,
+  onOpenWhatIf
 }) => {
   const isCollapsed = useSidebarStore((state) => state.isCollapsed);
   const sidebarBehavior = useSidebarStore((state) => state.sidebarBehavior);
@@ -223,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         transition={{ type: 'spring', stiffness: 220, damping: 26 }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="bg-white/8 dark:bg-slate-950/10 border border-slate-200/15 dark:border-white/[0.015] backdrop-blur-xl flex flex-col justify-between shrink-0 z-40 fixed top-3 bottom-3 left-3 h-[calc(100vh-24px)] rounded-3xl overflow-hidden font-sans shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="glass-sidebar-blur flex flex-col justify-between shrink-0 z-40 fixed top-3 bottom-3 left-3 h-[calc(100vh-24px)] rounded-3xl overflow-hidden font-sans"
       >
         {/* Top Scrollable Navigation Section */}
         <div className="flex flex-col flex-1 min-h-0">
@@ -235,12 +239,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onKeyDown={handleNavKeyDown} 
             className={`flex-1 ${isExpandedVisual ? 'overflow-y-auto' : 'overflow-hidden'} overflow-x-hidden p-2.5 space-y-3 sidebar-nav-container scrollbar-none`}
           >
-            <nav aria-label="Primary navigation" className="space-y-1">
+            {isExpandedVisual && (
+              <div className="px-1 pb-2">
+                <FamilyProfileSwitcher compact={true} />
+              </div>
+            )}
+            {/* Workspace Category */}
+            <nav aria-label="Workspace" className="space-y-1">
               <motion.span
                 initial={false}
                 animate={{ opacity: isExpandedVisual ? 1 : 0, height: isExpandedVisual ? 'auto' : 0 }}
                 transition={{ duration: 0.15 }}
-                className="block px-3 pb-1 text-[8.5px] font-bold uppercase tracking-[0.16em] text-slate-500/75 overflow-hidden whitespace-nowrap"
+                className="block px-3 pb-1 text-[8.5px] font-extrabold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400 overflow-hidden whitespace-nowrap"
               >
                 Workspace
               </motion.span>
@@ -257,7 +267,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={Award}
                 isActive={activeStep === 5}
                 isExpanded={isExpandedVisual}
-                savings={taxCalculationResult.savings}
                 onClick={() => setActiveStep(5)}
                 isPrimary={true}
               />
@@ -272,38 +281,62 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </nav>
 
             {isExpandedVisual ? (
-              <div className="mx-2 h-px bg-slate-200 dark:bg-white/[0.045]" />
+              <div className="mx-2 h-px bg-slate-200/40 dark:bg-white/[0.03]" />
             ) : (
-              <div className="w-6 h-px bg-slate-200/60 dark:bg-white/[0.06] mx-auto my-1" />
+              <div className="w-6 h-px bg-slate-200/40 dark:bg-white/[0.03] mx-auto my-1" />
             )}
 
-            <nav aria-label="Tools" className="space-y-1">
+            {/* AI Category */}
+            <nav aria-label="AI Intelligence" className="space-y-1">
               <motion.span
                 initial={false}
                 animate={{ opacity: isExpandedVisual ? 1 : 0, height: isExpandedVisual ? 'auto' : 0 }}
                 transition={{ duration: 0.15 }}
-                className="block px-3 pb-1 text-[8.5px] font-bold uppercase tracking-[0.16em] text-slate-500/75 overflow-hidden whitespace-nowrap"
+                className="block px-3 pb-1 text-[8.5px] font-extrabold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400 overflow-hidden whitespace-nowrap"
               >
-                Tools
+                AI Intelligence
+              </motion.span>
+              <SidebarItem
+                label="AI Copilot"
+                icon={BrainCircuit}
+                isActive={activeStep === 4}
+                isExpanded={isExpandedVisual}
+                onClick={() => setActiveStep(4)}
+              />
+              <SidebarItem
+                label="What-if Simulator"
+                icon={SlidersHorizontal}
+                isActive={false}
+                isExpanded={isExpandedVisual}
+                onClick={() => onOpenWhatIf && onOpenWhatIf()}
+              />
+            </nav>
+
+            {isExpandedVisual ? (
+              <div className="mx-2 h-px bg-slate-200/40 dark:bg-white/[0.03]" />
+            ) : (
+              <div className="w-6 h-px bg-slate-200/40 dark:bg-white/[0.03] mx-auto my-1" />
+            )}
+
+            {/* Documents & Reports Category */}
+            <nav aria-label="Documents & Reports" className="space-y-1">
+              <motion.span
+                initial={false}
+                animate={{ opacity: isExpandedVisual ? 1 : 0, height: isExpandedVisual ? 'auto' : 0 }}
+                transition={{ duration: 0.15 }}
+                className="block px-3 pb-1 text-[8.5px] font-extrabold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400 overflow-hidden whitespace-nowrap"
+              >
+                Documents & Reports
               </motion.span>
               <SidebarItem
                 label="Document Vault"
                 icon={FileUp}
                 isActive={activeStep === 3}
                 isExpanded={isExpandedVisual}
-                completed={taxData.grossSalary !== 850000 || taxData.tdsDeducted !== 15000}
                 onClick={() => setActiveStep(3)}
               />
               <SidebarItem
-                label="AI Analysis"
-                icon={BrainCircuit}
-                isActive={activeStep === 4}
-                isExpanded={isExpandedVisual}
-                badge="Gemini"
-                onClick={() => setActiveStep(4)}
-              />
-              <SidebarItem
-                label="History & Archive"
+                label="Export & Reports"
                 icon={History}
                 isActive={activeStep === 10}
                 isExpanded={isExpandedVisual}
@@ -330,7 +363,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 dark:border-white/[0.04] bg-slate-100/30 dark:bg-white/[0.015] px-2.5 py-2.5 text-left">
+              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200/40 dark:border-white/[0.025] bg-slate-100/20 dark:bg-white/[0.008] px-2.5 py-2.5 text-left">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="text-[8.5px] font-bold text-slate-500 dark:text-slate-400/80 uppercase tracking-widest leading-none">
@@ -379,9 +412,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               transition={{ duration: 0.15 }}
               className="overflow-hidden"
             >
-              <div className="flex items-center justify-between px-3 py-2.5 mt-1.5 bg-slate-100/30 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/[0.015] rounded-xl text-[10px] text-slate-600 dark:text-slate-400 select-none">
+              <div className="flex items-center justify-between px-3 py-2.5 mt-1.5 bg-slate-100/20 dark:bg-white/[0.008] border border-slate-200/40 dark:border-white/[0.015] rounded-xl text-[10px] text-slate-600 dark:text-slate-400 select-none">
                 <span className="font-semibold">Interface Theme</span>
-                <div className="flex items-center gap-1 bg-slate-200/50 dark:bg-slate-900/40 p-0.5 border border-slate-300/50 dark:border-white/[0.03] rounded-lg">
+                <div className="flex items-center gap-1 bg-slate-200/40 dark:bg-slate-900/30 p-0.5 border border-slate-300/40 dark:border-white/[0.02] rounded-lg">
                   {(['light', 'dark', 'system'] as SidebarTheme[]).map((t) => {
                     const isSelected = theme === t;
                     const Icon = t === 'light' ? Sun : t === 'dark' ? Moon : Laptop;
@@ -406,9 +439,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Divider */}
           {isExpandedVisual ? (
-            <div className="h-px bg-slate-200 dark:bg-white/[0.045] mx-0.5" />
+            <div className="h-px bg-slate-200/40 dark:bg-white/[0.03] mx-0.5" />
           ) : (
-            <div className="w-6 h-px bg-slate-200/60 dark:bg-white/[0.06] mx-auto" />
+            <div className="w-6 h-px bg-slate-200/40 dark:bg-white/[0.03] mx-auto" />
           )}
 
           {/* User profile section */}

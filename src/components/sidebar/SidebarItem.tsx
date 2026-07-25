@@ -67,8 +67,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = React.memo(({
           : 'w-9 h-9 mx-auto justify-center rounded-xl text-[11.5px]'
       } ${
         isActive 
-          ? 'bg-blue-600/10 text-blue-600 border-blue-500/25 dark:bg-[#16E27A]/10 dark:text-[#16E27A] dark:border-[#16E27A]/25 font-bold shadow-[0_2px_8px_rgba(37,99,235,0.06)] dark:shadow-[0_2px_8px_rgba(22,226,122,0.06)]' 
-          : `${isPrimary ? 'text-slate-700 dark:text-slate-200 font-bold' : 'text-slate-500 dark:text-slate-400 font-semibold'} border-transparent hover:bg-slate-900/5 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-100 transition-all duration-150`
+          ? 'bg-blue-600/10 text-blue-600 border-blue-500/20 dark:bg-[#16E27A]/10 dark:text-[#16E27A] dark:border-[#16E27A]/20 font-bold shadow-[0_2px_6px_rgba(37,99,235,0.04)] dark:shadow-[0_2px_6px_rgba(22,226,122,0.04)]' 
+          : `${isPrimary ? 'text-slate-900 dark:text-slate-100 font-black' : 'text-slate-800 dark:text-slate-200 font-bold'} border-transparent hover:bg-slate-900/10 dark:hover:bg-white/[0.06] hover:text-slate-950 dark:hover:text-white transition-all duration-150`
       }`}
     >
       {/* Icon and label block */}
@@ -123,7 +123,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = React.memo(({
             <button
               onClick={handleFavoriteClick}
               className={`p-0.5 rounded hover:bg-slate-900/5 dark:hover:bg-white/5 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-150 shrink-0 ${
-                isFavorited ? 'text-amber-500 opacity-100' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-455'
+                isFavorited ? 'text-amber-500 opacity-100' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
               title={isFavorited ? "Remove from Favorites" : "Add to Favorites"}
             >

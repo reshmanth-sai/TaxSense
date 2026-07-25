@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calculator, ChevronDown, Check, Plus } from 'lucide-react';
+import { Calculator, ChevronDown, Check, Plus, ShieldCheck } from 'lucide-react';
 import { useSidebarStore } from './useSidebarStore';
+import { useTaxStore } from '../../store/useTaxStore';
 import { CollapseButton } from './CollapseButton';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -135,8 +136,19 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isExpanded }) => {
         </div>
       </div>
 
-      {/* Collapse/Minimize trigger */}
-      {isExpanded && <CollapseButton />}
+      {/* Privacy Mode & Collapse trigger */}
+      {isExpanded && (
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => useTaxStore.getState().togglePrivacyBlur()}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all cursor-pointer"
+            title="Toggle Privacy Blur Mode (Blur salary figures on screen)"
+          >
+            <ShieldCheck className="w-4 h-4 text-blue-500" />
+          </button>
+          <CollapseButton />
+        </div>
+      )}
     </div>
   );
 };

@@ -4,13 +4,13 @@ import multer from 'multer';
 import crypto from 'crypto';
 import rateLimit from 'express-rate-limit';
 import { Type } from '@google/genai';
-import { 
-  getAI, 
-  generateContentWithRetryAndFallback, 
-  generateContentStreamWithLogging, 
-  validateEnvironment, 
-  mapError, 
-  logStructured 
+import {
+  getAI,
+  generateContentWithRetryAndFallback,
+  generateContentStreamWithLogging,
+  validateEnvironment,
+  mapError,
+  logStructured
 } from './services/ai/googleClient.ts';
 
 const app = express();
@@ -118,7 +118,7 @@ async function financeNewsHandler(req: any, res: any) {
   } catch (error: any) {
     const latencyMs = Date.now() - startTime;
     const appErr = mapError(error);
-    
+
     logStructured('error', 'Error generating finance news (local server fallback)', {
       requestId,
       correlationId,
@@ -143,8 +143,8 @@ async function startServer() {
   app.get('/api/health', (req, res) => {
     try {
       validateEnvironment();
-      res.json({ 
-        status: 'ok', 
+      res.json({
+        status: 'ok',
         timestamp: new Date().toISOString(),
         environment: 'Local Node Server'
       });
@@ -183,7 +183,7 @@ async function startServer() {
         endpoint: 'extract-pdf',
         model: 'gemini-2.5-flash',
       });
-      
+
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: [
@@ -300,7 +300,7 @@ async function startServer() {
           safeData[key] = Math.max(0, safeData[key] || 0);
         }
       }
-      
+
       // Apply statutory caps on deductions
       if (safeData.deduction80C != null) safeData.deduction80C = Math.min(safeData.deduction80C, 150000);
       if (safeData.deduction80D != null) safeData.deduction80D = Math.min(safeData.deduction80D, 75000);
@@ -322,7 +322,7 @@ async function startServer() {
 
     try {
       const { messages, systemPrompt } = req.body;
-      
+
       if (!messages || !Array.isArray(messages)) {
         res.status(400).json({ error: 'Conversation messages array is required.' });
         return;
@@ -358,7 +358,7 @@ async function startServer() {
           }
         }
       }
-      
+
       res.write('data: [DONE]\n\n');
       res.end();
     } catch (error: any) {

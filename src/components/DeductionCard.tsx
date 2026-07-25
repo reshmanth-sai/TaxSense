@@ -1156,7 +1156,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
 
             {/* Desktop Sticky Summary Panel (4 cols) */}
             <div className="lg:col-span-4 lg:sticky lg:top-6 space-y-6">
-              <div className="bg-white/40 dark:bg-slate-900/35 border border-slate-200/50 dark:border-white/[0.04] rounded-3xl p-6 backdrop-blur-md space-y-6 text-left">
+              <div className="bg-white/75 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] rounded-3xl p-6 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.03)] space-y-6 text-left">
                 <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest block border-b border-slate-200/50 dark:border-white/[0.02] pb-3">Exemption Summary</span>
                 
                 <div className="space-y-4 border-b border-slate-200/50 dark:border-white/[0.04] pb-4">
@@ -1275,7 +1275,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
             </div>
 
             {/* Deduction Summary Checklist */}
-            <div className="bg-white/40 dark:bg-slate-900/35 border border-slate-200/50 dark:border-white/[0.04] rounded-3xl p-6 backdrop-blur-md space-y-4 text-left">
+            <div className="bg-white/75 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] rounded-3xl p-6 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.03)] space-y-4 text-left">
               <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest block border-b border-slate-200/50 dark:border-white/[0.02] pb-3">Final Ledger Breakdown</span>
 
               <div className="flex justify-between items-center py-2.5">

@@ -194,8 +194,14 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
     return () => observer.disconnect();
   }, []);
 
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [replayKey, setReplayKey] = useState(0);
+
   const resetTimeline = () => {
+    setIsSpinning(true);
     setIsPlaying(false);
+    setReplayKey((prev) => prev + 1);
+
     setTimelineState({
       showUploadCard: false,
       isDraggingPDF: false,
@@ -228,7 +234,17 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
     targetCursorOpacityRef.current = 0;
     targetCursorClickingRef.current = false;
     lastAudioCheckRef.current = 0;
-    setTimeout(() => setIsPlaying(true), 600);
+
+    // Smooth scroll down to Product Video Player demo section
+    const demoEl = document.getElementById('demo-player');
+    if (demoEl) {
+      demoEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    setTimeout(() => {
+      setIsPlaying(true);
+      setIsSpinning(false);
+    }, 400);
   };
 
   // Master Timeline Driver
@@ -535,7 +551,11 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
             </button>
             <div className="flex gap-2">
               <button 
-                onClick={onStart}
+                onClick={() => {
+                  const demoEl = document.getElementById('demo-player');
+                  if (demoEl) demoEl.scrollIntoView({ behavior: 'smooth' });
+                  else onStart();
+                }}
                 className="group relative overflow-hidden px-7 py-[18px] bg-white/70 hover:bg-white text-slate-800 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-white dark:border-white/10 font-bold text-[13px] uppercase tracking-wider rounded-[14px] transition-all flex items-center gap-1.5 shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
               >
                 <RollingText text="Try Live Demo" />
@@ -546,16 +566,16 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
                 className="px-5 py-[18px] bg-white/70 hover:bg-white text-slate-600 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-slate-400 dark:border-white/10 rounded-[14px] transition-all flex items-center justify-center shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
                 title="Replay Interactive Workflow"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className={`w-4 h-4 transition-transform ${isSpinning ? 'animate-spin text-blue-500' : ''}`} />
               </button>
             </div>
           </div>
 
-          {/* Hero Trust Signals & Social Proof */}
+          {/* Hero Trust Signals & Authentic Social Proof */}
           <div className="pt-2 flex flex-col items-center gap-2.5">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <div className="flex text-amber-400 text-sm">★★★★★</div>
-              <span>Trusted by 15,000+ Indian Taxpayers</span>
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Verified AY 2026–27 CBDT Tax Engine • 100% Local & Private AI</span>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">
@@ -570,12 +590,13 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
 
       {/* REDESIGNED PRODUCT VIDEO PLAYER SHOWCASE */}
       <motion.div
+        id="demo-player"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="mt-10 w-full relative z-10"
+        className="mt-10 w-full relative z-10 scroll-mt-36 sm:scroll-mt-40"
       >
-        <ProductVideoPlayer onStartFiling={onStart} />
+        <ProductVideoPlayer key={replayKey} onStartFiling={onStart} />
       </motion.div>
     </div>
   );

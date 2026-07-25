@@ -36,6 +36,7 @@ import {
   PrimaryCTA
 } from './vault/VaultComponents';
 import { DocumentPreviewModal } from './dashboard/DashboardComponents';
+import { SmartDocumentChecklist } from './SmartDocumentChecklist';
 
 interface DocumentVaultProps {
   onFileUpload: (fileText: string) => void;
@@ -893,6 +894,9 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
             </div>
           </div>
         )}
+
+        {/* Smart Missing Document Audit Checklist */}
+        <SmartDocumentChecklist />
 
         {/* 5. Bottom Guidance Action Buttons Footer */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6 border-t border-slate-200 dark:border-white/[0.06] w-full">

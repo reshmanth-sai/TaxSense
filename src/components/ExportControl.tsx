@@ -269,7 +269,7 @@ _Generated via TaxSense ITR Copilot_`;
               className={`w-full h-8 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer select-none active:scale-95 border ${
                 copied
                   ? 'bg-emerald-600 text-white border-emerald-500'
-                  : 'bg-slate-900 hover:bg-slate-800 text-white border-slate-950'
+                  : 'bg-blue-600 hover:bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500'
               }`}
             >
               {copied ? (
