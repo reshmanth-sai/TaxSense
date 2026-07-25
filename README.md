@@ -59,7 +59,6 @@
 - [🧮 Tax Engine & CBDT Rules](#-tax-engine--cbdt-rules)
 - [🛣️ Roadmap](#️-roadmap)
 - [🤝 Contributing](#-contributing)
-- [🙏 Acknowledgements](#-acknowledgements)
 - [📄 License](#-license)
 - [🌟 The Vision](#-the-vision)
 
@@ -391,14 +390,6 @@ Contributions are welcome! Follow these steps:
 3. **Commit your Changes**: `git commit -m "feat: add support for Sec 80GG"`
 4. **Push to Branch**: `git push origin feature/amazing-feature`
 5. **Open a Pull Request**: Submit your PR for review!
-
----
-
-## 🙏 Acknowledgements
-
-- **Google Gemini API**: For powering document intelligence and financial reasoning.
-- **Income Tax Department, Govt. of India**: For official tax slab specifications and statutory rules.
-- **React & Tailwind CSS Teams**: For building world-class developer tools.
 
 ---
 
