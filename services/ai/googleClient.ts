@@ -11,7 +11,7 @@ let isValidated = false;
 export function validateEnvironment(): void {
   if (isValidated) return;
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!apiKey || apiKey.trim() === '') {
     throw new Error('CRITICAL: GEMINI_API_KEY environment variable is missing or empty.');
   }
@@ -30,7 +30,7 @@ export function getAI(): GoogleGenAI {
   if (!aiClient) {
     validateEnvironment();
     
-    const apiKey = process.env.GEMINI_API_KEY!;
+    const apiKey = (process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY)!;
     
     aiClient = new GoogleGenAI({
       apiKey,
