@@ -1181,16 +1181,34 @@ export default function App() {
 
               <AICopilot isOpen={isFloatingAIChatOpen} onClose={() => setIsFloatingAIChatOpen(false)} />
 
-              {/* Toggle trigger for Right side copilot drawer */}
-              {!isFloatingAIChatOpen && activeStep !== 5 && (
-                <button
-                  onClick={() => setIsFloatingAIChatOpen(true)}
-                  title="Open TaxSense AI Copilot"
-                  className="fixed right-6 bottom-6 z-40 p-3.5 bg-gradient-to-tr from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.4)] dark:shadow-[0_6px_25px_rgba(139,92,246,0.6)] cursor-pointer transition-all hover:scale-110 duration-300 active:scale-95 flex items-center justify-center group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 border border-purple-400/30 ring-2 ring-purple-500/20"
-                >
-                  <Sparkles className="w-5.5 h-5.5 text-white transition-transform group-hover:rotate-12 duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]" />
-                </button>
-              )}
+              {/* Unified Floating AI Copilot Trigger */}
+              <AnimatePresence>
+                {!isFloatingAIChatOpen && activeStep !== 5 && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    onClick={() => {
+                      if (activeStep === 10) {
+                        setIsPdfModalOpen(true);
+                      } else {
+                        setIsFloatingAIChatOpen(true);
+                      }
+                    }}
+                    title="Open TaxSense AI Copilot"
+                    className="fixed right-6 bottom-6 z-40 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.4)] dark:shadow-[0_6px_25px_rgba(139,92,246,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 border border-purple-400/30 ring-2 ring-purple-500/20 font-sans"
+                  >
+                    <Sparkles className="w-4 h-4 text-purple-200 animate-pulse shrink-0 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>
+                      {activeStep === 11 ? 'Need help claiming 80D?' :
+                       activeStep === 6 ? 'Explain my tax computation?' :
+                       activeStep === 10 ? 'Ready to submit your return?' :
+                       'Ask AI Copilot'}
+                    </span>
+                  </motion.button>
+                )}
+              </AnimatePresence>
 
               {/* Settings Dialog Panel Overlay */}
               <AnimatePresence>
@@ -1576,27 +1594,7 @@ export default function App() {
         onOpenPdf={() => setIsPdfModalOpen(true)}
       />
 
-      {/* Contextual Conversational Floating AI Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={() => {
-            if (activeStep === 10) {
-              setIsPdfModalOpen(true);
-            } else {
-              setActiveStep(4);
-            }
-          }}
-          className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-2xl shadow-xl shadow-purple-500/25 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 border border-purple-400/20 font-sans"
-        >
-          <Sparkles className="w-4 h-4 text-purple-200 animate-pulse shrink-0" />
-          <span>
-            {activeStep === 11 ? 'Need help claiming 80D?' :
-             activeStep === 6 ? 'Explain my tax computation?' :
-             activeStep === 10 ? 'Ready to submit your return?' :
-             'Ask AI Copilot'}
-          </span>
-        </button>
-      </div>
+
     </div>
   );
 }
