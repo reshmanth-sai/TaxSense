@@ -56,11 +56,11 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
     });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: [
         {
           inlineData: {
@@ -77,7 +77,7 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       latencyMs,
     });
 
@@ -90,7 +90,7 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       latencyMs,
       errorCategory: appErr.category,
       errorMessage: error.message || String(error),
