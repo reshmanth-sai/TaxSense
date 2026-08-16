@@ -16,9 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
-    if (typeof (res as any).flushHeaders === 'function') {
-      (res as any).flushHeaders();
-    }
+    res.flushHeaders();
 
     const { messages, systemPrompt } = req.body;
     
@@ -35,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       const responseStream = await generateContentStreamWithLogging({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         contents,
         config: {
           systemInstruction: systemPrompt || 'You are an AI assistant.',

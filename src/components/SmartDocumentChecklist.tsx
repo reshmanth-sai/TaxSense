@@ -109,8 +109,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       financialYear: 'FY 2025-26',
       uploadTime: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
       status: 'Verified',
-      confidence: 99,
-      pages: 1
+      confidence: 99
     });
 
     setToastMessage(`✨ Uploaded ${fileCustomName} to Vault! Verified under ${item?.title || 'Checklist'}.`);

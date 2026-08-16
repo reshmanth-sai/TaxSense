@@ -82,13 +82,21 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
         },
         (err) => {
           console.error(err);
-          addChatMessage({ role: 'assistant', content: "I'm sorry, I encountered a network error while analyzing your data. Please try again." });
+          const errorMsg = err?.message || 'Network error while reaching AI service.';
+          addChatMessage({ 
+            role: 'assistant', 
+            content: `⚠️ **Service Error**: ${errorMsg}\n\nPlease check that your \`GEMINI_API_KEY\` is configured properly in Vercel environment variables.` 
+          });
           setIsChatLoading(false);
           setStreamingMessage('');
         }
       );
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      addChatMessage({ 
+        role: 'assistant', 
+        content: `⚠️ **Error**: ${err?.message || 'An unexpected error occurred. Please try again.'}` 
+      });
       setIsChatLoading(false);
     } finally {
       isSubmittingRef.current = false;
