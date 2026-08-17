@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { validateEnvironment } from '../services/ai/googleClient.ts';
+import { validateEnvironment } from '../services/ai/googleClient';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   try {

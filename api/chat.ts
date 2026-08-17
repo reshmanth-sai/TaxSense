@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateContentStreamWithLogging, mapError } from '../services/ai/googleClient.ts';
+import { generateContentStreamWithLogging, mapError } from '../services/ai/googleClient';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

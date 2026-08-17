@@ -18,7 +18,15 @@ export class StreamingService {
       });
 
       if (!response.ok) {
-        throw new Error(`Server error: ${response.statusText}`);
+        let errText = '';
+        try {
+          const errorJson = await response.json();
+          errText = errorJson.error || errorJson.message || '';
+        } catch (e) {
+          errText = await response.text().catch(() => '');
+        }
+        const statusDetails = response.statusText ? ` (${response.statusText})` : '';
+        throw new Error(errText || `Server returned HTTP status ${response.status}${statusDetails}`);
       }
 
       const reader = response.body?.getReader();

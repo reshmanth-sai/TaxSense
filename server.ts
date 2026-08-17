@@ -11,7 +11,7 @@ import {
   validateEnvironment,
   mapError,
   logStructured
-} from './services/ai/googleClient.ts';
+} from './services/ai/googleClient';
 
 const app = express();
 app.use(express.json());

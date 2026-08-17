@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
-import { generateContentWithRetryAndFallback, mapError, logStructured } from '../services/ai/googleClient.ts';
+import { generateContentWithRetryAndFallback, mapError, logStructured } from '../services/ai/googleClient';
 import crypto from 'crypto';
 
 // In-memory cache for news (warm lambdas will share this cache)

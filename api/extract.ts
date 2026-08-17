@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
-import { generateContentWithRetryAndFallback, mapError } from '../services/ai/googleClient.ts';
+import { generateContentWithRetryAndFallback, mapError } from '../services/ai/googleClient';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

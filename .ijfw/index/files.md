@@ -1,7 +1,7 @@
 <!-- ijfw schema:1 codebase-index -->
 # Codebase index
 
-Generated: 2026-08-16T18:06:49Z
+Generated: 2026-08-17T06:13:46Z
 Root: .
 
 Files: 101
@@ -10,7 +10,7 @@ Files: 101
 
 - `./.agents/AGENTS.md` (42 lines, .md) -- Follow this philosophy throughout every code change, UI layout, and feature refinement:
 - `./AGENTS.md` (56 lines, .md) -- ijfw_version: 1.3.2
-- `./CLAUDE.md` (17 lines, .md) -- Stack: React / TypeScript
+- `./CLAUDE.md` (20 lines, .md) -- Stack: React / TypeScript
 - `./README.md` (410 lines, .md) -- <div align=\"center\">
 - `./api/chat.ts` (71 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
 - `./api/extract-pdf.ts` (102 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
@@ -53,7 +53,7 @@ Files: 101
 - `./src/components/WhatIfSimulatorModal.tsx` (662 lines, .tsx) -- import React, { useState, useMemo } from 'react';
 - `./src/components/WorkspaceSelection.tsx` (616 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/compliance/FilingDeadlineBar.tsx` (236 lines, .tsx) -- import React, { useState, useEffect, useMemo } from 'react';
-- `./src/components/copilot/AICopilot.tsx` (282 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
+- `./src/components/copilot/AICopilot.tsx` (290 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
 - `./src/components/dashboard/AIFilingReadinessEngine.tsx` (345 lines, .tsx) -- import React, { useState } from 'react';
 - `./src/components/dashboard/CTCEfficiencyScorecard.tsx` (154 lines, .tsx) -- import React, { useMemo } from 'react';
 - `./src/components/dashboard/DashboardCommandCenter.tsx` (728 lines, .tsx) -- import React, { useState } from 'react';

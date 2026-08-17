@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Multer from 'multer';
-import { getAI, mapError, logStructured } from '../services/ai/googleClient.ts';
+import { getAI, mapError, logStructured } from '../services/ai/googleClient';
 import crypto from 'crypto';
 
 const upload = Multer({
