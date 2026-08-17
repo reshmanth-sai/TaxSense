@@ -433,9 +433,9 @@ export default function App() {
       return;
     }
 
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
-      console.error("[GIS] Google Client ID missing");
+      console.error("[GIS] Google Client ID missing. Set VITE_GOOGLE_CLIENT_ID in Vercel environment variables.");
       setGoogleGsiState('failed');
       return;
     }
@@ -463,10 +463,10 @@ export default function App() {
       return;
     }
 
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
     if (!clientId) {
       console.error("[GIS] Google Client ID missing");
-      showToast("Google OAuth configuration is missing.", 'error');
+      showToast("Google OAuth is not configured yet. Please set VITE_GOOGLE_CLIENT_ID in Vercel environment variables.", 'error');
       return;
     }
 
