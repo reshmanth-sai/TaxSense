@@ -85,7 +85,7 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
           const errorMsg = err?.message || 'Network error while reaching AI service.';
           addChatMessage({ 
             role: 'assistant', 
-            content: `⚠️ **Service Error**: ${errorMsg}\n\nPlease check that your \`GEMINI_API_KEY\` is configured properly in Vercel environment variables.` 
+            content: `⚠️ **Service Error**: ${errorMsg}` 
           });
           setIsChatLoading(false);
           setStreamingMessage('');

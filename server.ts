@@ -178,11 +178,11 @@ app.post('/api/extract-pdf', upload.single('file'), async (req: any, res: any) =
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
     });
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: [
         {
           inlineData: {
@@ -336,7 +336,7 @@ app.post('/api/chat', async (req, res) => {
     }));
 
     const responseStream = await generateContentStreamWithLogging({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents,
       config: {
         systemInstruction: systemPrompt || 'You are an AI assistant.',
