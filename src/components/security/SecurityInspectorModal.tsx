@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { ShieldCheck, Lock, CheckCircle2, X, Cpu, RefreshCw, KeyRound } from 'lucide-react';
 
 interface SecurityInspectorModalProps {

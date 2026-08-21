@@ -333,7 +333,7 @@ export const RecommendationCard: React.FC<{
           <span className="inline-flex items-center justify-center text-[9.5px] leading-none bg-slate-100/50 dark:bg-white/[0.01] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/[0.02] px-2.5 py-1 rounded-full font-medium h-5">
             Difficulty: {difficulty}
           </span>
-          <span className="inline-flex items-center justify-center text-[9.5px] leading-none bg-purple-500/10 text-purple-655 dark:text-purple-400 border border-purple-500/15 px-2.5 py-1 rounded-full font-bold h-5">
+          <span className="inline-flex items-center justify-center text-[9.5px] leading-none bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/15 px-2.5 py-1 rounded-full font-bold h-5">
             Confidence: {typeof confidence === 'number' ? `${confidence}%` : confidence}
           </span>
           {documents.length > 0 && (
@@ -536,14 +536,14 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
                   Total Pages
                 </span>
                 <span className="text-xs text-slate-800 dark:text-slate-200 font-medium">
-                  {doc.pages || 3} pages
+                  {doc.pages ? `${doc.pages} page${doc.pages > 1 ? 's' : ''}` : 'Page count unknown'}
                 </span>
               </div>
               <div className="space-y-1">
                 <span className="text-[8.5px] text-slate-500 font-bold uppercase tracking-wider block">
                   OCR Accuracy
                 </span>
-                <span className="text-xs text-purple-650 dark:text-purple-400 font-bold font-mono">
+                <span className="text-xs text-purple-600 dark:text-purple-400 font-bold font-mono">
                   {doc.confidence || 99}% Confidence
                 </span>
               </div>
@@ -628,12 +628,12 @@ export const CopilotDetailsDrawer: React.FC<{
           {/* Interactive Confidence Badge */}
           <button
             onClick={() => setShowConfidenceDetail(!showConfidenceDetail)}
-            className="flex items-center gap-1.5 text-[10px] text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium bg-purple-500/10 hover:bg-purple-500/15 px-2 py-1 rounded-md border border-purple-250 dark:border-purple-500/20 cursor-pointer focus:outline-none"
+            className="flex items-center gap-1.5 text-[10px] text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium bg-purple-500/10 hover:bg-purple-500/15 px-2 py-1 rounded-md border border-purple-200 dark:border-purple-500/20 cursor-pointer focus:outline-none"
             title="Click to view confidence calculation explanation"
           >
             <span>Confidence</span>
-            <span className="text-purple-650 dark:text-purple-400 font-bold font-mono">{confidence}%</span>
-            <Info className="w-3 h-3 text-purple-650 dark:text-purple-400" />
+            <span className="text-purple-600 dark:text-purple-400 font-bold font-mono">{confidence}%</span>
+            <Info className="w-3 h-3 text-purple-600 dark:text-purple-400" />
           </button>
 
           {/* Quick Stats */}
@@ -644,7 +644,7 @@ export const CopilotDetailsDrawer: React.FC<{
 
         <button
           onClick={onToggle}
-          className="text-[11px] text-purple-655 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors flex items-center gap-1 cursor-pointer focus:outline-none"
+          className="text-[11px] text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors flex items-center gap-1 cursor-pointer focus:outline-none"
         >
           <span>{isOpen ? 'Collapse Panel' : 'Explain Savings'}</span>
           <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

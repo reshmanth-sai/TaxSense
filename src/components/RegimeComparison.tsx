@@ -100,7 +100,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
         <>
           {/* Premium Hero Section */}
           <div className="space-y-1.5 text-left border-b border-slate-200 dark:border-white/[0.04] pb-4">
-            <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-450 border border-emerald-250 dark:border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider inline-block">
+            <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-450 border border-emerald-200 dark:border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider inline-block">
               AI Optimization Strategy
             </span>
             <h2 className="text-xl md:text-2xl font-black text-slate-800 dark:text-slate-100">Your optimal tax strategy is ready.</h2>
@@ -130,7 +130,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
             {/* 2. AI Recommendation */}
             <div className="space-y-1.5 text-left">
               <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-455" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-500" />
                 AI Recommendation
               </span>
               <div className="text-lg lg:text-xl font-bold text-slate-800 dark:text-slate-100">
@@ -167,8 +167,8 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
             {/* 4. AI Confidence status */}
             <div className="space-y-1 text-left">
               <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black block">AI Confidence</span>
-              <div className="text-xs text-emerald-600 dark:text-emerald-455 font-bold flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-emerald-605 dark:text-emerald-400" />
+              <div className="text-xs text-emerald-600 dark:text-emerald-500 font-bold flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Very High Confidence</span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-450 font-medium">
@@ -196,7 +196,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
               key={section}
               onClick={() => setActiveSection(section)}
               className={`px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer relative ${
-                isActive ? 'text-slate-800 dark:text-slate-100 bg-white dark:bg-[#0E131B] shadow-sm dark:shadow-inner' : 'text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-205'
+                isActive ? 'text-slate-800 dark:text-slate-100 bg-white dark:bg-[#0E131B] shadow-sm dark:shadow-inner' : 'text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-200'
               }`}
             >
               <span>{displayNames[section]}</span>
@@ -219,7 +219,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
               className="space-y-6 text-left"
             >
               {/* Recommended Next Action */}
-              <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-205 dark:border-white/[0.04] rounded-2xl p-5 space-y-4">
+              <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.04] rounded-2xl p-5 space-y-4">
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
                     <span className="text-[9px] text-slate-500 uppercase tracking-widest font-black block">Recommended Next Action</span>
@@ -233,10 +233,10 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                 </div>
 
                 <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400 font-semibold text-left">
-                  <p className="text-[10px] text-slate-550 dark:text-slate-505 font-black uppercase tracking-wider">Why?</p>
+                  <p className="text-[10px] text-slate-550 dark:text-slate-500 font-black uppercase tracking-wider">Why?</p>
                   <ul className="space-y-1.5 pl-4 list-disc text-slate-650 dark:text-slate-300">
                     <li>Lowest projected tax liability</li>
-                    <li>Saves <span className="text-emerald-650 dark:text-emerald-450 font-mono font-bold">{formatINR(savings)}</span></li>
+                    <li>Saves <span className="text-emerald-600 dark:text-emerald-450 font-mono font-bold">{formatINR(savings)}</span></li>
                     <li>Verified using your Form 16 details</li>
                     <li>No compliance concerns detected</li>
                     <li>Takes less than one minute</li>
@@ -246,7 +246,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                 <div className="pt-2 border-t border-slate-200 dark:border-white/[0.02]">
                   <button
                     onClick={() => setActiveSection('recommendation')}
-                    className="text-[10px] font-bold uppercase tracking-wider text-blue-605 hover:text-blue-750 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer border-none bg-transparent p-0"
+                    className="text-[10px] font-bold uppercase tracking-wider text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer border-none bg-transparent p-0"
                   >
                     Learn How AI Calculated This
                   </button>
@@ -254,7 +254,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
               </div>
 
               {/* AI Timeline Panel */}
-              <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-205 dark:border-white/[0.04] rounded-2xl p-5 space-y-3.5">
+              <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.04] rounded-2xl p-5 space-y-3.5">
                 <span className="text-[9px] text-slate-500 uppercase tracking-widest font-black block">AI Compliance Journey</span>
                 <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-[10px] font-bold text-slate-650 dark:text-slate-400 select-none">
                   {[
@@ -291,7 +291,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                       <div className="p-4 space-y-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
                         <div className="flex justify-between items-center py-1">
                           <span>Tax savings optimization:</span>
-                          <span className="text-emerald-600 dark:text-emerald-455 font-mono font-bold">+{formatINR(savings)} savings</span>
+                          <span className="text-emerald-600 dark:text-emerald-500 font-mono font-bold">+{formatINR(savings)} savings</span>
                         </div>
                         <div className="flex justify-between items-center py-1 border-t border-slate-200 dark:border-white/[0.02] pt-2">
                           <span>Taxable income threshold:</span>
@@ -344,7 +344,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
 
               {/* Benefits & Trade-offs */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-205 dark:border-white/[0.04] rounded-2xl p-5 space-y-3">
+                <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.04] rounded-2xl p-5 space-y-3">
                   <span className="text-[9px] text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-black block">Benefits</span>
                   <div className="flex flex-wrap gap-1.5 select-none">
                     {[
@@ -360,7 +360,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                   </div>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-205 dark:border-white/[0.04] rounded-2xl p-5 space-y-3">
+                <div className="bg-slate-50 dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.04] rounded-2xl p-5 space-y-3">
                   <span className="text-[9px] text-amber-600 dark:text-amber-500 uppercase tracking-widest font-black block">Trade-offs (Cannot claim)</span>
                   <div className="flex flex-wrap gap-1.5 select-none">
                     {[
@@ -404,9 +404,9 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                       <td className="p-3 text-right font-mono">{formatINR(newRegime.grossTotalIncome - (incomeProfile?.stcg || 0) - (incomeProfile?.ltcg || 0))}</td>
                     </tr>
                     <tr>
-                      <td className="p-3 text-rose-600 dark:text-rose-450">Standard Deduction</td>
-                      <td className="p-3 text-right font-mono text-rose-600 dark:text-rose-455">-{formatINR(50000)}</td>
-                      <td className="p-3 text-right font-mono text-rose-605 dark:text-rose-455">-{formatINR(75000)}</td>
+                      <td className="p-3 text-rose-600 dark:text-rose-500">Standard Deduction</td>
+                      <td className="p-3 text-right font-mono text-rose-600 dark:text-rose-500">-{formatINR(50000)}</td>
+                      <td className="p-3 text-right font-mono text-rose-600 dark:text-rose-500">-{formatINR(75000)}</td>
                     </tr>
                     <tr>
                       <td className="p-3">Claimed Deductions (80C, 80D, HRA)</td>
@@ -416,9 +416,9 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
                       </td>
                     </tr>
                     <tr className="bg-slate-50/50 dark:bg-white/[0.01]">
-                      <td className="p-3 font-semibold text-slate-800 dark:text-slate-205">Net Taxable Income</td>
-                      <td className="p-3 text-right font-mono font-bold text-slate-800 dark:text-slate-205">{formatINR(oldRegime.taxableIncome)}</td>
-                      <td className="p-3 text-right font-mono font-bold text-slate-800 dark:text-slate-205">{formatINR(newRegime.taxableIncome)}</td>
+                      <td className="p-3 font-semibold text-slate-800 dark:text-slate-200">Net Taxable Income</td>
+                      <td className="p-3 text-right font-mono font-bold text-slate-800 dark:text-slate-200">{formatINR(oldRegime.taxableIncome)}</td>
+                      <td className="p-3 text-right font-mono font-bold text-slate-800 dark:text-slate-200">{formatINR(newRegime.taxableIncome)}</td>
                     </tr>
                     <tr>
                       <td className="p-3">Base Slab Tax</td>
@@ -457,7 +457,7 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
             >
               <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/[0.02] pb-3 select-none">
                 <BookOpen className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-                <h3 className="text-xs font-bold text-slate-805 dark:text-slate-205">Statutory References (AY 2026-27)</h3>
+                <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200">Statutory References (AY 2026-27)</h3>
               </div>
               <ul className="space-y-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-semibold">
                 <li className="flex gap-3">

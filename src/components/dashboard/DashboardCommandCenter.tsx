@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowRight, 
   Sparkles, 
@@ -116,7 +116,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
     show: { 
       opacity: 1, 
       y: 0,
-      transition: { type: 'spring', stiffness: 400, damping: 30 }
+      transition: { type: 'spring' as const, stiffness: 400, damping: 30 }
     }
   };
 

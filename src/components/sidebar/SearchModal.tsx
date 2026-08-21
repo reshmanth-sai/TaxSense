@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Search, LayoutDashboard, Award, ListTodo, FileUp, BrainCircuit, History, Settings, CornerDownLeft } from 'lucide-react';
 import { useSidebarStore } from './useSidebarStore';
 

@@ -214,7 +214,7 @@ _Generated via TaxSense ITR Copilot_`;
               onClick={handleDownloadSummary}
               className={`w-full h-8 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer select-none active:scale-95 border ${
                 downloaded
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-250'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                   : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
               }`}
             >

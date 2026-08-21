@@ -24,7 +24,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
   const totalEstimatedRefund = Math.round(rentSavings + healthSavings + npsSavings);
 
   return (
-    <section id="refund-finder" className="py-24 md:py-28 px-6 max-w-4xl mx-auto space-y-16">
+    <section className="py-24 md:py-28 px-6 max-w-4xl mx-auto space-y-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -39,7 +39,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           No Form 16 Yet? Uncover Hidden Refunds
         </h2>
-        <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
           Answer 3 simple questions to estimate how much unclaimed tax refund you could recover this year.
         </p>
       </motion.div>
@@ -182,6 +182,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
                   <button
                     onClick={() => setStep(1)}
                     className="p-3 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer"
+                    aria-label="Start the refund audit over"
                     title="Restart Micro Audit"
                   >
                     <RotateCcw className="w-4 h-4" />

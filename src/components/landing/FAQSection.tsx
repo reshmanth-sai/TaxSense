@@ -68,7 +68,7 @@ export const FAQSection: React.FC = React.memo(() => {
   });
 
   return (
-    <section id="faq" className="relative z-10 py-24 md:py-28 px-6 max-w-4xl mx-auto space-y-12 bg-transparent">
+    <section className="relative z-10 py-24 md:py-28 px-6 max-w-4xl mx-auto space-y-12 bg-transparent">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export const FAQSection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Frequently Asked Questions
         </h2>
-        <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
           Everything you need to know about tax calculations, privacy, and regime comparisons.
         </p>
       </motion.div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { User, LogOut } from 'lucide-react';
 import { Tooltip } from './Tooltip';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 interface UserProfileProps {
   isExpanded: boolean;

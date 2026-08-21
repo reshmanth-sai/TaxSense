@@ -38,7 +38,8 @@ export interface UploadedFile {
   size: string;
   employer: string;
   financialYear: string;
-  pages: number;
+  /** Page count, when the document was parsed and reported one. */
+  pages?: number;
   uploadTime: string;
   status: 'Verified' | 'Failed' | 'Processing';
   confidence: number;

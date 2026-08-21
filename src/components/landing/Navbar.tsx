@@ -62,6 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
   return (
     <div className="fixed top-11 left-1/2 -translate-x-1/2 z-40 w-full max-w-[1200px] px-4 sm:px-6 pointer-events-none select-none">
         <motion.header
+          role="banner"
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -92,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
                   <span className="text-base font-extrabold tracking-tight text-[#0B1730] dark:text-white leading-none">
                     TAXSENSE
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="AI Engine Active" />
+                  <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
                 <span className="text-[9.5px] font-mono text-slate-400 font-bold block mt-0.5 tracking-wider uppercase">
                   AI Tax OS
@@ -105,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
           </div>
 
           {/* CENTER SECTION: PRODUCT-ORIENTED NAVIGATION */}
-          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-[13px] font-sans font-medium text-slate-600 dark:text-slate-300">
+          <nav aria-label="Main" className="hidden md:flex items-center gap-5 lg:gap-6 text-[13px] font-sans font-medium text-slate-600 dark:text-slate-300">
             {primaryLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
@@ -134,6 +135,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setIsMoreOpen(!isMoreOpen)}
+                aria-expanded={isMoreOpen}
+                aria-haspopup="true"
                 className={`flex items-center gap-1 py-1 transition-colors duration-150 cursor-pointer whitespace-nowrap ${
                   isMoreOpen || ['tipping-point', 'faq'].includes(activeSection)
                     ? 'text-blue-600 dark:text-blue-400 font-semibold'
@@ -189,6 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
             {/* Sleek Single Icon Theme Toggle */}
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               className="p-2.5 rounded-xl bg-slate-100/80 hover:bg-slate-200/80 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
               title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
@@ -209,12 +213,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               className="p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
               className="p-2.5 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

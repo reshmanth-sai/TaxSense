@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Star, CheckCircle } from 'lucide-react';
 import { Tooltip } from './Tooltip';
 import { useSidebarStore } from './useSidebarStore';

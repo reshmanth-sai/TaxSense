@@ -158,7 +158,7 @@ export const JourneySection: React.FC = React.memo(() => {
   const journeyLineScaleX = useSpring(journeyScrollProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
 
   return (
-    <section ref={journeyRef} id="journey" className="relative py-32 md:py-36 px-6 max-w-6xl mx-auto space-y-20 z-10 overflow-hidden bg-transparent">
+    <section ref={journeyRef} className="relative py-32 md:py-36 px-6 max-w-6xl mx-auto space-y-20 z-10 overflow-hidden bg-transparent">
       <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-blue-500/[0.045] dark:bg-blue-500/[0.03] blur-[100px] rounded-full pointer-events-none z-0" />
 
       <motion.div

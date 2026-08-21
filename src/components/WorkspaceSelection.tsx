@@ -530,7 +530,7 @@ export default function WorkspaceSelection({
                   }}
                   className={`w-full h-11 rounded-xl text-[12px] tracking-wide font-bold cursor-pointer flex items-center justify-center transition-all duration-200 select-none group-active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none relative ${
                     googleGsiState === 'success'
-                      ? 'bg-emerald-50 dark:bg-[#10B981]/10 border border-emerald-250 dark:border-[#10B981]/25 text-emerald-700 dark:text-[#34D399]'
+                      ? 'bg-emerald-50 dark:bg-[#10B981]/10 border border-emerald-200 dark:border-[#10B981]/25 text-emerald-700 dark:text-[#34D399]'
                       : (googleGsiState === 'loading' || isAuthenticating)
                       ? 'text-slate-500 cursor-wait bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800'
                       : 'bg-primary-action hover:bg-primary-action/90 text-white shadow-[0_0_20px_rgba(37,99,235,0.15)] dark:shadow-[0_0_20px_rgba(37,99,235,0.25)]'

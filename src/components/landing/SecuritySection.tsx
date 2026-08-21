@@ -6,7 +6,7 @@ import { CardSpotlight } from './helpers/CardSpotlight';
 
 export const SecuritySection: React.FC = React.memo(() => {
   return (
-    <section id="security" className="py-24 md:py-28 px-6 max-w-5xl mx-auto space-y-16">
+    <section className="py-24 md:py-28 px-6 max-w-5xl mx-auto space-y-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

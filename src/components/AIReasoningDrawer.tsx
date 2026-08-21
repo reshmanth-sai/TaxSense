@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, Sparkles, CheckCircle2, Lock, ArrowRight, ArrowDown, HelpCircle, 
   MessageSquare, BookOpen, Send, CheckCircle, Info, ChevronDown, ChevronRight, AlertCircle,

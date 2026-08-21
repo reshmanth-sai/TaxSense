@@ -6,7 +6,7 @@ import { CardSpotlight } from './helpers/CardSpotlight';
 
 export const ComparisonSection: React.FC = React.memo(() => {
   return (
-    <section id="comparison" className="py-24 md:py-28 px-6 max-w-5xl mx-auto space-y-16">
+    <section className="py-24 md:py-28 px-6 max-w-5xl mx-auto space-y-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -21,7 +21,7 @@ export const ComparisonSection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Standard vs TaxSense
         </h2>
-        <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-lg mx-auto leading-relaxed font-sans">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed font-sans">
           Traditional tax filing is slow, manual, and leaves money on the table. TaxSense makes it instant, transparent, and accurate.
         </p>
       </motion.div>

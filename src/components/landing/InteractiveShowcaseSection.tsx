@@ -48,7 +48,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
   const recommendedRegime = newTax <= oldTax ? 'New Tax Regime' : 'Old Tax Regime';
 
   return (
-    <section id="interactive-showcase" className="py-24 md:py-28 px-6 max-w-6xl mx-auto space-y-16 border-y border-slate-200/60 dark:border-white/[0.04] bg-transparent relative">
+    <section className="py-24 md:py-28 px-6 max-w-6xl mx-auto space-y-16 border-y border-slate-200/60 dark:border-white/[0.04] bg-transparent relative">
       <ShareSavingsModal
         isOpen={shareModalOpen}
         onClose={() => setShareModalOpen(false)}
@@ -70,7 +70,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Simulate Your Tax Savings
         </h2>
-        <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
           Adjust salary inputs and deduction toggles to test live regime calculations in real-time.
         </p>
       </motion.div>

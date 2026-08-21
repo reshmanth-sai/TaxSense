@@ -22,6 +22,9 @@ interface LandingPageProps {
   onStart: () => void;
 }
 
+// Sections mount as they approach the viewport. The placeholder is sized close
+// to a real section so that expanding it does not jerk the scroll position out
+// from under a nav click, and `scroll-mt` clears the two fixed bars at the top.
 const LazySection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isIntersecting = useInView(ref, {
@@ -31,7 +34,7 @@ const LazySection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div ref={ref} className="w-full">
-      {isIntersecting ? children : <div className="h-[250px] bg-transparent opacity-0" />}
+      {isIntersecting ? children : <div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}
     </div>
   );
 };
@@ -173,6 +176,15 @@ export default function LandingPage({ onStart }: LandingPageProps) {
 
 
 
+      {/* Skip link: without it, a keyboard user tabs through the banner, the
+          navbar and every rail dot before reaching any content. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-xl focus:bg-blue-700 focus:text-white focus:text-sm focus:font-semibold focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to content
+      </a>
+
       {/* Inline styles for border beams & background drift keyframe animations */}
       <style>{`
         @keyframes border-beam {
@@ -253,6 +265,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             ? "0 20px 56px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05)" 
             : "0 20px 48px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.4)"
         }}
+        role="navigation"
+        aria-label="Page sections"
         className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-6 select-none w-12 pt-8 pb-6 bg-gradient-to-b from-white/60 to-white/35 dark:from-slate-950/25 dark:to-slate-950/10 border border-slate-200/40 dark:border-white/[0.03] border-t-white/20 dark:border-t-white/10 backdrop-blur-[18px] rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.03)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.55)] transition-all duration-300"
       >
         {/* Typographically Optimized Counter */}
@@ -302,20 +316,16 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             const rgbaGlowStrongStr = `rgba(${r}, ${g}, ${b}, 0.7)`;
 
             return (
-              <div
+              <button
                 key={s.id}
-                tabIndex={0}
+                type="button"
+                aria-label={`Jump to ${s.label}`}
+                aria-current={isActive ? 'true' : undefined}
                 onMouseEnter={() => setHoveredDot(s.id)}
                 onMouseLeave={() => setHoveredDot(null)}
                 onFocus={() => setHoveredDot(s.id)}
                 onBlur={() => setHoveredDot(null)}
                 onClick={() => handleScrollTo(s.id)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleScrollTo(s.id);
-                  }
-                }}
                 className="relative flex items-center justify-center w-5 h-5 cursor-pointer z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#16E27A] rounded-full"
               >
                 {isActive ? (
@@ -372,7 +382,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -451,73 +461,76 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       <Navbar onStart={handleStartWorkspace} activeSection={activeSection} />
 
 
+      <main id="main-content">
       {/* SECTION 1: HERO */}
       <div id="hero" className="w-full">
         <HeroSection onStart={handleStartWorkspace} />
       </div>
 
       {/* SECTION 2: WHY TAXSENSE / COMPARISON */}
-      <div id="comparison" className="w-full">
+      <div id="comparison" className="w-full scroll-mt-28">
         <LazySection>
           <ComparisonSection />
         </LazySection>
       </div>
 
       {/* SECTION 3: TIPPING POINT VISUALIZER (NEW) */}
-      <div id="tipping-point" className="w-full">
+      <div id="tipping-point" className="w-full scroll-mt-28">
         <LazySection>
           <TippingPointVisualizer />
         </LazySection>
       </div>
 
       {/* SECTION 4: INTERACTIVE CALCULATOR SHOWCASE */}
-      <div id="interactive-showcase" className="w-full">
+      <div id="interactive-showcase" className="w-full scroll-mt-28">
         <LazySection>
           <InteractiveShowcaseSection />
         </LazySection>
       </div>
 
       {/* SECTION 5: UNCLAIMED REFUND FINDER (NEW) */}
-      <div id="refund-finder" className="w-full">
+      <div id="refund-finder" className="w-full scroll-mt-28">
         <LazySection>
           <RefundFinderWidget onStart={handleStartWorkspace} />
         </LazySection>
       </div>
 
       {/* SECTION 6: 4-STEP JOURNEY */}
-      <div id="journey" className="w-full">
+      <div id="journey" className="w-full scroll-mt-28">
         <LazySection>
           <JourneySection />
         </LazySection>
       </div>
 
       {/* SECTION 8: MULTILINGUAL AI COPILOT SHOWCASE */}
-      <div id="copilot" className="w-full">
+      <div id="copilot" className="w-full scroll-mt-28">
         <LazySection>
           <CopilotSection soundEnabled={soundEnabled} />
         </LazySection>
       </div>
 
       {/* SECTION 9: SECURITY */}
-      <div id="security" className="w-full">
+      <div id="security" className="w-full scroll-mt-28">
         <LazySection>
           <SecuritySection />
         </LazySection>
       </div>
 
       {/* SECTION 11: FAQ */}
-      <div id="faq" className="w-full">
+      <div id="faq" className="w-full scroll-mt-28">
         <LazySection>
           <FAQSection />
         </LazySection>
       </div>
 
       {/* SECTION 12: FINAL CTA */}
-      <div id="get-started" className="w-full">
+      <div id="get-started" className="w-full scroll-mt-28">
         <LazySection>
           <GetStartedSection onStart={handleStartWorkspace} />
         </LazySection>
       </div>
+
+      </main>
 
       {/* FOOTER ROW */}
       <div ref={footerRef} className="relative z-20 w-full overflow-hidden bg-transparent">

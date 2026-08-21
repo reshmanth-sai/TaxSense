@@ -1259,7 +1259,7 @@ export default function App() {
                               <button
                                 key={preset.id}
                                 onClick={() => handleLoadPreset(preset.id as any)}
-                                className="p-2.5 bg-slate-50 hover:bg-slate-105 dark:bg-slate-950/40 dark:hover:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer text-left transition-all duration-150 active:scale-95 flex flex-col justify-between h-20 w-full"
+                                className="p-2.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950/40 dark:hover:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer text-left transition-all duration-150 active:scale-95 flex flex-col justify-between h-20 w-full"
                               >
                                 <span className="font-bold text-[10px] text-slate-850 dark:text-slate-250 leading-tight">{preset.name}</span>
                                 <span className="text-[8.5px] text-slate-500 dark:text-slate-500 mt-1 leading-snug">{preset.desc}</span>
@@ -1347,7 +1347,7 @@ export default function App() {
                                   setAiTemperature(temp);
                                   localStorage.setItem('taxsense_ai_temp', temp.toString());
                                 }}
-                                className="w-full accent-blue-650 dark:accent-blue-500 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg cursor-pointer"
+                                className="w-full accent-blue-600 dark:accent-blue-500 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg cursor-pointer"
                               />
                             </div>
                             <div className="flex justify-between text-[8px] text-slate-550 pl-0.5">
@@ -1391,15 +1391,15 @@ export default function App() {
                         <div className="space-y-2.5 pt-3 border-t border-slate-200 dark:border-slate-800/80">
                           <span className="font-bold text-slate-400 dark:text-slate-500 block uppercase tracking-wider text-[9px] font-mono">Support & Documentation</span>
                           <div className="flex flex-col gap-2 font-semibold pl-1">
-                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-650 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
+                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-600 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
                               <span>Privacy Sandbox Policy</span>
                               <ArrowRight className="w-3 h-3 text-slate-400 dark:text-slate-600" />
                             </a>
-                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-650 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
+                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-600 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
                               <span>Section 139(1) Filing Guide</span>
                               <ArrowRight className="w-3 h-3 text-slate-400 dark:text-slate-600" />
                             </a>
-                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-650 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
+                            <a href="#" className="text-slate-650 dark:text-slate-450 hover:text-emerald-600 dark:hover:text-emerald-450 transition-colors flex items-center gap-1.5 w-fit">
                               <span>Income Tax Department APIs documentation</span>
                               <ArrowRight className="w-3 h-3 text-slate-400 dark:text-slate-600" />
                             </a>
@@ -1407,14 +1407,14 @@ export default function App() {
                         </div>
 
                         <div className="space-y-1.5 pt-3 border-t border-slate-200 dark:border-slate-800/80">
-                          <span className="font-bold text-red-650 dark:text-red-400 block">Danger Zone</span>
+                          <span className="font-bold text-red-600 dark:text-red-400 block">Danger Zone</span>
                           <div className="flex gap-3">
                             <button
                               onClick={() => {
                                 clearFilingHistory();
                                 setIsSettingsOpen(false);
                               }}
-                              className="flex-1 py-2 bg-red-50 hover:bg-red-105 dark:bg-red-950/20 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-500/20 hover:border-red-300 dark:hover:border-red-500/40 text-red-600 dark:text-red-400 font-bold rounded-xl cursor-pointer text-center select-none active:scale-95 transition-all text-[11px]"
+                              className="flex-1 py-2 bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-500/20 hover:border-red-300 dark:hover:border-red-500/40 text-red-600 dark:text-red-400 font-bold rounded-xl cursor-pointer text-center select-none active:scale-95 transition-all text-[11px]"
                             >
                               Clear archives history
                             </button>

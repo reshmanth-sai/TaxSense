@@ -197,7 +197,7 @@ export default function ExtractionConfirm({
       {/* Warning/Action Required Callout */}
       {hasCriticalWarning && (
         <div className="mb-6 p-4 bg-amber-500/[0.03] border border-amber-500/15 rounded-xl flex items-start gap-3 text-amber-300 text-left">
-          <AlertCircle className="h-5 w-5 shrink-0 text-amber-405 mt-0.5" />
+          <AlertCircle className="h-5 w-5 shrink-0 text-amber-400 mt-0.5" />
           <div className="space-y-1">
             <h5 className="text-xs font-bold text-amber-200">Manual verification required</h5>
             <p className="text-[11px] leading-relaxed font-semibold">
@@ -256,7 +256,7 @@ export default function ExtractionConfirm({
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b border-white/[0.04] pb-4">
           <div className="md:col-span-5 space-y-1 text-left">
             <div className="flex items-center gap-2">
-              <Coins className="h-4 w-4 text-slate-505" />
+              <Coins className="h-4 w-4 text-slate-500" />
               <span className="text-xs font-bold text-slate-300">Gross Salary (Section 17)</span>
             </div>
             <p className="text-[10px] leading-relaxed text-slate-500">Annual base pay inclusive of allowances and taxable perks</p>
@@ -299,18 +299,18 @@ export default function ExtractionConfirm({
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b border-white/[0.04] pb-4">
           <div className="md:col-span-5 space-y-1 text-left">
             <div className="flex items-center gap-2">
-              <Receipt className="h-4 w-4 text-slate-505" />
+              <Receipt className="h-4 w-4 text-slate-500" />
               <span className="text-xs font-bold text-slate-300">TDS Deducted (Sec 192)</span>
             </div>
             <p className="text-[10px] leading-relaxed text-slate-500">Total income tax deposited on your behalf by your employer</p>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-[9px] font-semibold text-slate-550 uppercase tracking-wider">AI Extracted:</span>
               {extractedData?.tdsDeducted ? (
-                <span className="text-[9px] font-bold text-emerald-455 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
+                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
                   {formatINR(extractedData.tdsDeducted)}
                 </span>
               ) : (
-                <span className="text-[9px] font-semibold text-slate-505 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
+                <span className="text-[9px] font-semibold text-slate-500 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
                   Not detected
                 </span>
               )}
@@ -342,18 +342,18 @@ export default function ExtractionConfirm({
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b border-white/[0.04] pb-4">
           <div className="md:col-span-5 space-y-1 text-left">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-slate-505" />
+              <ShieldCheck className="h-4 w-4 text-slate-500" />
               <span className="text-xs font-bold text-slate-300">PF Contribution (80C Eligible)</span>
             </div>
             <p className="text-[10px] leading-relaxed text-slate-500">Employee Provident Fund deducted from your base pay (annualized)</p>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-[9px] font-semibold text-slate-550 uppercase tracking-wider">AI Extracted:</span>
               {extractedData?.deduction80C ? (
-                <span className="text-[9px] font-bold text-emerald-455 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
+                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
                   {formatINR(extractedData.deduction80C)}
                 </span>
               ) : (
-                <span className="text-[9px] font-semibold text-slate-505 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
+                <span className="text-[9px] font-semibold text-slate-500 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
                   Not detected
                 </span>
               )}
@@ -361,7 +361,7 @@ export default function ExtractionConfirm({
           </div>
           <div className="md:col-span-7">
             <div className="relative">
-              <span className="absolute left-3.5 top-2.5 text-slate-505 text-xs font-semibold">₹</span>
+              <span className="absolute left-3.5 top-2.5 text-slate-500 text-xs font-semibold">₹</span>
               <input
                 type="text"
                 inputMode="numeric"
@@ -383,18 +383,18 @@ export default function ExtractionConfirm({
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center border-b border-white/[0.04] pb-4">
           <div className="md:col-span-5 space-y-1 text-left">
             <div className="flex items-center gap-2">
-              <Building className="h-4 w-4 text-slate-505" />
+              <Building className="h-4 w-4 text-slate-500" />
               <span className="text-xs font-bold text-slate-300">HRA Received (Section 10(13A))</span>
             </div>
             <p className="text-[10px] leading-relaxed text-slate-500">House Rent Allowance component specified in salary breakdown</p>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-[9px] font-semibold text-slate-550 uppercase tracking-wider">AI Extracted:</span>
               {extractedData?.hraExemption ? (
-                <span className="text-[9px] font-bold text-emerald-455 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
+                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10 font-mono">
                   {formatINR(extractedData.hraExemption)}
                 </span>
               ) : (
-                <span className="text-[9px] font-semibold text-slate-505 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
+                <span className="text-[9px] font-semibold text-slate-500 bg-white/[0.02] px-2 py-0.5 rounded border border-white/[0.04]">
                   Not detected
                 </span>
               )}
@@ -402,7 +402,7 @@ export default function ExtractionConfirm({
           </div>
           <div className="md:col-span-7">
             <div className="relative">
-              <span className="absolute left-3.5 top-2.5 text-slate-505 text-xs font-semibold">₹</span>
+              <span className="absolute left-3.5 top-2.5 text-slate-500 text-xs font-semibold">₹</span>
               <input
                 type="text"
                 inputMode="numeric"
@@ -497,7 +497,7 @@ export default function ExtractionConfirm({
             <div>
               <label className="block text-[11px] font-bold text-slate-400 mb-1">Edu Loan (80E)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-slate-505 text-[11px] font-semibold">₹</span>
+                <span className="absolute left-3 top-2 text-slate-500 text-[11px] font-semibold">₹</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -511,7 +511,7 @@ export default function ExtractionConfirm({
             <div>
               <label className="block text-[11px] font-bold text-slate-400 mb-1">Donations (80G)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-slate-505 text-[11px] font-semibold">₹</span>
+                <span className="absolute left-3 top-2 text-slate-500 text-[11px] font-semibold">₹</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -525,7 +525,7 @@ export default function ExtractionConfirm({
             <div>
               <label className="block text-[11px] font-bold text-slate-400 mb-1">Savings Int (80TTA)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-slate-505 text-[11px] font-semibold">₹</span>
+                <span className="absolute left-3 top-2 text-slate-500 text-[11px] font-semibold">₹</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -539,7 +539,7 @@ export default function ExtractionConfirm({
             <div>
               <label className="block text-[11px] font-bold text-slate-400 mb-1">Home Loan Int (24b)</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-slate-505 text-[11px] font-semibold">₹</span>
+                <span className="absolute left-3 top-2 text-slate-500 text-[11px] font-semibold">₹</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -610,7 +610,7 @@ export default function ExtractionConfirm({
           id="btn-confirm-extraction"
           onClick={handleApply}
           type="button"
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold bg-emerald-500 hover:bg-emerald-405 text-slate-950 rounded-xl shadow-md shadow-emerald-500/10 transition-all active:scale-98 cursor-pointer"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl shadow-md shadow-emerald-500/10 transition-all active:scale-98 cursor-pointer"
         >
           <CheckCircle2 className="h-4 w-4" />
           <span>Confirm & Start Chat Copilot</span>

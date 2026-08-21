@@ -86,7 +86,7 @@ const SavingsHero: React.FC<SavingsHeroProps> = React.memo(({ savings, recommend
           </div>
 
           <div className="space-y-1">
-            <span className="text-4xl md:text-5xl font-black text-emerald-605 dark:text-[#34D399] tracking-tight font-mono block">
+            <span className="text-4xl md:text-5xl font-black text-emerald-600 dark:text-[#34D399] tracking-tight font-mono block">
               <AnimatedCounter value={savings} />
             </span>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-extrabold block">
@@ -112,7 +112,7 @@ const SavingsHero: React.FC<SavingsHeroProps> = React.memo(({ savings, recommend
           {/* KPI 2: Best Regime */}
           <div className="bg-slate-50/80 dark:bg-[#0E1324] border border-slate-200/50 dark:border-white/[0.04] p-3.5 rounded-2xl flex flex-col justify-between hover:border-slate-350 dark:hover:border-white/[0.08] transition-colors">
             <span className="text-[9px] text-slate-500 dark:text-slate-450 uppercase tracking-wider font-extrabold">Best Regime</span>
-            <span className="text-lg font-black text-blue-600 dark:text-blue-405 mt-1">
+            <span className="text-lg font-black text-blue-600 dark:text-blue-400 mt-1">
               {recommendedRegime === 'NEW' ? 'New Regime' : 'Old Regime'}
             </span>
           </div>
@@ -490,19 +490,19 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
               <span className="text-[9px] font-bold text-slate-550 dark:text-slate-550 uppercase tracking-widest block mb-1">AI Exemption Plan Summary</span>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700 dark:text-slate-300">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-605 dark:text-emerald-400 shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>Your salary records were verified.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-605 dark:text-emerald-400 shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>Three deductions were automatically applied.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-605 dark:text-emerald-400 shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>One additional tax saving opportunity was identified.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-605 dark:text-emerald-400 shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>The New Regime produces the lowest tax liability.</span>
                 </div>
               </div>
@@ -582,7 +582,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                 {/* Middle Action */}
                 <button
                   onClick={() => setSubStage('3B')}
-                  className="h-11 px-5 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/[0.02] text-slate-500 hover:text-slate-805 dark:text-slate-400 dark:hover:text-white text-xs font-bold rounded-xl cursor-pointer select-none active:scale-95 transition-all w-full sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-450"
+                  className="h-11 px-5 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/[0.02] text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white text-xs font-bold rounded-xl cursor-pointer select-none active:scale-95 transition-all w-full sm:w-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-450"
                 >
                   Need changes? Edit Deductions
                 </button>
@@ -635,7 +635,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                 <div className="border-b border-slate-200 dark:border-white/[0.04]">
                   <button
                     onClick={() => setExpandedAccordion(expandedAccordion === '80C' ? null : '80C')}
-                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-205 hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
+                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
                   >
                     <span>Section 80C (Provident Fund, ELSS, Insurance)</span>
                     <div className="flex items-center gap-3">
@@ -669,7 +669,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                           {/* 3. Live Savings */}
                           <div className="flex justify-between items-center bg-emerald-500/5 dark:bg-emerald-500/[0.02] p-3 rounded-lg border border-emerald-500/20 dark:border-emerald-500/10">
                             <span className="text-emerald-600 dark:text-emerald-450 font-bold">Live Section Savings</span>
-                            <span className="font-mono text-emerald-600 dark:text-emerald-405 font-black">
+                            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-black">
                               <AnimatedCounter value={Math.round(val80C * currentRate * 1.04)} />
                             </span>
                           </div>
@@ -696,7 +696,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('80C', Math.max(0, val80C - 5000))}
-                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
                               >
                                 <Minus className="h-3.5 w-3.5" />
                               </button>
@@ -719,7 +719,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('80C', Math.min(LIMIT_80C, val80C + 5000))}
-                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
                               >
                                 <Plus className="h-3.5 w-3.5" />
                               </button>
@@ -768,7 +768,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                 <div className="border-b border-slate-200 dark:border-white/[0.04]">
                   <button
                     onClick={() => setExpandedAccordion(expandedAccordion === '80D' ? null : '80D')}
-                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-205 hover:bg-slate-55/50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
+                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-55/50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
                   >
                     <span>Section 80D (Medical Insurance Premium)</span>
                     <div className="flex items-center gap-3">
@@ -801,7 +801,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
 
                           {/* 3. Live Savings */}
                           <div className="flex justify-between items-center bg-emerald-500/5 dark:bg-emerald-500/[0.02] p-3 rounded-lg border border-emerald-500/20 dark:border-emerald-500/10">
-                            <span className="text-emerald-600 dark:text-emerald-455 font-bold">Live Section Savings</span>
+                            <span className="text-emerald-600 dark:text-emerald-500 font-bold">Live Section Savings</span>
                             <span className="font-mono text-emerald-600 dark:text-emerald-400 font-black">
                               <AnimatedCounter value={Math.round(val80D * currentRate * 1.04)} />
                             </span>
@@ -829,7 +829,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('80D', Math.max(0, val80D - 2500))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
                               >
                                 <Minus className="h-3.5 w-3.5" />
                               </button>
@@ -852,7 +852,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('80D', Math.min(LIMIT_80D, val80D + 2500))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 rounded-md transition-colors cursor-pointer"
                               >
                                 <Plus className="h-3.5 w-3.5" />
                               </button>
@@ -901,7 +901,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                 <div className="border-b border-slate-200 dark:border-white/[0.04]">
                   <button
                     onClick={() => setExpandedAccordion(expandedAccordion === 'HRA' ? null : 'HRA')}
-                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-205 hover:bg-slate-55/50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
+                    className="w-full py-4.5 px-5 flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-55/50 dark:hover:bg-white/[0.01] transition-all text-xs uppercase tracking-wider"
                   >
                     <span>HRA (House Rent Exemption)</span>
                     <div className="flex items-center gap-3">
@@ -922,13 +922,13 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                         <div className="p-6 bg-slate-50/50 dark:bg-[#070A0F] space-y-5 border-t border-slate-200 dark:border-white/[0.02] text-xs">
                           {/* 1. Current Claimed Amount */}
                           <div className="flex justify-between items-center bg-white dark:bg-white/[0.01] p-3 rounded-lg border border-slate-200 dark:border-white/[0.02]">
-                            <span className="text-slate-605 dark:text-slate-400 font-semibold">Current Claimed Amount</span>
+                            <span className="text-slate-600 dark:text-slate-400 font-semibold">Current Claimed Amount</span>
                             <span className="font-mono text-slate-900 dark:text-slate-200 font-extrabold">{formatINR(valHRA)}</span>
                           </div>
 
                           {/* 2. Remaining Eligible Amount */}
                           <div className="flex justify-between items-center bg-white dark:bg-white/[0.01] p-3 rounded-lg border border-slate-200 dark:border-white/[0.02]">
-                            <span className="text-slate-605 dark:text-slate-400 font-semibold">Remaining Eligible Amount</span>
+                            <span className="text-slate-600 dark:text-slate-400 font-semibold">Remaining Eligible Amount</span>
                             <span className="font-mono text-slate-900 dark:text-slate-200 font-extrabold">{formatINR(Math.max(0, LIMIT_HRA - valHRA))}</span>
                           </div>
 
@@ -945,7 +945,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                             <div className="flex justify-between items-center mb-1">
                               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Adjust Claim amount</span>
                               <div className="relative w-32 shrink-0">
-                                <span className="absolute left-2.5 top-1.5 text-slate-400 dark:text-slate-555 text-[10px] font-bold">₹</span>
+                                <span className="absolute left-2.5 top-1.5 text-slate-400 dark:text-slate-500 text-[10px] font-bold">₹</span>
                                 <input
                                   aria-label="Adjust HRA deduction amount"
                                   type="text"
@@ -962,7 +962,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('HRA exemption', Math.max(0, valHRA - 10000))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-355 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md transition-colors cursor-pointer"
                               >
                                 <Minus className="h-3.5 w-3.5" />
                               </button>
@@ -985,7 +985,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('HRA exemption', Math.min(LIMIT_HRA, valHRA + 10000))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-355 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md transition-colors cursor-pointer"
                               >
                                 <Plus className="h-3.5 w-3.5" />
                               </button>
@@ -1049,13 +1049,13 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                         <div className="p-6 bg-slate-50/50 dark:bg-[#070A0F] space-y-5 border-t border-slate-200 dark:border-white/[0.02] text-xs">
                           {/* 1. Current Claimed Amount */}
                           <div className="flex justify-between items-center bg-white dark:bg-white/[0.01] p-3 rounded-lg border border-slate-200 dark:border-white/[0.02]">
-                            <span className="text-slate-605 dark:text-slate-400 font-semibold">Current Claimed Amount</span>
+                            <span className="text-slate-600 dark:text-slate-400 font-semibold">Current Claimed Amount</span>
                             <span className="font-mono text-slate-900 dark:text-slate-200 font-extrabold">{formatINR(valSection24bLetOut)}</span>
                           </div>
 
                           {/* 2. Remaining Eligible Amount */}
                           <div className="flex justify-between items-center bg-white dark:bg-white/[0.01] p-3 rounded-lg border border-slate-200 dark:border-white/[0.02]">
-                            <span className="text-slate-605 dark:text-slate-400 font-semibold">Remaining Eligible Amount</span>
+                            <span className="text-slate-600 dark:text-slate-400 font-semibold">Remaining Eligible Amount</span>
                             <span className="font-mono text-slate-900 dark:text-slate-200 font-extrabold">{formatINR(Math.max(0, LIMIT_24B_LETOUT - valSection24bLetOut))}</span>
                           </div>
 
@@ -1072,7 +1072,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                             <div className="flex justify-between items-center mb-1">
                               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Adjust Claim amount</span>
                               <div className="relative w-32 shrink-0">
-                                <span className="absolute left-2.5 top-1.5 text-slate-400 dark:text-slate-555 text-[10px] font-bold">₹</span>
+                                <span className="absolute left-2.5 top-1.5 text-slate-400 dark:text-slate-500 text-[10px] font-bold">₹</span>
                                 <input
                                   aria-label="Adjust Housing Loan deduction amount"
                                   type="text"
@@ -1089,7 +1089,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('section24bLetOut', Math.max(0, valSection24bLetOut - 10000))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-355 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md transition-colors cursor-pointer"
                               >
                                 <Minus className="h-3.5 w-3.5" />
                               </button>
@@ -1112,7 +1112,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                               <button 
                                 type="button"
                                 onClick={() => setDeductionPreset('section24bLetOut', Math.min(LIMIT_24B_LETOUT, valSection24bLetOut + 10000))}
-                                className="p-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-808 text-slate-600 dark:text-slate-355 rounded-md transition-colors cursor-pointer"
+                                className="p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md transition-colors cursor-pointer"
                               >
                                 <Plus className="h-3.5 w-3.5" />
                               </button>
@@ -1162,7 +1162,7 @@ export const DeductionCard: React.FC<DeductionCardProps> = React.memo(({ onConti
                 <div className="space-y-4 border-b border-slate-200/50 dark:border-white/[0.04] pb-4">
                   <div>
                     <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-extrabold block">Claimed Amount</span>
-                    <span className="text-base font-extrabold text-slate-805 dark:text-slate-200 font-mono">
+                    <span className="text-base font-extrabold text-slate-800 dark:text-slate-200 font-mono">
                       <AnimatedCounter value={totalClaimed} />
                     </span>
                   </div>

@@ -535,7 +535,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
         {/* Enforced Typography Hierarchy (72px -> 18px -> 13px baseline) */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-extrabold tracking-tight text-slate-900 font-sans dark:text-white leading-[1.05]">
           Compare both tax regimes instantly. <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-500 to-emerald-500 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">File with 100% confidence.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-700 to-emerald-700 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">File with 100% confidence.</span>
         </h1>
         <p className="text-[16px] md:text-[18px] leading-[1.6] text-slate-650 dark:text-slate-350 max-w-[660px] mx-auto font-medium">
           Upload your Form 16, or just type your salary. TaxSense compares Old vs New regimes to the rupee, flags 80C and 80D deductions you have missed, and shows what you get back.
@@ -565,6 +565,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
               <button
                 onClick={resetTimeline}
                 className="px-5 py-[18px] bg-white/70 hover:bg-white text-slate-600 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-slate-400 dark:border-white/10 rounded-[14px] transition-all flex items-center justify-center shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
+                aria-label="Replay the product demo"
                 title="Replay Interactive Workflow"
               >
                 <RotateCcw className={`w-4 h-4 transition-transform ${isSpinning ? 'animate-spin text-blue-500' : ''}`} />

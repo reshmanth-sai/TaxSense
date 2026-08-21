@@ -37,6 +37,7 @@ const DeductionCard = React.lazy(() => import('../DeductionCard'));
 const FilingReviewCard = React.lazy(() => import('../FilingReviewCard'));
 const GenerateReturnCard = React.lazy(() => import('../GenerateReturnCard'));
 import { useTaxStore } from '../../store/useTaxStore';
+import type { UploadedFile } from '../../store/useTaxStore';
 
 // Format INR currency
 const formatINR = (val: number) => {
@@ -297,7 +298,7 @@ export const PipelineStep: React.FC<PipelineStepProps> = ({
         className="w-full text-left space-y-1 focus:outline-none select-none cursor-pointer group"
       >
         <div className="flex items-center justify-between">
-          <h4 className={`text-xs font-bold font-sans transition-colors ${isRunning ? 'text-blue-650 dark:text-blue-400' : isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-655 dark:text-slate-550'
+          <h4 className={`text-xs font-bold font-sans transition-colors ${isRunning ? 'text-blue-600 dark:text-blue-400' : isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-550'
             }`}>
             {title}
           </h4>
@@ -318,7 +319,7 @@ export const PipelineStep: React.FC<PipelineStepProps> = ({
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="flex flex-col gap-1.5 mt-2.5 pl-1.5 pb-2 text-[9px] text-slate-500 dark:text-slate-500 font-semibold leading-relaxed border-l border-slate-200 dark:border-slate-855">
+            <div className="flex flex-col gap-1.5 mt-2.5 pl-1.5 pb-2 text-[9px] text-slate-500 dark:text-slate-500 font-semibold leading-relaxed border-l border-slate-200 dark:border-slate-800">
               {items.map((it, idx) => (
                 <div key={idx} className="flex items-center gap-2">
                   <span className={`w-1 h-1 rounded-full ${isCompleted ? 'bg-emerald-500' : isRunning ? 'bg-blue-500' : 'bg-slate-800'}`} />
@@ -400,11 +401,11 @@ export const ProcessingPipeline: React.FC<ProcessingPipelineProps> = ({
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900/20 border border-slate-205 dark:border-white/[0.03] rounded-[24px] p-6 backdrop-blur-md space-y-6 text-left relative overflow-hidden shadow-xs">
+    <div className="bg-white dark:bg-slate-900/20 border border-slate-200 dark:border-white/[0.03] rounded-[24px] p-6 backdrop-blur-md space-y-6 text-left relative overflow-hidden shadow-xs">
       <div>
-        <span className="text-[9px] text-slate-550 dark:text-slate-505 font-bold uppercase tracking-wider font-mono block">Analysis progress</span>
-        <h3 className="text-xs font-bold text-slate-805 dark:text-slate-355 flex items-center gap-1.5 uppercase tracking-wider">
-          <Cpu className="w-3.5 h-3.5 text-blue-650 dark:text-blue-400" />
+        <span className="text-[9px] text-slate-550 dark:text-slate-500 font-bold uppercase tracking-wider font-mono block">Analysis progress</span>
+        <h3 className="text-xs font-bold text-slate-800 dark:text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+          <Cpu className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           Ingestion Timeline
         </h3>
       </div>
@@ -430,17 +431,10 @@ export const ProcessingPipeline: React.FC<ProcessingPipelineProps> = ({
 // ----------------------------------------------------
 // 5. DocumentAttachment
 // ----------------------------------------------------
-export interface UploadedFile {
-  id: string;
-  name: string;
-  size: string;
-  employer: string;
-  financialYear: string;
-  pages: number;
-  uploadTime: string;
-  status: 'Verified' | 'Failed' | 'Processing';
-  confidence: number;
-}
+// The store owns this shape. Re-exported here because several modules already
+// import UploadedFile from this file; a second declaration silently drifted
+// out of sync with the store's once already.
+export type { UploadedFile };
 
 interface DocumentAttachmentProps {
   file: UploadedFile;
@@ -482,7 +476,7 @@ export const DocumentAttachment: React.FC<DocumentAttachmentProps> = ({
     >
       <div className="flex items-start gap-3.5 flex-1 min-w-0">
         <div className="p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.04] rounded-xl text-slate-500 dark:text-slate-400 shrink-0 flex items-center justify-center">
-          <FileText className="w-5 h-5 text-blue-650 dark:text-blue-450" />
+          <FileText className="w-5 h-5 text-blue-600 dark:text-blue-450" />
         </div>
 
         <div className="space-y-1.5 flex-1 min-w-0">
@@ -494,7 +488,7 @@ export const DocumentAttachment: React.FC<DocumentAttachmentProps> = ({
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSaveRename()}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-805 dark:text-white focus:outline-none focus:border-blue-500/50 flex-1 font-semibold"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-blue-500/50 flex-1 font-semibold"
                   autoFocus
                 />
                 <button
@@ -569,7 +563,7 @@ export const DocumentAttachment: React.FC<DocumentAttachmentProps> = ({
           <button
             onClick={onDelete}
             title="Purge Attachment"
-            className="p-2 bg-red-500/5 hover:bg-red-500/15 border border-red-500/10 text-red-500 dark:text-red-400 hover:text-red-650 dark:hover:text-red-300 rounded-xl transition-all cursor-pointer shadow-inner active:scale-95"
+            className="p-2 bg-red-500/5 hover:bg-red-500/15 border border-red-500/10 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 rounded-xl transition-all cursor-pointer shadow-inner active:scale-95"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -608,13 +602,13 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
         </div>
         <div className="space-y-1 flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] text-purple-605 dark:text-purple-400 font-bold uppercase tracking-wider font-mono">TaxSense Copilot</span>
+            <span className="text-[9px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider font-mono">TaxSense Copilot</span>
             <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full select-none">
               <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-450 uppercase tracking-wider">97% Confidence</span>
             </div>
           </div>
-          <h4 className="text-xs font-bold text-slate-805 dark:text-slate-200 pt-0.5">Expert Verification Review</h4>
+          <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 pt-0.5">Expert Verification Review</h4>
         </div>
       </div>
 
@@ -634,7 +628,7 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
             {/* Why this recommendation */}
             <div className="space-y-1">
               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Why this recommendation?</span>
-              <p className="leading-relaxed text-[11px] text-slate-655 dark:text-slate-400">
+              <p className="leading-relaxed text-[11px] text-slate-600 dark:text-slate-400">
                 Extracted salary is {formatINR(incomeProfile?.grossSalary || 0)}.
                 {missing80D ? " We verified zero claims under Section 80D. If you pay medical premiums for parents/self, you could unlock up to ₹25,000 to ₹50,000 in extra deductions." : " Section 80D and standard deductions are mapped correctly."}
               </p>
@@ -658,7 +652,7 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
             {/* Applicable Rules */}
             <div className="space-y-1">
               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Applicable Tax Rules</span>
-              <ul className="list-disc pl-4 space-y-1 leading-relaxed text-[11px] text-slate-655 dark:text-slate-400">
+              <ul className="list-disc pl-4 space-y-1 leading-relaxed text-[11px] text-slate-600 dark:text-slate-400">
                 <li>Section 10(13A) HRA exemption limits calculated based on rent receipts.</li>
                 <li>Standard deduction of ₹75,000 preloaded under AY 2026-27 rules.</li>
                 <li>Section 80C caps verified at ₹1,50,000 maximum.</li>
@@ -679,7 +673,7 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
 
         <button
           onClick={onActionClick}
-          className="flex-1 py-2.5 bg-purple-100/50 hover:bg-purple-100 dark:bg-purple-500/10 dark:hover:bg-purple-500/20 border border-purple-205 dark:border-purple-500/20 text-purple-650 dark:text-purple-400 font-bold text-xs rounded-xl cursor-pointer transition-all text-center select-none active:scale-[0.98]"
+          className="flex-1 py-2.5 bg-purple-100/50 hover:bg-purple-100 dark:bg-purple-500/10 dark:hover:bg-purple-500/20 border border-purple-200 dark:border-purple-500/20 text-purple-600 dark:text-purple-400 font-bold text-xs rounded-xl cursor-pointer transition-all text-center select-none active:scale-[0.98]"
         >
           View Recommendations
         </button>
@@ -972,11 +966,11 @@ export const ProcessingLogs: React.FC<{
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900/10 border border-slate-205 dark:border-white/[0.03] rounded-3xl p-6 space-y-4 backdrop-blur-md text-left shadow-xs">
+    <div className="bg-slate-50 dark:bg-slate-900/10 border border-slate-200 dark:border-white/[0.03] rounded-3xl p-6 space-y-4 backdrop-blur-md text-left shadow-xs">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <span className="text-[10px] text-slate-500 dark:text-slate-505 font-bold uppercase tracking-wider font-mono">Activity timeline</span>
-          <h4 className="text-xs font-bold text-slate-805 dark:text-slate-205 font-sans">Processing Activity</h4>
+          <span className="text-[10px] text-slate-500 dark:text-slate-500 font-bold uppercase tracking-wider font-mono">Activity timeline</span>
+          <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 font-sans">Processing Activity</h4>
         </div>
         <div className="flex items-center gap-2">
           {logs.length > 0 && (
@@ -984,14 +978,14 @@ export const ProcessingLogs: React.FC<{
               <button
                 onClick={copyLogs}
                 title="Copy activity logs"
-                className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-205 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <Copy className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={downloadLogs}
                 title="Download logs"
-                className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-205 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-450 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
               </button>
@@ -999,7 +993,7 @@ export const ProcessingLogs: React.FC<{
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-455 dark:hover:text-slate-205 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+            className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-455 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
           >
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -1029,7 +1023,7 @@ export const ProcessingLogs: React.FC<{
                 className={`flex gap-3 leading-relaxed ${isNewest ? 'text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-700 dark:text-slate-400'}`}
               >
                 <span className="text-slate-500 dark:text-slate-600 shrink-0 select-none font-semibold">{log.timestamp}</span>
-                <span className="text-slate-400 dark:text-slate-655 select-none">•</span>
+                <span className="text-slate-400 dark:text-slate-600 select-none">•</span>
                 <span>{log.message}</span>
               </motion.div>
             );
@@ -1114,7 +1108,7 @@ export const ProcessingHero: React.FC<ProcessingHeroProps> = ({
   const isActive = ['UPLOADING', 'OCR', 'EXTRACTING', 'VERIFYING', 'GENERATING_RETURN'].includes(ingestionState);
 
   return (
-    <div className="bg-white dark:bg-[#0f172a]/20 border border-slate-205 dark:border-slate-800 rounded-[24px] p-8 backdrop-blur-md relative overflow-hidden text-left flex flex-col md:flex-row md:items-center gap-8 shadow-xs">
+    <div className="bg-white dark:bg-[#0f172a]/20 border border-slate-200 dark:border-slate-800 rounded-[24px] p-8 backdrop-blur-md relative overflow-hidden text-left flex flex-col md:flex-row md:items-center gap-8 shadow-xs">
       <div className="absolute inset-0 bg-radial-at-c from-blue-500/[0.02] to-transparent pointer-events-none" />
 
       {/* Centered illustration graphic */}
@@ -1125,7 +1119,7 @@ export const ProcessingHero: React.FC<ProcessingHeroProps> = ({
       {/* Left-aligned details, progress, ETA */}
       <div className="flex-1 space-y-5">
         <div className="space-y-2">
-          <h3 className="text-lg font-black text-slate-900 dark:text-slate-105 font-sans tracking-tight leading-snug">
+          <h3 className="text-lg font-black text-slate-900 dark:text-slate-100 font-sans tracking-tight leading-snug">
             {getHumanTitle()}
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold leading-relaxed font-sans max-w-xl">
@@ -1210,12 +1204,12 @@ export const VerificationMetric: React.FC<{
       case 'status':
         return 'bg-emerald-500/[0.02] border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.06)] p-5 md:col-span-2 border-2';
       case 'success':
-        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-205 dark:border-white/[0.04] text-emerald-605 dark:text-emerald-400 p-4';
+        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-white/[0.04] text-emerald-600 dark:text-emerald-400 p-4';
       case 'info':
-        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-205 dark:border-white/[0.04] text-blue-650 dark:text-blue-400 p-4';
+        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-white/[0.04] text-blue-600 dark:text-blue-400 p-4';
       case 'neutral':
       default:
-        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-205 dark:border-white/[0.04] text-slate-805 dark:text-slate-200 p-4';
+        return 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-white/[0.04] text-slate-800 dark:text-slate-200 p-4';
     }
   };
 
@@ -1247,7 +1241,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ title, items }) => {
       case 'verification':
         return <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />;
       case 'identity':
-        return <User className="w-4 h-4 text-purple-605 dark:text-purple-400 shrink-0" />;
+        return <User className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />;
       case 'tax':
         return <Calculator className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0" />;
       case 'salary':
@@ -1257,12 +1251,12 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ title, items }) => {
   };
 
   return (
-    <div className="p-5 bg-slate-55 dark:bg-slate-900/20 border border-slate-205 dark:border-white/[0.03] rounded-2xl space-y-4 backdrop-blur-md text-left shadow-xs">
+    <div className="p-5 bg-slate-55 dark:bg-slate-900/20 border border-slate-200 dark:border-white/[0.03] rounded-2xl space-y-4 backdrop-blur-md text-left shadow-xs">
       <h5 className="text-[10px] font-bold text-slate-550 dark:text-slate-500 uppercase tracking-wider font-mono">{title}</h5>
       <div className="space-y-3">
         {items.map((it, idx) => (
           <div key={idx} className="flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2.5 text-slate-705 dark:text-slate-300 font-sans font-semibold">
+            <div className="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-sans font-semibold">
               {getIcon(it.type)}
               <span>{it.label}</span>
             </div>
@@ -1407,7 +1401,7 @@ export const ConfidenceBadge: React.FC<{ score: number }> = ({ score }) => {
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
     >
-      <span className="text-emerald-650 dark:text-emerald-450 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-1 rounded-full uppercase text-[10px] font-bold font-mono cursor-help select-none">
+      <span className="text-emerald-600 dark:text-emerald-450 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-1 rounded-full uppercase text-[10px] font-bold font-mono cursor-help select-none">
         {score}% Verified
       </span>
 
@@ -1421,7 +1415,7 @@ export const ConfidenceBadge: React.FC<{ score: number }> = ({ score }) => {
             className="absolute bottom-full right-0 mb-2 w-56 p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl text-[10px] leading-relaxed text-slate-700 dark:text-slate-300 space-y-1.5 pointer-events-none z-20 text-left font-sans"
           >
             <p className="font-bold uppercase tracking-wider text-[8px] font-mono text-emerald-600 dark:text-emerald-450">AI Confidence Audit</p>
-            <p className="font-semibold text-slate-800 dark:text-slate-202">Verified against official AY 2026-27 tax rules.</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-200">Verified against official AY 2026-27 tax rules.</p>
             <div className="pt-1.5 border-t border-slate-200 dark:border-slate-900 text-slate-550 dark:text-slate-400 text-[8.5px] space-y-1">
               <div>✓ Employer TAN signature matched</div>
               <div>✓ Section 80C limit rules checked</div>
@@ -1576,8 +1570,8 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
 
       <div className="space-y-5">
         <div className="space-y-1">
-          <span className="text-[9px] text-slate-550 dark:text-slate-505 font-bold uppercase tracking-wider font-mono block">Real-time analysis</span>
-          <h3 className="text-sm font-bold text-slate-805 dark:text-slate-100 flex items-center gap-1.5 font-sans">
+          <span className="text-[9px] text-slate-550 dark:text-slate-500 font-bold uppercase tracking-wider font-mono block">Real-time analysis</span>
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5 font-sans">
             <Calculator className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             Tax Regime Comparison
           </h3>
@@ -1629,7 +1623,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
             <span className="text-[8.5px] text-slate-500 font-bold uppercase tracking-wider font-mono block font-sans">Summary calculations</span>
             <div className="flex items-center justify-between text-xs py-1 px-2 -mx-2 bg-slate-100/50 dark:bg-white/[0.01] rounded">
               <span className="text-slate-800 dark:text-slate-200 font-semibold font-sans">Taxable base income</span>
-              <div className="flex items-center gap-6 font-mono text-slate-805 dark:text-slate-200 font-bold">
+              <div className="flex items-center gap-6 font-mono text-slate-800 dark:text-slate-200 font-bold">
                 <span className="w-20 text-right">{formatINR(oldRegime.taxableIncome)}</span>
                 <span className="w-20 text-right">{formatINR(newRegime.taxableIncome)}</span>
               </div>
@@ -1653,7 +1647,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
             <div className="space-y-1.5 text-xs">
               <div className="flex justify-between text-[11px] font-mono font-medium">
                 <span className="text-slate-500 dark:text-slate-450 font-sans">Current Regime (Old)</span>
-                <span className="text-slate-800 dark:text-slate-355 font-bold">{formatINR(oldTotal)}</span>
+                <span className="text-slate-800 dark:text-slate-400 font-bold">{formatINR(oldTotal)}</span>
               </div>
               <div className="h-2 w-full bg-slate-100 dark:bg-slate-950 rounded-full overflow-hidden border border-slate-200/50 dark:border-white/[0.02]">
                 <div className="h-full bg-slate-400 dark:bg-slate-600 rounded-full" style={{ width: `${(oldTotal / maxTotal) * 100}%` }} />
@@ -1692,7 +1686,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
             <div className="absolute -left-[50px] -bottom-[50px] w-24 h-24 bg-emerald-500/[0.03] rounded-full blur-xl pointer-events-none" />
             <div className="space-y-1 text-left relative z-10">
               <span className="text-[9px] text-emerald-600 dark:text-emerald-450 font-mono font-bold uppercase tracking-wider">Recommended Option Savings</span>
-              <p className="text-[11px] text-slate-700 dark:text-slate-355 leading-relaxed font-sans">
+              <p className="text-[11px] text-slate-700 dark:text-slate-400 leading-relaxed font-sans">
                 Based on your verified income and deductions, switching to the Recommended Regime reduces your estimated tax liability by <span className="font-bold text-slate-900 dark:text-white font-mono">{formatINR(taxCalculationResult.savings)}</span>.
               </p>
             </div>
@@ -1739,7 +1733,7 @@ export const AuditPanel: React.FC<AuditPanelProps> = ({
       {/* Left Column - Hero and Timeline */}
       <div className="lg:col-span-7 space-y-6">
         {/* Audit Hero */}
-        <div className="bg-slate-50 dark:bg-[#0f172a]/20 border border-slate-205 dark:border-slate-800 rounded-[24px] p-6 backdrop-blur-md flex items-center gap-4 relative overflow-hidden shadow-xs">
+        <div className="bg-slate-50 dark:bg-[#0f172a]/20 border border-slate-200 dark:border-slate-800 rounded-[24px] p-6 backdrop-blur-md flex items-center gap-4 relative overflow-hidden shadow-xs">
           <div className="absolute inset-0 bg-radial-at-t from-emerald-500/[0.01] to-transparent pointer-events-none" />
 
           <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/5">
@@ -1770,12 +1764,12 @@ export const AuditPanel: React.FC<AuditPanelProps> = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="p-6 bg-slate-55 dark:bg-slate-900/40 border border-slate-205 dark:border-white/[0.04] rounded-3xl space-y-4 backdrop-blur-md shadow-xs"
+            className="p-6 bg-slate-55 dark:bg-slate-900/40 border border-slate-200 dark:border-white/[0.04] rounded-3xl space-y-4 backdrop-blur-md shadow-xs"
           >
             <div className="flex items-center justify-between">
               <div className="space-y-0.5 text-left">
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono block">Validation details</span>
-                <span className="text-xs font-bold text-slate-805 dark:text-slate-200 font-sans">AI Confidence Index</span>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 font-sans">AI Confidence Index</span>
               </div>
               <ConfidenceBadge score={98} />
             </div>

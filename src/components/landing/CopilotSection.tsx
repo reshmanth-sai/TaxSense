@@ -243,7 +243,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
   };
 
   return (
-    <section id="copilot" className="py-24 md:py-28 border-y border-slate-200/60 dark:border-white/[0.04] bg-transparent px-6 relative overflow-hidden">
+    <section className="py-24 md:py-28 border-y border-slate-200/60 dark:border-white/[0.04] bg-transparent px-6 relative overflow-hidden">
       <div className="max-w-4xl mx-auto space-y-16 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -259,7 +259,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
           <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
             Conversational Tax Intelligence
           </h2>
-          <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
             Select your language and click preset prompts to watch the AI engine calculate tax savings.
           </p>
 

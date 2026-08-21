@@ -318,7 +318,7 @@ export const FilingReviewCard: React.FC<FilingReviewCardProps> = React.memo(({ o
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white dark:bg-[#0A0D14] border-l border-slate-205 dark:border-white/[0.08] p-8 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto text-left"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white dark:bg-[#0A0D14] border-l border-slate-200 dark:border-white/[0.08] p-8 shadow-2xl z-50 flex flex-col justify-between overflow-y-auto text-left"
             >
               <div className="space-y-6">
                 <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-white/[0.04]">
@@ -328,7 +328,7 @@ export const FilingReviewCard: React.FC<FilingReviewCardProps> = React.memo(({ o
                   </div>
                   <button
                     onClick={() => setIsDrawerOpen(false)}
-                    className="p-2 hover:bg-slate-100 dark:hover:bg-white/[0.04] rounded-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-205 transition-colors cursor-pointer"
+                    className="p-2 hover:bg-slate-100 dark:hover:bg-white/[0.04] rounded-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors cursor-pointer"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -348,7 +348,7 @@ export const FilingReviewCard: React.FC<FilingReviewCardProps> = React.memo(({ o
                 </div>
                 <button
                   onClick={() => setIsDrawerOpen(false)}
-                  className="h-10 px-5 bg-slate-105 hover:bg-slate-200 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-98"
+                  className="h-10 px-5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-98"
                 >
                   Close
                 </button>
