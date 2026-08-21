@@ -21,34 +21,39 @@ export const ComparisonSection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Standard vs TaxSense
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed font-sans">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed font-sans">
           Traditional tax filing is slow, manual, and leaves money on the table. TaxSense makes it instant, transparent, and accurate.
         </p>
       </motion.div>
 
       {/* Metrics Banner */}
-      <div className="grid grid-cols-3 gap-4 p-4 bg-white/60 dark:bg-[#0E131B]/70 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl text-center backdrop-blur-md shadow-sm">
-        <div className="space-y-1">
-          <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Time Required</span>
-          <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
-            <span className="text-red-500 line-through mr-1 opacity-70">3+ Hours</span>
-            <span className="text-emerald-600 dark:text-[#16E27A]">58s</span>
+      <div className="space-y-2">
+        <div className="grid grid-cols-3 gap-4 p-4 bg-white/60 dark:bg-[#0E131B]/70 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl text-center backdrop-blur-md shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Time Required</span>
+            <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
+              <span className="text-red-500 line-through mr-1 opacity-70">3+ Hours</span>
+              <span className="text-emerald-600 dark:text-[#16E27A]">58s</span>
+            </div>
+          </div>
+          <div className="space-y-1 border-x border-slate-200 dark:border-white/[0.06]">
+            <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Regime Analysis</span>
+            <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
+              <span className="text-red-500 line-through mr-1 opacity-70">Manual Guesswork</span>
+              <span className="text-emerald-600 dark:text-[#16E27A]">100% Simulated</span>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Example Savings*</span>
+            <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
+              <span className="text-red-500 line-through mr-1 opacity-70">₹0</span>
+              <span className="text-emerald-600 dark:text-[#16E27A]">₹67,860</span>
+            </div>
           </div>
         </div>
-        <div className="space-y-1 border-x border-slate-200 dark:border-white/[0.06]">
-          <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Regime Analysis</span>
-          <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
-            <span className="text-red-500 line-through mr-1 opacity-70">Manual Guesswork</span>
-            <span className="text-emerald-600 dark:text-[#16E27A]">100% Simulated</span>
-          </div>
-        </div>
-        <div className="space-y-1">
-          <span className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 font-semibold block">Average Savings</span>
-          <div className="text-xs sm:text-base font-bold text-slate-900 dark:text-white font-mono">
-            <span className="text-red-500 line-through mr-1 opacity-70">₹0</span>
-            <span className="text-emerald-600 dark:text-[#16E27A]">₹18,400</span>
-          </div>
-        </div>
+        <p className="text-[11px] text-slate-500 dark:text-slate-500 text-center font-mono px-2">
+          *On ₹15,00,000 gross salary claiming 80C, 80D and HRA -- New Regime computed at ₹97,500 vs Old Regime at ₹1,65,360 by this page's own calculator. Try your own numbers below.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -111,7 +116,7 @@ export const ComparisonSection: React.FC = React.memo(() => {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-          <div className="absolute top-0 right-0 bg-emerald-500 text-white dark:bg-[#16E27A] dark:text-[#050607] px-3.5 py-1 text-[9px] font-black uppercase tracking-wider rounded-bl-xl shadow-md">
+          <div className="absolute top-0 right-0 bg-emerald-500 text-white dark:bg-[#16E27A] dark:text-[#050607] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-bl-xl shadow-md">
             Recommended
           </div>
 

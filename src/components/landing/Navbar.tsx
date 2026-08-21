@@ -6,9 +6,13 @@ import { useSidebarStore } from '../sidebar/useSidebarStore';
 interface NavbarProps {
   onStart: () => void;
   activeSection: string;
+  /** Whether the deadline banner above is currently showing. Default true
+   *  matches the banner's own default so nothing shifts before either has
+   *  had a chance to report its real state. */
+  bannerVisible?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVisible = true }) => {
   const theme = useSidebarStore((state) => state.theme);
   const setTheme = useSidebarStore((state) => state.setTheme);
 
@@ -60,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
   ];
 
   return (
-    <div className="fixed top-11 left-1/2 -translate-x-1/2 z-40 w-full max-w-[1200px] px-4 sm:px-6 pointer-events-none select-none">
+    <div className={`fixed ${bannerVisible ? 'top-11' : 'top-4'} left-1/2 -translate-x-1/2 z-40 w-full max-w-[1200px] px-4 sm:px-6 pointer-events-none select-none transition-[top] duration-300 ease-out`}>
         <motion.header
           role="banner"
           initial={{ opacity: 0, y: -16 }}
@@ -95,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection }) => {
                   </span>
                   <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
-                <span className="text-[9.5px] font-mono text-slate-400 font-bold block mt-0.5 tracking-wider uppercase">
+                <span className="text-[10px] font-mono text-slate-400 font-bold block mt-0.5 tracking-wider uppercase">
                   AI Tax OS
                 </span>
               </div>

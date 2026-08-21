@@ -19,7 +19,12 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const shareText = `I just compared my tax regimes and identified ₹${savingsAmount.toLocaleString('en-IN')} in tax savings using TaxSense AI! 🚀 Compare your tax regimes in 58 seconds: https://taxsense.in`;
+  // Uses the page's own origin rather than a hardcoded domain: this project
+  // has no confirmed production domain yet (see index.html), and a share
+  // button is the worst place to publish a guess -- it posts to LinkedIn
+  // and Twitter on the user's behalf.
+  const shareUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const shareText = `I just compared my tax regimes and identified ₹${savingsAmount.toLocaleString('en-IN')} in tax savings using TaxSense! Compare your tax regimes in 58 seconds${shareUrl ? `: ${shareUrl}` : '.'}`;
 
   const handleCopyText = () => {
     navigator.clipboard.writeText(shareText);
@@ -28,7 +33,7 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
   };
 
   const handleShareLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://taxsense.in')}&summary=${encodeURIComponent(shareText)}`;
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${encodeURIComponent(shareText)}`;
     window.open(url, '_blank');
   };
 
@@ -55,7 +60,7 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
           </button>
 
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[9px] font-mono font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-mono font-bold uppercase tracking-wider">
               <Sparkles className="w-3 h-3" /> Viral Share Card
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">Share Your Tax Savings</h3>

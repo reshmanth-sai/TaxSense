@@ -172,7 +172,7 @@ export const JourneySection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-none mb-3">
           The 4-Step Journey
         </h2>
-        <p className="text-xs sm:text-sm text-slate-650 dark:text-slate-400 max-w-xl mx-auto leading-relaxed font-sans mt-3">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed font-sans mt-3">
           We broke down tax complexity into a structured, elegant process that you control entirely.
         </p>
       </motion.div>

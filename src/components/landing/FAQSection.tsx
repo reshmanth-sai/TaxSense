@@ -47,6 +47,18 @@ const faqsData: FAQItem[] = [
   }
 ];
 
+// Rendered from the same faqsData array shown on screen, so the structured
+// data can never list a question the page doesn't actually answer.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqsData.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+
 export const FAQSection: React.FC = React.memo(() => {
   const [faqOpen, setFaqOpen] = useState<string | null>(faqsData[0].q);
   const [faqSearch, setFaqSearch] = useState("");
@@ -83,7 +95,7 @@ export const FAQSection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Frequently Asked Questions
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
           Everything you need to know about tax calculations, privacy, and regime comparisons.
         </p>
       </motion.div>
@@ -177,6 +189,9 @@ export const FAQSection: React.FC = React.memo(() => {
           })
         )}
       </div>
+      <script type="application/ld+json">
+        {JSON.stringify(faqJsonLd)}
+      </script>
     </section>
   );
 });

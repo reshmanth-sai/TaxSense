@@ -3,14 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TAXSENSE</title>
+    <title>TaxSense — Old vs New Tax Regime Calculator (AY 2026-27)</title>
+    <meta name="description" content="Compare Old vs New tax regimes for AY 2026-27 in seconds. Upload your Form 16 or type your salary, find missed 80C and 80D deductions, and see your refund — no account required." />
+    <!--
+      No <link rel="canonical"> or og:url/twitter:url here: this project has no
+      confirmed production domain (vercel.json has no custom domain, .env.example
+      only has a generic APP_URL placeholder). Add both once the real domain is
+      known — a wrong canonical actively misdirects search engines and share
+      previews, which is worse than omitting it.
+    -->
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TaxSense" />
+    <meta property="og:title" content="TaxSense — Old vs New Tax Regime Calculator (AY 2026-27)" />
+    <meta property="og:description" content="Compare Old vs New tax regimes for AY 2026-27 in seconds. Upload your Form 16 or type your salary, find missed 80C and 80D deductions, and see your refund — no account required." />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="TaxSense — Old vs New Tax Regime Calculator (AY 2026-27)" />
+    <meta name="twitter:description" content="Compare Old vs New tax regimes for AY 2026-27 in seconds. Upload your Form 16 or type your salary, find missed 80C and 80D deductions, and see your refund — no account required." />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700;850;950&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

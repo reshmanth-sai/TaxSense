@@ -62,7 +62,7 @@ export const TippingPointVisualizer: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           Find Your Tax Regime Tipping Point
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
           Discover the exact deduction threshold where switching between Old and New tax regimes saves you the most money.
         </p>
       </motion.div>

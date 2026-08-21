@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, ShieldAlert, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Clock, ShieldAlert, ArrowRight, CheckCircle2, X } from 'lucide-react';
 import { TAX_CONFIG, FILING_DEADLINES } from '../../config';
 
 interface DeadlineBannerProps {
   onStart: () => void;
+  /** Fires whenever the banner's rendered/hidden state changes, so the fixed
+   *  navbar below it (which has no document-flow reference point) can move
+   *  up and reclaim the space when this banner is dismissed. */
+  onVisibilityChange?: (visible: boolean) => void;
 }
 
 type Phase = 'open' | 'belated' | 'closed';
@@ -35,8 +39,18 @@ function splitDuration(ms: number) {
   };
 }
 
-export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart }) => {
+const DISMISS_KEY = 'taxsense_deadline_banner_dismissed_for';
+
+export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisibilityChange }) => {
   const [state, setState] = useState<BannerState>(() => readClock(Date.now()));
+  // Dismissal is scoped to the current phase (open / belated / closed) via
+  // sessionStorage, so a fresh tab still shows the banner once the phase
+  // changes -- e.g. when the due date passes -- rather than staying hidden
+  // forever because of a click made weeks earlier.
+  const [dismissedPhase, setDismissedPhase] = useState<Phase | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return (sessionStorage.getItem(DISMISS_KEY) as Phase | null) ?? null;
+  });
 
   useEffect(() => {
     const tick = () => setState(readClock(Date.now()));
@@ -46,6 +60,19 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart }) => {
   }, []);
 
   const { phase, msLeft } = state;
+
+  const isVisible = dismissedPhase !== phase;
+
+  useEffect(() => {
+    onVisibilityChange?.(isVisible);
+  }, [isVisible, onVisibilityChange]);
+
+  if (!isVisible) return null;
+
+  const dismiss = () => {
+    setDismissedPhase(phase);
+    sessionStorage.setItem(DISMISS_KEY, phase);
+  };
   const { days, hours, minutes, seconds } = splitDuration(msLeft);
 
   // The belated window is the one that carries a penalty, so it reads as a
@@ -129,6 +156,14 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart }) => {
           >
             <span>{phase === 'closed' ? 'Compare regimes' : 'File now'}</span>
             <ArrowRight className="w-3 h-3" />
+          </button>
+
+          <button
+            onClick={dismiss}
+            aria-label="Dismiss deadline notice"
+            className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-md transition-colors cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

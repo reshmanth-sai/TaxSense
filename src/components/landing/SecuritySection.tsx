@@ -21,7 +21,7 @@ export const SecuritySection: React.FC = React.memo(() => {
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           No account. No database.
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
           Here is exactly what happens to your Form 16 — including the part most tax tools leave out.
         </p>
       </motion.div>
@@ -42,7 +42,7 @@ export const SecuritySection: React.FC = React.memo(() => {
             </div>
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">No account required</h3>
-              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Guest mode</span>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Guest mode</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Run a full regime comparison without giving us a name, an email, or a phone number. Signing in is optional and only adds cross-device sync.
@@ -64,7 +64,7 @@ export const SecuritySection: React.FC = React.memo(() => {
             </div>
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">Nothing stored on our servers</h3>
-              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">No database writes</span>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">No database writes</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
               We write no Form 16, no PAN, and no salary figure to a database. Your working session is kept in this browser's own storage and clears after 30 minutes of inactivity.
@@ -86,7 +86,7 @@ export const SecuritySection: React.FC = React.memo(() => {
             </div>
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">Read by Google Gemini</h3>
-              <span className="text-[9px] font-mono text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider block">Third-party processor</span>
+              <span className="text-[10px] font-mono text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider block">Third-party processor</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
               To read your PDF, we send it over TLS to Google's Gemini API and discard it once the text comes back. This is the one point where your document leaves your device — we would rather you knew.
@@ -108,7 +108,7 @@ export const SecuritySection: React.FC = React.memo(() => {
             </div>
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">Built to the AY 2026-27 rules</h3>
-              <span className="text-[9px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider block">Finance Act, FY 2025-26</span>
+              <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider block">Finance Act, FY 2025-26</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Slabs, the Section 87A rebate, Section 115BAC and the 4% cess follow the current Finance Act. TaxSense is a calculator, not a filing intermediary — you file on the e-filing portal.

@@ -532,10 +532,12 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           <span>AI Tax Ingestion Platform • FY 2025–26 (AY 2026–27)</span>
         </div>
 
-        {/* Enforced Typography Hierarchy (72px -> 18px -> 13px baseline) */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-extrabold tracking-tight text-slate-900 font-sans dark:text-white leading-[1.05]">
-          Compare both tax regimes instantly. <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-700 to-emerald-700 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">File with 100% confidence.</span>
+        {/* Type scale: H1=60 (src/index.css). Two lines at desktop width instead
+            of four -- the old copy plus a 72px size pushed the CTA below the
+            fold on a 720px-tall laptop viewport. */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 font-sans dark:text-white leading-[1.05]">
+          Old regime or new?{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-700 to-emerald-700 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">Know in 58 seconds.</span>
         </h1>
         <p className="text-[16px] md:text-[18px] leading-[1.6] text-slate-650 dark:text-slate-350 max-w-[660px] mx-auto font-medium">
           Upload your Form 16, or just type your salary. TaxSense compares Old vs New regimes to the rupee, flags 80C and 80D deductions you have missed, and shows what you get back.
@@ -581,8 +583,8 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> 💰 ₹18,400 Avg. Savings</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> 🛡️ Zero Login Required</span>
+              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> See your real savings in 58s</span>
+              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> Zero Login Required</span>
             </div>
           </div>
         </div>

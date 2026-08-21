@@ -39,7 +39,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
           No Form 16 Yet? Uncover Hidden Refunds
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
           Answer 3 simple questions to estimate how much unclaimed tax refund you could recover this year.
         </p>
       </motion.div>

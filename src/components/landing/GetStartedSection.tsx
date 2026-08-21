@@ -25,7 +25,7 @@ export const GetStartedSection: React.FC<GetStartedSectionProps> = React.memo(({
               Start your free comparison in 58 seconds.
             </span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-sans">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-sans">
             Calculate your optimal regime, claim missed exemptions, and file your return with complete peace of mind.
           </p>
         </div>

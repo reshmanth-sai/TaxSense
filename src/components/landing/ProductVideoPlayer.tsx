@@ -82,7 +82,7 @@ const CursorPointer = ({
           </div>
           <div className="text-left font-mono">
             <div className="text-[10px] font-bold text-blue-300 leading-tight">Form16_FY26.pdf</div>
-            <div className="text-[8px] text-slate-400 font-semibold">1.4 MB • Dragging...</div>
+            <div className="text-[10px] text-slate-400 font-semibold">1.4 MB • Dragging...</div>
           </div>
         </motion.div>
       )}
@@ -151,7 +151,7 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
     <div className="w-full bg-slate-100/80 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-white/[0.04] px-5 py-2 flex items-center justify-between font-mono text-[10px] select-none backdrop-blur-md">
       <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold truncate">
         <Sparkles className="w-3.5 h-3.5 animate-spin animate-duration-3000 shrink-0 text-purple-600 dark:text-purple-400" />
-        <span className="uppercase tracking-widest text-[9px] text-slate-500 font-extrabold shrink-0">AI REASONING:</span>
+        <span className="uppercase tracking-widest text-[10px] text-slate-500 font-extrabold shrink-0">AI REASONING:</span>
         <AnimatePresence mode="wait">
           <motion.span
             key={reasoningTexts[activeStep]}
@@ -166,7 +166,7 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
         </AnimatePresence>
       </div>
 
-      <div className="hidden sm:flex items-center gap-2 text-[9.5px] font-extrabold shrink-0">
+      <div className="hidden sm:flex items-center gap-2 text-[10px] font-extrabold shrink-0">
         <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
           ✓ CONFIDENCE 98%
         </span>

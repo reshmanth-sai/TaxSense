@@ -58,6 +58,7 @@ const getNodeColorRGB = (idx: number): [number, number, number] => {
 
 export default function LandingPage({ onStart }: LandingPageProps) {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [isDeadlineBannerVisible, setIsDeadlineBannerVisible] = useState(true);
   const [soundEnabled] = useState(true);
 
   // Scroll Rail Navigation Data & State
@@ -86,13 +87,16 @@ export default function LandingPage({ onStart }: LandingPageProps) {
   const theme = useSidebarStore((state) => state.theme);
   const setTheme = useSidebarStore((state) => state.setTheme);
 
+  // Order matches the rendered sections below -- the rail's step counter,
+  // the active-dot highlight, and the IntersectionObserver all walk this
+  // array in order, so it has to track any reorder of the JSX exactly.
   const sections = [
     { id: 'hero', label: 'Hero' },
+    { id: 'journey', label: 'How It Works' },
     { id: 'comparison', label: 'Regime Comparison' },
     { id: 'tipping-point', label: 'Tipping Point' },
     { id: 'interactive-showcase', label: 'Tax Calculator' },
     { id: 'refund-finder', label: 'Refund Finder' },
-    { id: 'journey', label: 'How It Works' },
     { id: 'copilot', label: 'AI Copilot' },
     { id: 'security', label: 'Security' },
     { id: 'faq', label: 'FAQ' },
@@ -274,10 +278,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
           <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100 leading-none">
             {activeIndex + 1}
           </span>
-          <span className="text-[9.5px] text-slate-400 dark:text-slate-600 font-semibold leading-none px-[0.5px]">
+          <span className="text-[10px] text-slate-400 dark:text-slate-600 font-semibold leading-none px-[0.5px]">
             /
           </span>
-          <span className="text-[9.5px] text-slate-400 dark:text-slate-500 font-medium leading-none">
+          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium leading-none">
             {sections.length}
           </span>
         </div>
@@ -376,7 +380,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 8 }}
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute left-10 px-3 py-1.5 bg-slate-900/90 dark:bg-[#0E131B]/95 backdrop-blur-md border border-slate-700/30 dark:border-white/[0.08] text-white text-[9px] font-bold uppercase tracking-wider rounded-lg whitespace-nowrap shadow-xl pointer-events-none"
+                      className="absolute left-10 px-3 py-1.5 bg-slate-900/90 dark:bg-[#0E131B]/95 backdrop-blur-md border border-slate-700/30 dark:border-white/[0.08] text-white text-[10px] font-bold uppercase tracking-wider rounded-lg whitespace-nowrap shadow-xl pointer-events-none"
                     >
                       {s.label}
                     </motion.div>
@@ -396,7 +400,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: "15%", rotate: -90 }}
               whileHover={{ opacity: 1.0 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute left-10 top-1/2 origin-center text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] select-none pointer-events-none whitespace-nowrap"
+              className="absolute left-10 top-1/2 origin-center text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] select-none pointer-events-none whitespace-nowrap"
             >
               Journey
             </motion.div>
@@ -455,10 +459,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       </div>
 
       {/* TOP DEADLINE BANNER */}
-      <DeadlineBanner onStart={handleStartWorkspace} />
+      <DeadlineBanner onStart={handleStartWorkspace} onVisibilityChange={setIsDeadlineBannerVisible} />
 
       {/* HEADER NAVBAR (Enterprise Glass Navbar) */}
-      <Navbar onStart={handleStartWorkspace} activeSection={activeSection} />
+      <Navbar onStart={handleStartWorkspace} activeSection={activeSection} bannerVisible={isDeadlineBannerVisible} />
 
 
       <main id="main-content">
@@ -467,63 +471,72 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         <HeroSection onStart={handleStartWorkspace} />
       </div>
 
-      {/* SECTION 2: WHY TAXSENSE / COMPARISON */}
-      <div id="comparison" className="w-full scroll-mt-28">
-        <LazySection>
-          <ComparisonSection />
-        </LazySection>
-      </div>
+      {/*
+        Reordered from the original hero -> comparison -> 3 calculators -> ...
+        -> journey -> ... sequence. "How It Works" used to sit 6th, after three
+        separate interactive tools a first-time visitor had no context for yet.
+        It now runs right after the hero, and the regime comparison -- the
+        actual differentiator -- comes before the calculators rather than
+        after the first one.
+      */}
 
-      {/* SECTION 3: TIPPING POINT VISUALIZER (NEW) */}
-      <div id="tipping-point" className="w-full scroll-mt-28">
-        <LazySection>
-          <TippingPointVisualizer />
-        </LazySection>
-      </div>
-
-      {/* SECTION 4: INTERACTIVE CALCULATOR SHOWCASE */}
-      <div id="interactive-showcase" className="w-full scroll-mt-28">
-        <LazySection>
-          <InteractiveShowcaseSection />
-        </LazySection>
-      </div>
-
-      {/* SECTION 5: UNCLAIMED REFUND FINDER (NEW) */}
-      <div id="refund-finder" className="w-full scroll-mt-28">
-        <LazySection>
-          <RefundFinderWidget onStart={handleStartWorkspace} />
-        </LazySection>
-      </div>
-
-      {/* SECTION 6: 4-STEP JOURNEY */}
+      {/* SECTION 2: 4-STEP JOURNEY (moved up from position 6) */}
       <div id="journey" className="w-full scroll-mt-28">
         <LazySection>
           <JourneySection />
         </LazySection>
       </div>
 
-      {/* SECTION 8: MULTILINGUAL AI COPILOT SHOWCASE */}
+      {/* SECTION 3: WHY TAXSENSE / COMPARISON */}
+      <div id="comparison" className="w-full scroll-mt-28">
+        <LazySection>
+          <ComparisonSection />
+        </LazySection>
+      </div>
+
+      {/* SECTION 4: TIPPING POINT VISUALIZER */}
+      <div id="tipping-point" className="w-full scroll-mt-28">
+        <LazySection>
+          <TippingPointVisualizer />
+        </LazySection>
+      </div>
+
+      {/* SECTION 5: INTERACTIVE CALCULATOR SHOWCASE */}
+      <div id="interactive-showcase" className="w-full scroll-mt-28">
+        <LazySection>
+          <InteractiveShowcaseSection />
+        </LazySection>
+      </div>
+
+      {/* SECTION 6: UNCLAIMED REFUND FINDER */}
+      <div id="refund-finder" className="w-full scroll-mt-28">
+        <LazySection>
+          <RefundFinderWidget onStart={handleStartWorkspace} />
+        </LazySection>
+      </div>
+
+      {/* SECTION 7: MULTILINGUAL AI COPILOT SHOWCASE */}
       <div id="copilot" className="w-full scroll-mt-28">
         <LazySection>
           <CopilotSection soundEnabled={soundEnabled} />
         </LazySection>
       </div>
 
-      {/* SECTION 9: SECURITY */}
+      {/* SECTION 8: SECURITY */}
       <div id="security" className="w-full scroll-mt-28">
         <LazySection>
           <SecuritySection />
         </LazySection>
       </div>
 
-      {/* SECTION 11: FAQ */}
+      {/* SECTION 9: FAQ */}
       <div id="faq" className="w-full scroll-mt-28">
         <LazySection>
           <FAQSection />
         </LazySection>
       </div>
 
-      {/* SECTION 12: FINAL CTA */}
+      {/* SECTION 10: FINAL CTA */}
       <div id="get-started" className="w-full scroll-mt-28">
         <LazySection>
           <GetStartedSection onStart={handleStartWorkspace} />

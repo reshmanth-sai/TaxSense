@@ -1,12 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;650;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Fonts load once, from index.html <head> -- Inter + JetBrains Mono only.
+ * This file used to carry a second @import for the same two families plus
+ * Playfair Display, which nothing in src/ ever applied (font-serif itself
+ * was unused). Two font requests were a render-blocking round trip for
+ * nothing; --font-serif is kept as a system fallback in case a future
+ * component wants a serif accent, but it no longer downloads a webfont.
+ */
+/*
+ * Type scale (landing + marketing surfaces). Arbitrary text-[Npx] values were
+ * sprawled across ~110 call sites with no shared scale -- a 72px H1 sitting
+ * directly on 9-10px body text, with almost nothing in between. Hold to this
+ * set for new landing work; extend it here rather than reaching for a new
+ * arbitrary value.
+ *
+ *   10  metadata floor -- badges, pills, mono labels, tooltips (never smaller)
+ *   12  secondary metadata, footer copy
+ *   14  dense supporting text inside cards
+ *   16  body copy floor -- paragraphs meant to be read, not scanned
+ *   18  section lede / intro paragraph under an H2
+ *   24  card headings, H3
+ *   32  H2 (mobile)
+ *   48  H2 (desktop)
+ *   60  H1 -- see HeroSection.tsx for why this isn't 72 any more
+ */
 @theme {
-  --font-sans: "Inter", "Geist", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", "Geist Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", monospace;
+  --font-serif: ui-serif, Georgia, serif;
 
   --color-primary-action: #2563EB;
   /* Blue CTA / primary action */
