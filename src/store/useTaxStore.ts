@@ -270,7 +270,7 @@ I have preloaded a typical salaried profile to start. How can I help you save ta
   }
 ];
 
-const defaultTaxProfiles: TaxProfile[] = [
+const demoTaxProfiles: TaxProfile[] = [
   {
     id: 'self',
     name: 'Mohit Kumar',
@@ -330,6 +330,24 @@ const defaultTaxProfiles: TaxProfile[] = [
     uploadedFiles: []
   }
 ];
+
+// Production guests get a single, genuinely empty profile — no name, no PAN,
+// no pre-filled family members. The richer cast above only appears locally
+// or when explicitly requested via ?demo=true, so a real visitor never opens
+// a "temporary, private" session and finds someone else's data in it.
+const emptyTaxProfiles: TaxProfile[] = [
+  {
+    id: 'self',
+    name: '',
+    relation: 'Self',
+    pan: '',
+    incomeProfile: defaultIncomeProfile,
+    confirmedDeductions: defaultConfirmedDeductions,
+    uploadedFiles: defaultUploadedFiles
+  }
+];
+
+const defaultTaxProfiles: TaxProfile[] = isDev ? demoTaxProfiles : emptyTaxProfiles;
 
 export const useTaxStore = create<TaxStoreState>()(
   persist(

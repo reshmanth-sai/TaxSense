@@ -24,8 +24,7 @@ import {
   Check,
   Zap,
   HelpCircle,
-  Award,
-  RotateCcw
+  Award
 } from 'lucide-react';
 import { useTaxStore } from '../../store/useTaxStore';
 import { SecurityInspectorModal } from '../security/SecurityInspectorModal';
@@ -63,7 +62,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   const activeProfileId = useTaxStore((state) => state.activeProfileId) || 'self';
 
   const activeProfile = taxProfiles.find(p => p.id === activeProfileId) || taxProfiles[0];
-  const userName = activeProfile?.name?.split(' ')[0] || incomeProfile.employeeName?.split(' ')[0] || 'Mohit';
+  const userName = activeProfile?.name?.split(' ')[0] || incomeProfile.employeeName?.split(' ')[0] || '';
 
   // Dynamic greeting time check
   const currentHour = new Date().getHours();
@@ -124,22 +123,6 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
       className="space-y-5 font-sans text-left max-w-7xl mx-auto py-1"
     >
       
-      {/* AI PERSISTENT TASK MEMORY BANNER */}
-      <motion.div variants={itemVariants} className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-between text-xs font-mono">
-        <div className="flex items-center gap-2">
-          <RotateCcw className="w-3.5 h-3.5 text-blue-500" />
-          <span className="text-slate-700 dark:text-slate-300">
-            <strong>Last Session Memory:</strong> You were working on <em>Rent Receipt Verification</em>.
-          </span>
-        </div>
-        <button
-          onClick={() => onNavigateStep(3)}
-          className="text-blue-600 dark:text-blue-400 font-bold hover:underline cursor-pointer flex items-center gap-1"
-        >
-          <span>Continue →</span>
-        </button>
-      </motion.div>
-
       {/* ---------------------------------------------------- */}
       {/* 1. HERO SECTION (15-20% Reduced Height + Compact Padding) */}
       {/* ---------------------------------------------------- */}
@@ -157,21 +140,29 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
             </div>
 
             <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              {timeGreeting}, {userName} 👋
+              {timeGreeting}{userName ? `, ${userName}` : ''} 👋
             </h1>
-            
+
             {/* Dynamic Rotating AI Daily Brief */}
             <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
-              Today I verified your Form 16. Return is <strong className="text-blue-600 dark:text-blue-400 font-bold">72% Complete</strong>. Only two compliance checks remain before submission.
+              {hasUploadedForm16 ? (
+                <>Today I verified your Form 16. Complete the remaining compliance checks below to finish filing.</>
+              ) : (
+                <>Upload your Form 16 and I'll analyze your income, deductions, and refund potential in under a minute.</>
+              )}
             </p>
           </div>
 
           {/* Hero KPI Badge & Contextual Primary Action Button */}
           <div className="shrink-0 flex flex-wrap items-center gap-3">
-            
+
             <div className="px-3.5 py-2 bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] rounded-xl text-left font-mono">
               <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-sans font-bold">Estimated Refund</span>
-              <span className="text-base font-black text-emerald-600 dark:text-emerald-400">₹15,000</span>
+              <span className="text-base font-black text-emerald-600 dark:text-emerald-400">
+                {hasUploadedForm16 && incomeProfile.tdsDeducted
+                  ? `₹${incomeProfile.tdsDeducted.toLocaleString('en-IN')}`
+                  : '—'}
+              </span>
             </div>
 
             <button

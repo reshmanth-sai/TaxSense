@@ -21,7 +21,8 @@ const SPRING_GENTLE = { type: 'spring' as const, stiffness: 120, damping: 20 };
 const RollingText: React.FC<{ text: string }> = ({ text }) => {
   return (
     <span className="relative overflow-hidden inline-flex">
-      <span className="inline-flex">
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true" className="inline-flex">
         {text.split("").map((c, i) => (
           <span
             key={i}
@@ -32,7 +33,7 @@ const RollingText: React.FC<{ text: string }> = ({ text }) => {
           </span>
         ))}
       </span>
-      <span className="absolute inset-0 inline-flex">
+      <span aria-hidden="true" className="absolute inset-0 inline-flex">
         {text.split("").map((c, i) => (
           <span
             key={i}
@@ -579,9 +580,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> ⚡ 58s Avg. Time</span>
               <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> 💰 ₹18,400 Avg. Savings</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> 🔒 AES-256 Encrypted</span>
               <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> 🛡️ Zero Login Required</span>
             </div>
           </div>

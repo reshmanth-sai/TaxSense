@@ -114,9 +114,8 @@ const SANDBOX_FEATURES: Feature[] = [
   },
   {
     icon: Info,
-    title: 'Session Not Saved',
-    description: 'Data is lost on browser close',
-    isWarning: true,
+    title: 'Nothing Is Stored',
+    description: 'This session clears automatically when you close the tab',
     isDividerTop: true,
   }
 ];
