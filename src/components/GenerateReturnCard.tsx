@@ -143,7 +143,7 @@ export const GenerateReturnCard: React.FC<GenerateReturnCardProps> = React.memo(
         <div className="space-y-1">
           <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Zero-Knowledge Sandbox Guard</span>
           <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            Your information never leaves your secure local browser workspace. Generated filing logs remain heavily encrypted. Nothing is submitted automatically without your signature.
+            Your figures stay in this browser and are never written to our database. Generated filing logs remain heavily encrypted. Nothing is submitted automatically without your signature.
           </p>
         </div>
       </div>

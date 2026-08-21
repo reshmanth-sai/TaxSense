@@ -593,11 +593,11 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
             
             <div className="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 font-semibold">
               {[
-                'Encrypted locally (AES-256)',
+                'Stored in this browser only',
                 'No filing shared automatically',
                 'AI audit ledger preserved',
                 'Immutable filing timestamp log',
-                'Zero-knowledge document vault'
+                'Never written to a server database'
               ].map((check) => (
                 <div key={check} className="flex items-center gap-2.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -649,8 +649,8 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
 
                 <div className="bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-white/[0.04] p-4 rounded-2xl space-y-3 text-xs">
                   <div className="flex justify-between items-center font-mono">
-                    <span className="text-slate-500">Security Hash:</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[10px]">AES-256-SHA256</span>
+                    <span className="text-slate-500">Stored:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[10px]">THIS BROWSER ONLY</span>
                   </div>
                   <div className="flex justify-between items-center font-mono">
                     <span className="text-slate-500">Assessment Year:</span>

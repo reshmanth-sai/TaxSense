@@ -22,6 +22,7 @@ import { CTCEfficiencyScorecard } from './components/dashboard/CTCEfficiencyScor
 import { PDFComputationExporter } from './components/export/PDFComputationExporter';
 import { CommandPalette } from './components/CommandPalette';
 import { useTaxStore, useTaxStoreHydrated, UserProfile } from './store/useTaxStore';
+import { useSessionTimeout } from './hooks/useSessionTimeout';
 import {
   DashboardCard,
   SectionHeader,
@@ -154,6 +155,11 @@ export default function App() {
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
+  // Clear the working session after 30 minutes of inactivity. The privacy copy
+  // on the landing page states this happens, so the hook has to be mounted for
+  // that claim to hold.
+  useSessionTimeout(30 * 60 * 1000);
+
   // Global ⌘K / Ctrl+K keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -176,9 +182,9 @@ export default function App() {
         basicSalary: 580000,
         hraReceived: 240000,
         otherIncome: 45000,
-        employeeName: 'Mohit Kumar',
-        employerName: 'Acme Corp Technologies',
-        pan: 'MK*****32F',
+        employeeName: '',
+        employerName: '',
+        pan: '',
         pfContribution: 72000,
         stcg: 12000,
         ltcg: 35000
@@ -721,11 +727,11 @@ export default function App() {
   // Get dynamic greeting greeting message based on time of day
   const getGreeting = () => {
     const hours = new Date().getHours();
-    const name = incomeProfile?.employeeName || 'Mohit';
-    const shortName = name.split(/\s+/)[0];
-    if (hours < 12) return `Good Morning, ${shortName}`;
-    if (hours < 18) return `Good Afternoon, ${shortName}`;
-    return `Good Evening, ${shortName}`;
+    const shortName = (incomeProfile?.employeeName || '').trim().split(/\s+/)[0];
+    const suffix = shortName ? `, ${shortName}` : '';
+    if (hours < 12) return `Good Morning${suffix}`;
+    if (hours < 18) return `Good Afternoon${suffix}`;
+    return `Good Evening${suffix}`;
   };
 
   // Prevent any unhydrated flash or flicker by deferring until state is resolved
@@ -1167,7 +1173,7 @@ export default function App() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                           </span>
-                          Secure Local Sandbox
+                          Session storage
                         </span>
                         <span className="text-slate-350 dark:text-slate-650">•</span>
                         <span className="text-blue-600 dark:text-blue-400">Gateway: Active</span>
@@ -1446,7 +1452,7 @@ export default function App() {
                       <div className="space-y-2 z-10 relative">
                         <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">ITR Return Logged Successfully!</h2>
                         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                          Your filing draft has been compiled, audited against AY 2026-27 rules, and logged to your local sandbox archives database.
+                          Your filing draft has been compiled, checked against AY 2026-27 rules, and saved to this browser database.
                         </p>
                       </div>
 

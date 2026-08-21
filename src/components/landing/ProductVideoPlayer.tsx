@@ -127,7 +127,7 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
     currentTimeMs < 1800 
       ? "Reading Form 16 PDF Structure..."
       : currentTimeMs < 2300 
-      ? "Validating AES-256 local sandbox encryption..."
+      ? "Uploading over TLS to Gemini for text extraction..."
       : "Form 16 verified • Zero permanent storage",
     // Phase 1
     currentTimeMs < 5000 
@@ -569,7 +569,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                     <p className="text-xs text-slate-600 dark:text-slate-400 mb-6 max-w-sm font-medium leading-relaxed">
                       {currentTimeMs >= 2200 
                         ? 'Form 16 successfully verified. No inconsistencies detected.'
-                        : 'Supports PDF, JPG and PNG • Client-side AES-256 local sandbox encryption.'}
+                        : 'Supports PDF, JPG and PNG • Read by Google Gemini, then discarded.'}
                     </p>
 
                     <div
@@ -832,7 +832,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         ₹51,480 Saved
                       </div>
                       <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                        ✓ AES-256
+                        ✓ No account
                       </div>
                     </div>
 

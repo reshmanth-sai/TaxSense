@@ -148,8 +148,8 @@ export const ComparisonSection: React.FC = React.memo(() => {
             <div className="space-y-1 flex gap-3">
               <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
               <div>
-                <span className="text-slate-900 dark:text-white font-bold block text-xs">100% Tax Department Compliance</span>
-                <span className="text-[11px] text-slate-650 dark:text-slate-400 leading-relaxed">Built according to latest FY 2025-26 IT rules with instant audit validation.</span>
+                <span className="text-slate-900 dark:text-white font-bold block text-xs">Current AY 2026-27 Rules</span>
+                <span className="text-[11px] text-slate-650 dark:text-slate-400 leading-relaxed">Slabs, Section 87A rebate and cess follow the Finance Act for FY 2025-26, recomputed on every change.</span>
               </div>
             </div>
           </div>

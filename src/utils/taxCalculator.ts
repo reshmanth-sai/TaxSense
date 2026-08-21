@@ -1,4 +1,5 @@
 import { TaxData, TaxCalculation, TaxRegimeBreakdown } from '../types';
+import { TAX_CONFIG } from '../config';
 
 export const INITIAL_TAX_DATA: TaxData = {
   assessmentYear: '2026-27', // Financial Year 2025-26
@@ -252,4 +253,45 @@ export function formatINR(val: number): string {
     maximumFractionDigits: 0,
   });
   return formatter.format(val);
+}
+
+/**
+ * Builds the TaxData payload from the two Zustand slices that hold user input.
+ *
+ * Both the main workspace and the dashboard need the same derivation, and any
+ * drift between them shows up as two different savings figures on screen at the
+ * same time. Keep this the single mapping from store shape to calculator input.
+ */
+export function buildTaxData(
+  incomeProfile: any,
+  confirmedDeductions: any
+): TaxData {
+  const d = confirmedDeductions || {};
+  const i = incomeProfile || {};
+  return {
+    assessmentYear: TAX_CONFIG.assessmentYear,
+    grossSalary: i.grossSalary || 0,
+    hraExemption: d['HRA exemption'] || d.hraExemption || 0,
+    ltaExemption: 0,
+    standardDeductionOld: TAX_CONFIG.standardDeductionOld,
+    standardDeductionNew: TAX_CONFIG.standardDeductionNew,
+    otherIncome: i.otherIncome || 0,
+    deduction80C: d['80C'] || 0,
+    deduction80D: d['80D'] || 0,
+    deduction80TTA: d['80TTA'] || 0,
+    deduction80G: d['80G'] || 0,
+    section24b: d['section24b'] || 0,
+    tdsDeducted: i.tdsDeducted || 0,
+    stcg: i.stcg || 0,
+    ltcg: i.ltcg || 0,
+    deduction80CCD1B: d['80CCD(1B)'] || 0,
+    deduction80CCD2: d['80CCD(2)'] || 0,
+    deduction80DD: d['80DD'] || 0,
+    deduction80U: d['80U'] || 0,
+    deduction80DDB: d['80DDB'] || 0,
+    deduction80E: d['80E'] || 0,
+    deduction80EEA: d['80EEA'] || 0,
+    deduction80GG: d['80GG'] || 0,
+    deduction80TTB: d['80TTB'] || 0,
+  } as TaxData;
 }

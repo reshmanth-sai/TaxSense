@@ -183,9 +183,12 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
     repaired.section24b = Math.min(repaired.section24b, 200000);
 
     // Default missing string fields
-    if (!repaired.employeeName) repaired.employeeName = 'Taxpayer';
-    if (!repaired.employerName) repaired.employerName = 'Unspecified Employer';
-    if (!repaired.pan) repaired.pan = 'MK*****32F';
+    // Leave identity fields blank when the document does not carry them. A
+    // placeholder PAN would be indistinguishable from an extracted one and
+    // would flow straight into the computation export.
+    if (!repaired.employeeName) repaired.employeeName = '';
+    if (!repaired.employerName) repaired.employerName = '';
+    if (!repaired.pan) repaired.pan = '';
 
     // 3. Update Zustand store (single source of truth)
     setIncomeProfile({
@@ -782,9 +785,9 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
               We’ve securely verified your salary, deductions, and tax information against AY 2026–27 rules. Your return is now ready for review.
             </p>
             <div className="flex items-center gap-2 pt-2 text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider font-mono select-none">
-              <span>Verified in Client Sandbox</span>
+              <span>Read by Google Gemini</span>
               <span>•</span>
-              <span>AES-256 Zero Storage</span>
+              <span>Not saved to our servers</span>
             </div>
           </div>
         </div>
@@ -793,11 +796,11 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           <VerificationMetric 
             label="Employer Name" 
-            value={incomeProfile?.employerName || 'TCS Ltd / Primary Employer'} 
+            value={incomeProfile?.employerName || 'Not detected'} 
           />
           <VerificationMetric 
             label="Taxpayer PAN" 
-            value={incomeProfile?.pan || 'MK*****32F'} 
+            value={incomeProfile?.pan || 'Not detected'} 
           />
           <VerificationMetric 
             label="ITR Form" 

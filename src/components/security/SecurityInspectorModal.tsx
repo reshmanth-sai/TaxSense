@@ -40,7 +40,7 @@ export const SecurityInspectorModal: React.FC<SecurityInspectorModalProps> = ({ 
                   Trust & Security Inspector
                 </h3>
                 <p className="text-xs text-slate-400 font-mono">
-                  Verified Local Sandbox Protection
+                  How your data is handled
                 </p>
               </div>
             </div>
@@ -58,10 +58,10 @@ export const SecurityInspectorModal: React.FC<SecurityInspectorModalProps> = ({ 
             <div className="p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-white/[0.04] space-y-1 text-left">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
                 <Lock className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>AES-256 Client-Side Encryption</span>
+                <span>Your PDF is read by Google Gemini</span>
               </div>
               <p className="text-slate-500 leading-relaxed pl-6">
-                All uploaded Form 16 documents and financial inputs are encrypted directly in your browser before processing.
+                To extract text, your Form 16 is sent over TLS to Google's Gemini API and dropped once the text returns. Typed figures are never sent anywhere — skip the upload if you would rather no third party saw the document.
               </p>
             </div>
 
@@ -90,7 +90,7 @@ export const SecurityInspectorModal: React.FC<SecurityInspectorModalProps> = ({ 
           <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06] flex items-center justify-between text-[10px] text-slate-400 font-mono">
             <span className="flex items-center gap-1">
               <Cpu className="w-3.5 h-3.5 text-emerald-500" />
-              Gateway Status: Active (Local Sandbox)
+              Gemini gateway: active for document text extraction
             </span>
             <button
               onClick={onClose}

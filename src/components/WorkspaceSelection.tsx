@@ -93,29 +93,29 @@ const SANDBOX_FEATURES: Feature[] = [
     iconClass: 'group-hover/item:scale-110 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-amber-500 dark:group-hover/item:text-amber-400',
     hoverContainerClass: 'group-hover/item:bg-amber-500/10 group-hover/item:border-amber-500/30 dark:group-hover/item:bg-amber-400/15 dark:group-hover/item:border-amber-400/30',
-    title: 'Instant Sandbox',
-    description: 'Temporary isolated workspace',
+    title: 'Start immediately',
+    description: 'No name, email or phone number needed',
   },
   {
     icon: Lock,
     iconClass: 'group-hover/item:rotate-12 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-emerald-500 dark:group-hover/item:text-emerald-400',
     hoverContainerClass: 'group-hover/item:bg-emerald-500/10 group-hover/item:border-emerald-500/30 dark:group-hover/item:bg-emerald-400/15 dark:group-hover/item:border-emerald-400/30',
-    title: 'Local Processing',
-    description: 'Your documents never leave your device',
+    title: 'Nothing on our servers',
+    description: 'No database record of your PAN or salary',
   },
   {
     icon: Timer,
     iconClass: 'group-hover/item:scale-110 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-sky-500 dark:group-hover/item:text-sky-400',
     hoverContainerClass: 'group-hover/item:bg-sky-500/10 group-hover/item:border-sky-500/30 dark:group-hover/item:bg-sky-400/15 dark:group-hover/item:border-sky-400/30',
-    title: 'Auto Cleanup',
-    description: 'Session automatically expires',
+    title: 'Auto cleanup',
+    description: 'Session clears after 30 minutes of inactivity',
   },
   {
     icon: Info,
-    title: 'Nothing Is Stored',
-    description: 'This session clears automatically when you close the tab',
+    title: 'Your PDF goes to Gemini',
+    description: 'Google reads the document, then we drop it',
     isDividerTop: true,
   }
 ];
@@ -134,8 +134,8 @@ const SECURE_FEATURES: Feature[] = [
     iconClass: 'group-hover/item:scale-110 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-emerald-500 dark:group-hover/item:text-emerald-400',
     hoverContainerClass: 'group-hover/item:bg-emerald-500/10 group-hover/item:border-emerald-500/30 dark:group-hover/item:bg-emerald-400/15 dark:group-hover/item:border-emerald-400/30',
-    title: 'Secure Vault',
-    description: 'AES-256 encrypted storage',
+    title: 'Saved workspace',
+    description: 'Your session is stored against your account',
   },
   {
     icon: MessageSquare,
@@ -595,13 +595,13 @@ export default function WorkspaceSelection({
           {/* Centered Trust Footer Badges */}
           <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:flex-wrap items-center justify-center gap-y-3 gap-x-6 my-2 relative z-10 justify-items-center">
             <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">🔒</span> AES-256 Encryption
+              <span aria-hidden="true">🔒</span> No login required
             </div>
             <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">🛡</span> ISO 27001 Certified
+              <span aria-hidden="true">🛡</span> No database record
             </div>
             <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">⚡</span> Local AI Processing
+              <span aria-hidden="true">⚡</span> Read by Google Gemini
             </div>
             <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <span aria-hidden="true">☁</span> Secure Cloud Sync

@@ -15,7 +15,7 @@ const stepsData: StepItem[] = [
   {
     step: "01",
     title: "Upload Document",
-    desc: "Drag and drop your Form 16 PDF securely. Everything processes inside a transient local memory workspace.",
+    desc: "Drag and drop your Form 16 PDF, or skip it and type your salary figures in directly.",
     trigger: 0,
     icon: Upload
   },

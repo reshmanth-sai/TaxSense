@@ -27,6 +27,7 @@ import {
   Award
 } from 'lucide-react';
 import { useTaxStore } from '../../store/useTaxStore';
+import { calculateTax, buildTaxData, formatINR } from '../../utils/taxCalculator';
 import { SecurityInspectorModal } from '../security/SecurityInspectorModal';
 import { AIFilingReadinessEngine } from './AIFilingReadinessEngine';
 
@@ -68,7 +69,19 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   const currentHour = new Date().getHours();
   const timeGreeting = currentHour < 12 ? 'Good Morning' : currentHour < 17 ? 'Good Afternoon' : 'Good Evening';
 
+  const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
+
   const hasUploadedForm16 = uploadedFiles.length > 0;
+  // Income can arrive by upload or by manual entry, so gate on the figure that
+  // every downstream number depends on rather than on the document count.
+  const hasIncome = (incomeProfile?.grossSalary || 0) > 0;
+
+  const calculation = React.useMemo(
+    () => calculateTax(buildTaxData(incomeProfile, confirmedDeductions)),
+    [incomeProfile, confirmedDeductions]
+  );
+  const savings = Math.max(0, calculation?.savings || 0);
+  const betterRegime = calculation?.recommendedRegime === 'OLD' ? 'Old' : 'New';
 
   const getGoogleCalendarUrl = () => {
     const title = encodeURIComponent('TaxSense: ITR Filing Deadline (AY 2026-27)');
@@ -107,12 +120,48 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
     }
   };
 
+  // Every stage below reports what the store actually holds. A stage never
+  // reads VERIFIED on the strength of a hardcoded string -- on a tax product a
+  // false "verified" is the one assurance the user came here to get.
   const journeyDetails = [
-    { stage: 1, name: 'Documents', status: 'VERIFIED', details: 'Form 16 & Salary slips ingested' },
-    { stage: 2, name: 'Income', status: 'VERIFIED', details: 'Gross salary & TDS cross-matched' },
-    { stage: 3, name: 'Optimization', status: 'COMPLETED', details: 'Regime comparison analyzed (New Regime saves ₹18,240)' },
-    { stage: 4, name: 'Compliance', status: 'PENDING', details: '2 tasks remaining: Verify AIS & Rent Receipt Log' },
-    { stage: 5, name: 'Ready', status: 'LOCKED', details: 'Requires 100% compliance verification' },
+    {
+      stage: 1,
+      name: 'Documents',
+      status: hasUploadedForm16 ? 'VERIFIED' : 'PENDING',
+      details: hasUploadedForm16
+        ? `${uploadedFiles.length} document${uploadedFiles.length > 1 ? 's' : ''} ingested`
+        : 'Upload a Form 16, or enter figures manually'
+    },
+    {
+      stage: 2,
+      name: 'Income',
+      status: hasIncome ? 'VERIFIED' : 'PENDING',
+      details: hasIncome
+        ? `Gross salary ${formatINR(incomeProfile.grossSalary)} recorded`
+        : 'No salary figure yet'
+    },
+    {
+      stage: 3,
+      name: 'Optimization',
+      status: hasIncome ? 'COMPLETED' : 'LOCKED',
+      details: hasIncome
+        ? `${betterRegime} Regime saves ${formatINR(savings)}`
+        : 'Needs an income figure to compare regimes'
+    },
+    {
+      stage: 4,
+      name: 'Compliance',
+      status: hasIncome ? 'PENDING' : 'LOCKED',
+      details: hasIncome
+        ? 'Review your deductions before filing'
+        : 'Needs an income figure'
+    },
+    {
+      stage: 5,
+      name: 'Ready',
+      status: 'LOCKED',
+      details: 'Unlocks once your deductions are confirmed'
+    },
   ];
 
   return (
@@ -650,7 +699,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
           <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-[10.5px] font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-between">
             <span className="flex items-center gap-1">
               <TrendingUp className="w-3 h-3 text-emerald-500" />
-              NEW REGIME SAVES ₹18,240 VS OLD
+              {hasIncome ? `${betterRegime.toUpperCase()} REGIME SAVES ${formatINR(savings)} VS ${betterRegime === 'New' ? 'OLD' : 'NEW'}` : 'ADD YOUR INCOME TO COMPARE REGIMES'}
             </span>
             <button 
               onClick={() => setShowOldRegimePreview(!showOldRegimePreview)}
@@ -692,19 +741,19 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1 text-emerald-500 font-bold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            ✔ AI Analysis Updated: 2 mins ago
+            {hasIncome ? '✔ Figures up to date' : '○ Waiting for your income figures'}
           </span>
           <span>•</span>
           <span>✔ CBDT Rules: AY 2026-27 Active</span>
           <span>•</span>
-          <span>✔ Data Encryption: AES-256 Client-Side</span>
+          <span>✔ Storage: this browser only, no server database</span>
         </div>
 
         <button
           onClick={() => setIsSecurityModalOpen(true)}
           className="hover:text-emerald-500 cursor-pointer font-bold transition-colors"
         >
-          SECURE LOCAL SANDBOX (Inspect)
+          HOW YOUR DATA IS HANDLED
         </button>
       </motion.div>
 

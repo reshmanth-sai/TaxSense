@@ -12,8 +12,13 @@ interface FAQItem {
 const faqsData: FAQItem[] = [
   {
     category: 'security',
-    q: "Is my financial data safe with TaxSense?",
-    a: "Yes. TaxSense uses local-first processing. In Guest Mode, your uploaded Form 16 PDF documents are parsed in temporary browser memory, encrypted locally with AES-256 GCM keys, and are never stored on any database or external server."
+    q: "Where does my Form 16 actually go?",
+    a: "To read your PDF, TaxSense sends it over an encrypted connection to Google's Gemini API, which returns the text. We discard the file at that point. Nothing is written to a TaxSense database — we keep no copy of your PAN, your salary figures, or the document itself. Your working session is stored in this browser's own storage so you can close the tab and come back, and it clears after 30 minutes of inactivity."
+  },
+  {
+    category: 'security',
+    q: "Can I use TaxSense without uploading any document?",
+    a: "Yes, and it is the most private way to use it. Every calculation runs on numbers, not documents. Type your gross salary, TDS and deductions into the calculator and you get the same side-by-side regime comparison — those figures never leave your browser. Uploading a Form 16 only saves you the typing."
   },
   {
     category: 'filing',

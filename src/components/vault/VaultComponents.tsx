@@ -823,8 +823,8 @@ export const ReassuranceText: React.FC = () => {
   const messages = [
     "Your document remains encrypted throughout processing.",
     "Nothing is permanently stored in our databases.",
-    "Processing is happening securely in your local sandbox.",
-    "Your data never leaves your protected workspace."
+    "Extracting text from your document...",
+    "Applying AY 2026-27 slabs to your figures..."
   ];
   const [index, setIndex] = useState(0);
 
@@ -2392,7 +2392,8 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                     <div className="relative">
                       <input
                         type="text"
-                        value={incomeProfile?.employeeName || 'Mohit Kumar'}
+                        value={incomeProfile?.employeeName || ''}
+                        placeholder="Add your name in the Document Vault"
                         readOnly
                         className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />
@@ -2408,7 +2409,8 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                     <div className="relative">
                       <input
                         type="text"
-                        value={incomeProfile?.pan || 'MK*****32F'}
+                        value={incomeProfile?.pan || ''}
+                        placeholder="Not detected"
                         readOnly
                         className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />

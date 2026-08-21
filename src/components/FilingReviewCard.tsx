@@ -344,7 +344,7 @@ export const FilingReviewCard: React.FC<FilingReviewCardProps> = React.memo(({ o
               <div className="pt-6 border-t border-slate-200 dark:border-slate-900/60 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-[10px] text-slate-550 dark:text-slate-500 font-bold uppercase tracking-wider">
                   <Lock className="w-3.5 h-3.5 text-slate-550 dark:text-slate-650" />
-                  <span>Encrypted Local Sandboxed Calculations</span>
+                  <span>Calculated in your browser</span>
                 </div>
                 <button
                   onClick={() => setIsDrawerOpen(false)}

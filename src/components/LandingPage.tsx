@@ -10,7 +10,6 @@ import {
   ComparisonSection,
   CopilotSection,
   SecuritySection,
-  TestimonialsSection,
   FAQSection,
   GetStartedSection,
   DeadlineBanner,
@@ -93,7 +92,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
     { id: 'journey', label: 'How It Works' },
     { id: 'copilot', label: 'AI Copilot' },
     { id: 'security', label: 'Security' },
-    { id: 'testimonials', label: 'Testimonials' },
     { id: 'faq', label: 'FAQ' },
     { id: 'get-started', label: 'Get Started' }
   ];
@@ -507,13 +505,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         </LazySection>
       </div>
 
-      {/* SECTION 10: TESTIMONIALS */}
-      <div id="testimonials" className="w-full">
-        <LazySection>
-          <TestimonialsSection />
-        </LazySection>
-      </div>
-
       {/* SECTION 11: FAQ */}
       <div id="faq" className="w-full">
         <LazySection>
@@ -556,14 +547,14 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed font-sans font-medium">
-                  AI-First tax optimization & Form 16 automation platform. Client-side memory for 100% private filing.
+                  Old vs New regime comparison and Form 16 parsing for Indian salaried taxpayers. No account, no database.
                 </p>
                 <div className="flex items-center gap-2 pt-1 text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>
-                  <span>Operational • Local Sandbox Active</span>
+                  <span>Operational • Guest sessions need no login</span>
                 </div>
               </div>
 
@@ -609,7 +600,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               </div>
               <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>AES-256 Client Encryption • 100% Private Local Memory</span>
+                <span>No account required • Nothing written to our database</span>
               </div>
             </div>
 

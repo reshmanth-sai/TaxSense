@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTaxStore } from '../../store/useTaxStore';
 import {
   CheckCircle,
   AlertCircle,
@@ -519,7 +520,7 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
                   Employer Entity
                 </span>
                 <span className="text-xs text-slate-800 dark:text-slate-200 font-medium">
-                  {doc.employer || 'Acme Corp Technologies'}
+                  {doc.employer || 'Employer not detected'}
                 </span>
               </div>
               <div className="space-y-1">
@@ -617,6 +618,8 @@ export const CopilotDetailsDrawer: React.FC<{
   confidence: number;
 }> = ({ isOpen, onToggle, confidence }) => {
   const [showConfidenceDetail, setShowConfidenceDetail] = useState(false);
+  const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
+  const sourceDocument = uploadedFiles[0]?.name;
 
   return (
     <div className="mt-3.5 border-t border-slate-200/50 dark:border-white/[0.04] pt-3.5 text-left">
@@ -700,7 +703,7 @@ export const CopilotDetailsDrawer: React.FC<{
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100/50 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.04] rounded-lg text-[10.5px] text-slate-700 dark:text-slate-300">
                   <FileText className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Form_16_Mohit_FY25-26.pdf</span>
+                  <span>{sourceDocument || 'No document uploaded'}</span>
                 </div>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100/50 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.04] rounded-lg text-[10.5px] text-slate-700 dark:text-slate-300">
                   <ExternalLink className="w-3 h-3 text-slate-500" />

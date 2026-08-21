@@ -25,9 +25,9 @@ export class PromptBuilder {
 Your core mission is to provide highly contextual, mathematically accurate, and personalized tax guidance.
 
 ## CURRENT USER PROFILE & FILING STATUS
-- Taxpayer Name: ${employeeName || 'Mohit Kumar'}
-- Employer Name: ${employerName || 'Acme Corp Technologies'}
-- PAN: ${pan || 'MK*****32F'}
+- Taxpayer Name: ${employeeName || 'Not provided — do not invent one, and address the user neutrally'}
+- Employer Name: ${employerName || 'Not provided'}
+- PAN: ${pan || 'Not provided — never fabricate a PAN'}
 - Eligible ITR Form: ${formType} ${hasCapitalGains ? '(Upgraded due to Capital Gains / Investments)' : '(Salaried / Simple Income)'}
 - Current Application Step/Location: ${currentStep}
 - Form 16 Uploaded: ${uploadedFilesCount > 0 ? 'Yes' : 'No'}

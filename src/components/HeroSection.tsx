@@ -538,7 +538,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-500 to-emerald-500 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">File with 100% confidence.</span>
         </h1>
         <p className="text-[16px] md:text-[18px] leading-[1.6] text-slate-650 dark:text-slate-350 max-w-[660px] mx-auto font-medium">
-          Upload your Form 16 in seconds. Our local-first AI engine compares Old vs New regimes, identifies missed 80C & 80D deductions, and calculates your maximum tax refund.
+          Upload your Form 16, or just type your salary. TaxSense compares Old vs New regimes to the rupee, flags 80C and 80D deductions you have missed, and shows what you get back.
         </p>
 
         <div className="pt-4 flex flex-col items-center justify-center gap-5">
@@ -576,7 +576,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           <div className="pt-2 flex flex-col items-center gap-2.5">
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Verified AY 2026–27 CBDT Tax Engine • 100% Local & Private AI</span>
+              <span>AY 2026–27 tax slabs • No login • Nothing saved to our servers</span>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">

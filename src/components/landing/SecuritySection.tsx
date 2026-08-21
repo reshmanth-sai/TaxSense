@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Lock, Shield, FileText, Cpu, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { KeyRound, Shield, FileText, Cpu, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { PremiumCard } from './helpers/PremiumCard';
 import { CardSpotlight } from './helpers/CardSpotlight';
 
@@ -16,17 +16,17 @@ export const SecuritySection: React.FC = React.memo(() => {
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Security & Compliance</span>
+          <span>How your data is handled</span>
         </div>
         <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
-          Bank-Grade Security
+          No account. No database.
         </h2>
-        <p className="text-xs sm:text-sm text-slate-655 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
-          Your financial data is private by design. TaxSense processes your Form 16 inside an isolated local sandbox.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+          Here is exactly what happens to your Form 16 — including the part most tax tools leave out.
         </p>
       </motion.div>
 
-      {/* Security Trust Pillars */}
+      {/* What actually happens to your data */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <CardSpotlight className="rounded-2xl" glowColor="rgba(59, 130, 246, 0.09)">
           <PremiumCard
@@ -38,14 +38,14 @@ export const SecuritySection: React.FC = React.memo(() => {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
-              <Lock className="w-5 h-5" />
+              <KeyRound className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">AES-256 Encryption</h3>
-              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">End-to-End Encrypted</span>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">No account required</h3>
+              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Guest mode</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
-              Form 16 documents are encrypted client-side using industry-standard AES-256 GCM encryption keys before processing.
+              Run a full regime comparison without giving us a name, an email, or a phone number. Signing in is optional and only adds cross-device sync.
             </p>
           </PremiumCard>
         </CardSpotlight>
@@ -63,11 +63,11 @@ export const SecuritySection: React.FC = React.memo(() => {
               <Shield className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Zero Data Retention</h3>
-              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Transient Memory</span>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Nothing stored on our servers</h3>
+              <span className="text-[9px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">No database writes</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
-              Guest sessions operate entirely in RAM memory. We store zero raw tax documents or PAN numbers on central servers.
+              We write no Form 16, no PAN, and no salary figure to a database. Your working session is kept in this browser's own storage and clears after 30 minutes of inactivity.
             </p>
           </PremiumCard>
         </CardSpotlight>
@@ -82,14 +82,14 @@ export const SecuritySection: React.FC = React.memo(() => {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
-              <FileText className="w-5 h-5" />
+              <Cpu className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">IT Dept Compliant</h3>
-              <span className="text-[9px] font-mono text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider block">AY 2026-27 Certified</span>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Read by Google Gemini</h3>
+              <span className="text-[9px] font-mono text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider block">Third-party processor</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
-              Engineered strictly in alignment with Income Tax Department rules under Section 115BAC and Chapter VI-A.
+              To read your PDF, we send it over TLS to Google's Gemini API and discard it once the text comes back. This is the one point where your document leaves your device — we would rather you knew.
             </p>
           </PremiumCard>
         </CardSpotlight>
@@ -104,24 +104,24 @@ export const SecuritySection: React.FC = React.memo(() => {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
-              <Cpu className="w-5 h-5" />
+              <FileText className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Sandboxed Engine</h3>
-              <span className="text-[9px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider block">Isolated Processing</span>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Built to the AY 2026-27 rules</h3>
+              <span className="text-[9px] font-mono text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider block">Finance Act, FY 2025-26</span>
             </div>
             <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
-              All AI computation runs within an isolated client process sandbox, eliminating external data leakage risk.
+              Slabs, the Section 87A rebate, Section 115BAC and the 4% cess follow the current Finance Act. TaxSense is a calculator, not a filing intermediary — you file on the e-filing portal.
             </p>
           </PremiumCard>
         </CardSpotlight>
       </div>
 
-      {/* Compliance Certification Strip */}
-      <div className="p-4 bg-slate-50 dark:bg-[#0E131B]/60 border border-slate-200/80 dark:border-white/[0.04] rounded-2xl flex flex-wrap items-center justify-around gap-4 text-xs font-mono text-slate-600 dark:text-slate-400">
-        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> SOC2 TYPE II STANDARDS</span>
-        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> ISO 27001 AUDITED</span>
-        <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> 100% PRIVACY GUARANTEED</span>
+      {/* Plain-language summary of what we do and do not do */}
+      <div className="p-5 bg-slate-50 dark:bg-[#0E131B]/60 border border-slate-200/80 dark:border-white/[0.04] rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-600 dark:text-slate-400">
+        <span className="flex items-start gap-2 leading-relaxed"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-px" /> We never ask for a login, an OTP, or your e-filing portal password.</span>
+        <span className="flex items-start gap-2 leading-relaxed"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-px" /> We never write your tax figures to a server-side database.</span>
+        <span className="flex items-start gap-2 leading-relaxed"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-px" /> Your PDF is sent to Google Gemini to be read, then dropped.</span>
       </div>
     </section>
   );

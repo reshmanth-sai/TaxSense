@@ -79,7 +79,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
     "Validating AIS & 26AS data integrity...",
     "Encrypting local browser workspace payload...",
     "Generating verified JSON return package...",
-    "Assembling zero-knowledge filing environment..."
+    "Assembling your filing summary..."
   ];
 
   // Rotate reasoning thoughts every 1.5s
@@ -233,9 +233,9 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                         { title: 'Documents verified', desc: 'Form 16 OCR matched' },
                         { title: 'Tax calculations completed', desc: `New Regime saves ${formatINR(savingsAmount)}` },
                         { title: 'Building filing workspace', desc: 'Structuring ITR-1 payload' },
-                        { title: 'Encrypting workspace', desc: 'AES-256 cipher active' },
+                        { title: 'Assembling summary', desc: 'Collating computed figures' },
                         { title: 'Preparing return package', desc: 'Validating JSON schemas' },
-                        { title: 'Final security validation', desc: 'Zero-knowledge verification' }
+                        { title: 'Final checks', desc: 'Validating against AY 2026-27 rules' }
                       ].map((step, idx) => {
                         const stepNum = idx + 1;
                         const isDone = generationStep >= stepNum;
@@ -306,8 +306,8 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                         </div>
 
                         <div className="bg-white dark:bg-slate-950/60 p-2.5 rounded-xl border border-slate-200/80 dark:border-white/[0.02]">
-                          <span className="text-[9px] text-slate-500 uppercase tracking-wider block font-bold">Encryption</span>
-                          <span className="font-bold text-blue-600 dark:text-cyan-400 font-mono">AES-256</span>
+                          <span className="text-[9px] text-slate-500 uppercase tracking-wider block font-bold">Storage</span>
+                          <span className="font-bold text-blue-600 dark:text-cyan-400 font-mono">Browser only</span>
                         </div>
                       </div>
                     </div>
@@ -374,7 +374,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                     { label: 'Tax Regime', val: recommendedRegime === 'NEW' ? 'New Regime' : 'Old Regime', color: 'text-blue-600 dark:text-blue-400' },
                     { label: 'Return Type', val: 'ITR-1', color: 'text-purple-600 dark:text-purple-300' },
                     { label: 'Compliance', val: 'Verified', color: 'text-emerald-600 dark:text-emerald-400' },
-                    { label: 'Encryption', val: 'AES-256', color: 'text-blue-600 dark:text-cyan-400' },
+                    { label: 'Storage', val: 'Browser only', color: 'text-blue-600 dark:text-cyan-400' },
                     { label: 'Workspace', val: 'Ready', color: 'text-emerald-600 dark:text-emerald-400' }
                   ].map((card) => (
                     <div key={card.label} className="bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-white/[0.06] p-3 rounded-2xl text-left space-y-1">
@@ -403,12 +403,12 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                     </div>
                     <div>
                       <span className="text-xs font-bold font-mono text-slate-900 dark:text-white block">ITR-1_AY2026-27_JSON.json</span>
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Encrypted Payload • 24 KB</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">ITR-1 JSON payload</span>
                     </div>
                   </div>
 
                   <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                    ✓ AES-256 Active
+                    ✓ Downloads locally
                   </span>
                 </div>
 
