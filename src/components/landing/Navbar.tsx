@@ -266,7 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
                     className="py-3 px-4 rounded-xl text-left text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 flex justify-between items-center"
                   >
                     <span>{item.label}</span>
-                    <span className="text-xs font-mono text-slate-400">↗</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
                 ) : (
                   <button

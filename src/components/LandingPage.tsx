@@ -227,38 +227,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       {/* Viewport Edge Vignette for cinematic layout depth */}
       <div className="pointer-events-none fixed inset-0 z-40 shadow-[inset_0_0_100px_rgba(255,255,255,0.85)] dark:shadow-[inset_0_0_100px_rgba(0,0,0,0.85)]" />
 
-      {/* Blueprint Grid Background Overlay (~1% opacity, 100px grid size) */}
-      <div
-        style={{
-          backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)',
-          backgroundSize: '100px 100px'
-        }}
-        className="absolute inset-0 z-0 pointer-events-none dark:hidden opacity-70"
-      />
-      <div
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px)',
-          backgroundSize: '100px 100px'
-        }}
-        className="absolute inset-0 z-0 pointer-events-none hidden dark:block opacity-70"
-      />
-
-      {/* Engineering Dot Matrix Grid Overlay (24px spacing, 1% opacity) */}
-      <div
-        style={{
-          backgroundImage: 'radial-gradient(rgba(0,0,0,0.04) 1.2px, transparent 0)',
-          backgroundSize: '24px 24px',
-        }}
-        className="absolute inset-0 z-0 pointer-events-none opacity-20 dark:hidden"
-      />
-      <div
-        style={{
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.08) 1.2px, transparent 0)',
-          backgroundSize: '24px 24px',
-        }}
-        className="absolute inset-0 z-0 pointer-events-none opacity-20 hidden dark:block"
-      />
-
       {/* LEFT SCROLL RAIL (Desktop only) */}
       <motion.div
         onMouseEnter={() => setIsPillHovered(true)}
@@ -416,52 +384,22 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       </motion.div>
 
       {/* 2% Opacity Film Grain Overlay */}
-      <div className="cinematic-noise pointer-events-none fixed inset-0 z-50 opacity-[0.02] mix-blend-overlay" />
-
-      {/* Cinematic Continuous Background Canvas: Large, overlapping, low-opacity glowing auroras */}
+      {/* Ambient background: one slow-drifting glow behind the hero. There
+          were four of these, each an infinitely-repeating Framer Motion
+          animation running for the entire session regardless of scroll
+          position -- Glow 4 near the final CTA was animating from the moment
+          the page loaded, long before anyone could see it. One is enough
+          ambiance for a page this content-dense; the vignette above still
+          gives every section a consistent edge treatment. */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Glow 1: Top Hero (Blue Glow) */}
         <motion.div
-          animate={{
+          animate={prefersReducedMotion ? {} : {
             x: [0, 20, -10, 0],
             y: [0, -15, 10, 0],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
           style={{ background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%)' }}
           className="absolute top-[3%] left-[10%] w-[1400px] h-[750px] blur-[80px]"
-        />
-
-        {/* Glow 2: Middle - Journey / Showcase (Blue & Green Mix) */}
-        <motion.div
-          animate={{
-            x: [0, -15, 20, 0],
-            y: [0, 15, -15, 0],
-          }}
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.04) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 75%)' }}
-          className="absolute top-[28%] right-[5%] w-[1600px] h-[850px] blur-[100px]"
-        />
-
-        {/* Glow 3: Lower - AI Copilot / Comparison (Purple & Green Mix) */}
-        <motion.div
-          animate={{
-            x: [0, 15, -20, 0],
-            y: [0, -15, 20, 0],
-          }}
-          transition={{ duration: 32, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.04) 0%, rgba(16, 185, 129, 0.05) 50%, transparent 75%)' }}
-          className="absolute top-[58%] left-[5%] w-[1500px] h-[800px] blur-[90px]"
-        />
-
-        {/* Glow 4: Bottom - Final CTA (Strong Green Glow) */}
-        <motion.div
-          animate={{
-            scale: [1, 1.03, 1],
-            opacity: [0.85, 1, 0.85]
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.07) 0%, transparent 70%)' }}
-          className="absolute top-[82%] left-1/2 -translate-x-1/2 w-[1800px] h-[900px] blur-[110px]"
         />
       </div>
 
