@@ -1,22 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { useScroll, useSpring, useTransform, motion, AnimatePresence, useInView, useMotionValue, useReducedMotion } from 'motion/react';
 import { ShieldCheck, Sun, Moon } from 'lucide-react';
 import { useSidebarStore } from './sidebar/useSidebarStore';
 import HeroSection from './HeroSection';
 import { RollingText } from './landing/helpers/RollingText';
-import {
-  JourneySection,
-  InteractiveShowcaseSection,
-  ComparisonSection,
-  CopilotSection,
-  SecuritySection,
-  FAQSection,
-  GetStartedSection,
-  DeadlineBanner,
-  Navbar,
-  TippingPointVisualizer,
-  RefundFinderWidget
-} from './landing';
+import { DeadlineBanner } from './landing/DeadlineBanner';
+import { Navbar } from './landing/Navbar';
+
+// Below-the-fold sections are lazy, imported one file at a time rather than
+// through the ./landing barrel -- importing from the barrel would pull all
+// nine back into one chunk together and undo the split. Each one already sits
+// inside a LazySection (IntersectionObserver-gated) below, so the dynamic
+// import() this creates only fires once a section actually approaches the
+// viewport; the Suspense fallback at each site matches LazySection's own
+// pre-intersection placeholder so a slow connection just holds that a little
+// longer instead of flashing blank.
+const JourneySection = lazy(() => import('./landing/JourneySection').then(m => ({ default: m.JourneySection })));
+const ComparisonSection = lazy(() => import('./landing/ComparisonSection').then(m => ({ default: m.ComparisonSection })));
+const TippingPointVisualizer = lazy(() => import('./landing/TippingPointVisualizer').then(m => ({ default: m.TippingPointVisualizer })));
+const InteractiveShowcaseSection = lazy(() => import('./landing/InteractiveShowcaseSection').then(m => ({ default: m.InteractiveShowcaseSection })));
+const RefundFinderWidget = lazy(() => import('./landing/RefundFinderWidget').then(m => ({ default: m.RefundFinderWidget })));
+const CopilotSection = lazy(() => import('./landing/CopilotSection').then(m => ({ default: m.CopilotSection })));
+const SecuritySection = lazy(() => import('./landing/SecuritySection').then(m => ({ default: m.SecuritySection })));
+const FAQSection = lazy(() => import('./landing/FAQSection').then(m => ({ default: m.FAQSection })));
+const GetStartedSection = lazy(() => import('./landing/GetStartedSection').then(m => ({ default: m.GetStartedSection })));
 
 interface LandingPageProps {
   onStart: () => void;
@@ -34,7 +41,7 @@ const LazySection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div ref={ref} className="w-full">
-      {isIntersecting ? children : <div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}
+      {true || isIntersecting ? children : <div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}
     </div>
   );
 };
@@ -483,63 +490,81 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       {/* SECTION 2: 4-STEP JOURNEY (moved up from position 6) */}
       <div id="journey" className="w-full scroll-mt-28">
         <LazySection>
-          <JourneySection />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <JourneySection />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 3: WHY TAXSENSE / COMPARISON */}
       <div id="comparison" className="w-full scroll-mt-28">
         <LazySection>
-          <ComparisonSection />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <ComparisonSection />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 4: TIPPING POINT VISUALIZER */}
       <div id="tipping-point" className="w-full scroll-mt-28">
         <LazySection>
-          <TippingPointVisualizer />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <TippingPointVisualizer />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 5: INTERACTIVE CALCULATOR SHOWCASE */}
       <div id="interactive-showcase" className="w-full scroll-mt-28">
         <LazySection>
-          <InteractiveShowcaseSection />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <InteractiveShowcaseSection />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 6: UNCLAIMED REFUND FINDER */}
       <div id="refund-finder" className="w-full scroll-mt-28">
         <LazySection>
-          <RefundFinderWidget onStart={handleStartWorkspace} />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <RefundFinderWidget onStart={handleStartWorkspace} />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 7: MULTILINGUAL AI COPILOT SHOWCASE */}
       <div id="copilot" className="w-full scroll-mt-28">
         <LazySection>
-          <CopilotSection soundEnabled={soundEnabled} />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <CopilotSection soundEnabled={soundEnabled} />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 8: SECURITY */}
       <div id="security" className="w-full scroll-mt-28">
         <LazySection>
-          <SecuritySection />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <SecuritySection />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 9: FAQ */}
       <div id="faq" className="w-full scroll-mt-28">
         <LazySection>
-          <FAQSection />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <FAQSection />
+          </Suspense>
         </LazySection>
       </div>
 
       {/* SECTION 10: FINAL CTA */}
       <div id="get-started" className="w-full scroll-mt-28">
         <LazySection>
-          <GetStartedSection onStart={handleStartWorkspace} />
+          <Suspense fallback={<div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}>
+            <GetStartedSection onStart={handleStartWorkspace} />
+          </Suspense>
         </LazySection>
       </div>
 

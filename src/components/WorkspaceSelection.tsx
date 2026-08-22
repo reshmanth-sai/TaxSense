@@ -418,7 +418,7 @@ export default function WorkspaceSelection({
               Your Private AI Tax Assistant
             </h1>
             <p className="text-[14px] sm:text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-medium">
-              Analyze tax documents locally with zero tracking, or securely sync across devices.
+              Upload a Form 16 or type your salary, with nothing written to our servers -- or sign in to sync across devices.
             </p>
           </div>
 

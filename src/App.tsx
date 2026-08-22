@@ -12,15 +12,20 @@ const FilingGuide = lazy(() => import('./components/FilingGuide'));
 const DocumentVault = lazy(() => import('./components/DocumentVault'));
 const AICopilot = lazy(() => import('./components/copilot/AICopilot').then(m => ({ default: m.AICopilot })));
 const HistoryArchive = lazy(() => import('./components/HistoryArchive'));
-import { WhatIfSimulatorModal } from './components/WhatIfSimulatorModal';
-import { SmartDocumentChecklist } from './components/SmartDocumentChecklist';
-import { VisualTaxBreakdown } from './components/VisualTaxBreakdown';
-import { FamilyProfileSwitcher } from './components/profile/FamilyProfileSwitcher';
-import { FilingDeadlineBar } from './components/compliance/FilingDeadlineBar';
-import { DashboardCommandCenter } from './components/dashboard/DashboardCommandCenter';
-import { CTCEfficiencyScorecard } from './components/dashboard/CTCEfficiencyScorecard';
-import { PDFComputationExporter } from './components/export/PDFComputationExporter';
-import { CommandPalette } from './components/CommandPalette';
+// SmartDocumentChecklist, VisualTaxBreakdown, CTCEfficiencyScorecard,
+// FamilyProfileSwitcher and FilingDeadlineBar were imported here but never
+// referenced anywhere in this file -- removed rather than lazy-loaded.
+//
+// The rest are lazy: this file's very first render, when currentStep === 'HOME',
+// returns <LandingPage/> and nothing else (see the early return below). Every
+// component here only ever mounts after that branch, but a static import still
+// ships its module in the landing page's own bundle regardless of which branch
+// runs -- that's the entire authenticated dashboard shell downloaded by a
+// visitor who never gets past the hero.
+const WhatIfSimulatorModal = lazy(() => import('./components/WhatIfSimulatorModal').then(m => ({ default: m.WhatIfSimulatorModal })));
+const DashboardCommandCenter = lazy(() => import('./components/dashboard/DashboardCommandCenter').then(m => ({ default: m.DashboardCommandCenter })));
+const PDFComputationExporter = lazy(() => import('./components/export/PDFComputationExporter').then(m => ({ default: m.PDFComputationExporter })));
+const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })));
 import { useTaxStore, useTaxStoreHydrated, UserProfile } from './store/useTaxStore';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import {
@@ -42,7 +47,9 @@ import LandingPage from './components/LandingPage';
 import WorkspaceSelection from './components/WorkspaceSelection';
 import { ExportService } from './services/ExportService';
 import { GoogleAuthService } from './services/GoogleAuthService';
-import { AuditPanel, RecommendationsPanel, FilingWorkspacePanel } from './components/vault/VaultComponents';
+const AuditPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.AuditPanel })));
+const RecommendationsPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.RecommendationsPanel })));
+const FilingWorkspacePanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.FilingWorkspacePanel })));
 import { Sidebar } from './components/sidebar/Sidebar';
 import { useSidebarStore } from './components/sidebar/useSidebarStore';
 
@@ -1029,12 +1036,14 @@ export default function App() {
                           exit={{ opacity: 0, y: -15 }}
                           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                         >
-                          <DashboardCommandCenter
-                            onNavigateStep={(step) => setActiveStep(step)}
-                            onOpenWhatIf={() => setIsWhatIfOpen(true)}
-                            onOpenPdf={() => setIsPdfModalOpen(true)}
-                            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-                          />
+                          <Suspense fallback={<div className="h-[600px] bg-slate-900/10 animate-pulse rounded-3xl" />}>
+                            <DashboardCommandCenter
+                              onNavigateStep={(step) => setActiveStep(step)}
+                              onOpenWhatIf={() => setIsWhatIfOpen(true)}
+                              onOpenPdf={() => setIsPdfModalOpen(true)}
+                              onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+                            />
+                          </Suspense>
                         </motion.div>
                       )}
 
@@ -1079,13 +1088,15 @@ export default function App() {
                               </p>
                             </div>
                           ) : (
-                            <AuditPanel
-                              analysisProgress={analysisProgress}
-                              taxData={taxData}
-                              taxCalculationResult={taxCalculationResult}
-                              formType={formType}
-                              setActiveStep={setActiveStep}
-                            />
+                            <Suspense fallback={<div className="h-96 bg-slate-900/10 animate-pulse rounded-2xl" />}>
+                              <AuditPanel
+                                analysisProgress={analysisProgress}
+                                taxData={taxData}
+                                taxCalculationResult={taxCalculationResult}
+                                formType={formType}
+                                setActiveStep={setActiveStep}
+                              />
+                            </Suspense>
                           )}
                         </motion.div>
                       )}
@@ -1111,15 +1122,17 @@ export default function App() {
                               </p>
                             </div>
                           ) : (
-                            <RecommendationsPanel
-                              taxData={taxData}
-                              taxCalculationResult={taxCalculationResult}
-                              incomeProfile={incomeProfile}
-                              confirmedDeductions={confirmedDeductions}
-                              formType={formType}
-                              formatINR={formatINR}
-                              setActiveStep={setActiveStep}
-                            />
+                            <Suspense fallback={<div className="h-96 bg-slate-900/10 animate-pulse rounded-2xl" />}>
+                              <RecommendationsPanel
+                                taxData={taxData}
+                                taxCalculationResult={taxCalculationResult}
+                                incomeProfile={incomeProfile}
+                                confirmedDeductions={confirmedDeductions}
+                                formType={formType}
+                                formatINR={formatINR}
+                                setActiveStep={setActiveStep}
+                              />
+                            </Suspense>
                           )}
                         </motion.div>
                       )}
@@ -1134,17 +1147,19 @@ export default function App() {
                           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                           className="space-y-6 font-sans"
                         >
-                          <FilingWorkspacePanel
-                            guidedFilingStep={guidedFilingStep}
-                            setGuidedFilingStep={setGuidedFilingStep}
-                            incomeProfile={incomeProfile}
-                            taxData={taxData}
-                            handleNumericChange={handleNumericChange}
-                            executeFilingSubmission={executeFilingSubmission}
-                            taxCalculationResult={taxCalculationResult}
-                            formatINR={formatINR}
-                            setActiveStep={setActiveStep}
-                          />
+                          <Suspense fallback={<div className="h-96 bg-slate-900/10 animate-pulse rounded-2xl" />}>
+                            <FilingWorkspacePanel
+                              guidedFilingStep={guidedFilingStep}
+                              setGuidedFilingStep={setGuidedFilingStep}
+                              incomeProfile={incomeProfile}
+                              taxData={taxData}
+                              handleNumericChange={handleNumericChange}
+                              executeFilingSubmission={executeFilingSubmission}
+                              taxCalculationResult={taxCalculationResult}
+                              formatINR={formatINR}
+                              setActiveStep={setActiveStep}
+                            />
+                          </Suspense>
                         </motion.div>
                       )}
 
@@ -1580,18 +1595,23 @@ export default function App() {
       </AnimatePresence>
 
       {/* "What-If" Interactive Tax Simulator Modal */}
-      <WhatIfSimulatorModal
-        isOpen={isWhatIfOpen}
-        onClose={() => setIsWhatIfOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <WhatIfSimulatorModal
+          isOpen={isWhatIfOpen}
+          onClose={() => setIsWhatIfOpen(false)}
+        />
+      </Suspense>
 
       {/* PDF Tax Computation Statement Exporter Modal */}
-      <PDFComputationExporter
-        isOpen={isPdfModalOpen}
-        onClose={() => setIsPdfModalOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <PDFComputationExporter
+          isOpen={isPdfModalOpen}
+          onClose={() => setIsPdfModalOpen(false)}
+        />
+      </Suspense>
 
       {/* Global ⌘K Command Palette Modal */}
+      <Suspense fallback={null}>
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
@@ -1599,7 +1619,7 @@ export default function App() {
         onOpenWhatIf={() => setIsWhatIfOpen(true)}
         onOpenPdf={() => setIsPdfModalOpen(true)}
       />
-
+      </Suspense>
 
     </div>
   );

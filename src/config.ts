@@ -22,3 +22,16 @@ export const FILING_DEADLINES = {
   lateFee: 5000,
   lateFeeReduced: 1000,
 } as const;
+
+/**
+ * The dashboard's compliance calendar. Each entry's status (passed / upcoming)
+ * is computed from `date` at render time -- never hardcode "Completed" or
+ * "Upcoming" text next to a date, that's exactly how the dashboard ended up
+ * telling a user in August that the 31 July due date was still 12 days away.
+ */
+export const COMPLIANCE_MILESTONES = [
+  { date: new Date(2026, 5, 15, 23, 59, 59), label: 'Employer Form 16 Cutoff' },
+  { date: FILING_DEADLINES.dueDate, label: 'Salaried ITR Filing Cutoff (Sec 139(1))' },
+  { date: new Date(2026, 8, 15, 23, 59, 59), label: 'Q2 Advance Tax Cutoff (45%)' },
+  { date: FILING_DEADLINES.belatedCutoff, label: 'Belated / Revised Return Cutoff' },
+] as const;

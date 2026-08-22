@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useTaxStore } from '../../store/useTaxStore';
 import { calculateTax, buildTaxData, formatINR } from '../../utils/taxCalculator';
+import { FILING_DEADLINES, COMPLIANCE_MILESTONES } from '../../config';
 import { SecurityInspectorModal } from '../security/SecurityInspectorModal';
 import { AIFilingReadinessEngine } from './AIFilingReadinessEngine';
 
@@ -72,6 +73,14 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
 
   const hasUploadedForm16 = uploadedFiles.length > 0;
+  const verifiedFileCount = uploadedFiles.filter((f) => f.status === 'Verified').length;
+  const unverifiedFileCount = uploadedFiles.length - verifiedFileCount;
+
+  const now = Date.now();
+  const dueDateMs = FILING_DEADLINES.dueDate.getTime();
+  const isPastDue = now > dueDateMs;
+  const daysUntilDue = Math.max(0, Math.ceil((dueDateMs - now) / 86400000));
+  const dueDateLabel = FILING_DEADLINES.dueDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   // Income can arrive by upload or by manual entry, so gate on the figure that
   // every downstream number depends on rather than on the document count.
   const hasIncome = (incomeProfile?.grossSalary || 0) > 0;
@@ -82,6 +91,35 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   );
   const savings = Math.max(0, calculation?.savings || 0);
   const betterRegime = calculation?.recommendedRegime === 'OLD' ? 'Old' : 'New';
+
+  // The 80D recommendation below claims a real, computed rupee figure rather
+  // than the flat statutory cap. 80D only reduces liability under the Old
+  // Regime, so this compares Old Regime tax at the current claim against Old
+  // Regime tax with the claim topped up to the self/family cap -- a flat
+  // "Save Rs 25,000" would have overstated the benefit for anyone not in the
+  // top slab, since the real saving is the deduction times the marginal rate,
+  // not the deduction itself.
+  const current80D = confirmedDeductions?.['80D'] || 0;
+  const SELF_80D_CAP = 25000;
+  const remaining80DHeadroom = Math.max(0, SELF_80D_CAP - current80D);
+  const real80DSaving = React.useMemo(() => {
+    if (!hasIncome || remaining80DHeadroom <= 0) return 0;
+    const withMore80D = calculateTax(
+      buildTaxData(incomeProfile, { ...confirmedDeductions, '80D': current80D + remaining80DHeadroom })
+    );
+    return Math.max(0, calculation.oldRegime.totalTaxPayable - withMore80D.oldRegime.totalTaxPayable);
+  }, [hasIncome, remaining80DHeadroom, incomeProfile, confirmedDeductions, current80D, calculation]);
+  const show80DRecommendation = hasIncome && remaining80DHeadroom > 0 && real80DSaving > 0;
+
+  // "AI Found" used to assert a flat, unsourced number ("₹18,200 Potential
+  // Additional Savings") and two specific claims ("Missing Rent Receipt",
+  // "Employer NPS Available") to every user regardless of what they'd
+  // actually entered. These two flags are the real, checkable version -- they
+  // read the same confirmedDeductions the rest of this dashboard uses, rather
+  // than a hardcoded guess about the user's situation.
+  const hraUnclaimed = hasIncome && (confirmedDeductions?.['HRA exemption'] || 0) === 0;
+  const employerNpsUnclaimed = hasIncome && (confirmedDeductions?.['80CCD(2)'] || 0) === 0;
+  const hasOpenInsights = hraUnclaimed || employerNpsUnclaimed;
 
   const getGoogleCalendarUrl = () => {
     const title = encodeURIComponent('TaxSense: ITR Filing Deadline (AY 2026-27)');
@@ -402,17 +440,23 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
               ITR Filing Deadline
             </span>
-            <span className="px-2 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-mono font-bold rounded-md">
-              12 Days Left
+            <span className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-md ${
+              isPastDue
+                ? 'bg-red-500/10 text-red-600 dark:text-red-400'
+                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+            }`}>
+              {isPastDue ? 'Due date passed' : `${daysUntilDue} Day${daysUntilDue === 1 ? '' : 's'} Left`}
             </span>
           </div>
 
           <div className="space-y-1">
             <div className="text-xl font-bold font-mono text-slate-900 dark:text-white">
-              31 July 2026
+              {dueDateLabel}
             </div>
             <div className="text-xs text-slate-500">
-              Statutory due date under Sec 139(1)
+              {isPastDue
+                ? 'Statutory due date under Sec 139(1) -- a belated return is still possible under Sec 139(4)'
+                : 'Statutory due date under Sec 139(1)'}
             </div>
           </div>
 
@@ -450,37 +494,40 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                   AY 2026-27 Compliance Calendar
                 </div>
 
-                <div className="p-2 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/50 dark:border-white/[0.04] flex justify-between items-center">
-                  <div>
-                    <span className="font-bold text-slate-900 dark:text-white block">15 June 2026</span>
-                    <span className="text-[10px] text-slate-400">Employer Form 16 Cutoff</span>
-                  </div>
-                  <span className="text-[9.5px] text-emerald-500 font-bold uppercase">Completed ✔</span>
-                </div>
-
-                <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20 flex justify-between items-center">
-                  <div>
-                    <span className="font-bold text-blue-600 dark:text-blue-400 block">31 July 2026</span>
-                    <span className="text-[10px] text-slate-400">Salaried ITR Filing Cutoff (Sec 139(1))</span>
-                  </div>
-                  <span className="text-[9.5px] text-amber-500 font-bold uppercase">Upcoming ⚠️</span>
-                </div>
-
-                <div className="p-2 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/50 dark:border-white/[0.04] flex justify-between items-center">
-                  <div>
-                    <span className="font-bold text-slate-900 dark:text-white block">15 Sept 2026</span>
-                    <span className="text-[10px] text-slate-400">Q2 Advance Tax Cutoff (45%)</span>
-                  </div>
-                  <span className="text-[9.5px] text-slate-400 font-bold uppercase">Upcoming</span>
-                </div>
-
-                <div className="p-2 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/50 dark:border-white/[0.04] flex justify-between items-center">
-                  <div>
-                    <span className="font-bold text-slate-900 dark:text-white block">31 Dec 2026</span>
-                    <span className="text-[10px] text-slate-400">Belated / Revised Return Cutoff</span>
-                  </div>
-                  <span className="text-[9.5px] text-slate-400 font-bold uppercase">Upcoming</span>
-                </div>
+                {COMPLIANCE_MILESTONES.map((milestone) => {
+                  const isPast = milestone.date.getTime() < now;
+                  const isTheDueDate = milestone.date.getTime() === dueDateMs;
+                  const label = milestone.date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                  return (
+                    <div
+                      key={milestone.label}
+                      className={`p-2 rounded-xl border flex justify-between items-center ${
+                        isTheDueDate && !isPast
+                          ? 'bg-blue-500/10 border-blue-500/20'
+                          : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200/50 dark:border-white/[0.04]'
+                      }`}
+                    >
+                      <div>
+                        <span className={`font-bold block ${isTheDueDate && !isPast ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white'}`}>
+                          {label}
+                        </span>
+                        <span className="text-[10px] text-slate-400">{milestone.label}</span>
+                      </div>
+                      <span className={`text-[9.5px] font-bold uppercase ${
+                        isPast
+                          ? 'text-slate-400'
+                          : isTheDueDate
+                          ? 'text-amber-500'
+                          : 'text-slate-400'
+                      }`}>
+                        {/* "Passed" is a date fact, not a claim that the user
+                            filed on time -- we have no record of that here,
+                            so it never gets a checkmark. */}
+                        {isPast ? 'Passed' : isTheDueDate ? 'Upcoming ⚠️' : 'Upcoming'}
+                      </span>
+                    </div>
+                  );
+                })}
               </motion.div>
             )}
           </AnimatePresence>
@@ -498,14 +545,27 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
           </div>
 
           <div className="flex items-center gap-4 font-mono">
-            <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>5 Verified</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-bold">
-              <AlertCircle className="w-4 h-4 text-amber-500" />
-              <span>2 Missing</span>
-            </div>
+            {uploadedFiles.length === 0 ? (
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-bold">
+                <AlertCircle className="w-4 h-4 text-slate-400" />
+                <span>No documents uploaded yet</span>
+              </div>
+            ) : (
+              <>
+                {verifiedFileCount > 0 && (
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <span>{verifiedFileCount} Verified</span>
+                  </div>
+                )}
+                {unverifiedFileCount > 0 && (
+                  <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-bold">
+                    <AlertCircle className="w-4 h-4 text-amber-500" />
+                    <span>{unverifiedFileCount} Processing</span>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <div className="pt-2 border-t border-slate-200/60 dark:border-white/[0.04]">
@@ -524,19 +584,18 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
       {/* ---------------------------------------------------- */}
       {/* 4. CENTERPIECE: AI NEXT BEST ACTION + COLLAPSIBLE WHY*/}
       {/* ---------------------------------------------------- */}
+      {show80DRecommendation && (
       <motion.div variants={itemVariants} className="bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 border border-blue-500/25 rounded-[28px] p-6 md:p-8 backdrop-blur-md text-left relative overflow-hidden space-y-5 shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 font-mono">
-              AI Next Best Action
+              Next Best Action
             </span>
           </div>
 
           <div className="flex items-center gap-3 text-[11px] font-mono text-slate-500">
             <span>Est. Time: <strong className="text-slate-900 dark:text-white">3 mins</strong></span>
-            <span>•</span>
-            <span>Confidence: <strong className="text-emerald-500">96%</strong></span>
           </div>
         </div>
 
@@ -566,7 +625,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                     exit={{ opacity: 0, height: 0 }}
                     className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-slate-700 dark:text-slate-300 font-sans"
                   >
-                    We detected zero medical insurance claims under Section 80D. Premium receipts for self or senior citizen parents reduce taxable income by up to ₹25,000.
+                    You've claimed {formatINR(current80D)} of the {formatINR(SELF_80D_CAP)} Section 80D limit under the Old Regime. Topping it up to the cap reduces your Old Regime tax by the amount shown -- this only applies if you file under the Old Regime.
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -575,8 +634,8 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
 
           <div className="shrink-0 flex items-center gap-6">
             <div className="text-right font-mono">
-              <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-sans font-bold">Expected Tax Saving</span>
-              <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">Save ₹25,000</span>
+              <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-sans font-bold">Old Regime Tax Saving</span>
+              <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">Save {formatINR(real80DSaving)}</span>
             </div>
 
             <button
@@ -626,7 +685,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                     className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
                   >
                     {quickFixSuccess ? <Check className="w-4 h-4 text-white" /> : null}
-                    <span>{quickFixSuccess ? 'Applied!' : 'Apply ₹25,000 Saving'}</span>
+                    <span>{quickFixSuccess ? 'Applied!' : 'Apply 80D Deduction'}</span>
                   </button>
                 </div>
               </div>
@@ -634,6 +693,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
           )}
         </AnimatePresence>
       </motion.div>
+      )}
 
       {/* ---------------------------------------------------- */}
       {/* 5. PRIORITIZED INSIGHTS & ANALYTICS PREVIEW         */}
@@ -658,23 +718,41 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
             </button>
           </div>
 
-          <div className="space-y-1">
-            <div className="text-[10px] text-slate-400 uppercase tracking-widest font-mono font-bold">AI Found</div>
-            <div className="text-2xl font-black font-mono text-purple-600 dark:text-purple-400">
-              ₹18,200 <span className="text-sm font-normal text-slate-600 dark:text-slate-300 font-sans">Potential Additional Savings</span>
+          {!hasIncome ? (
+            <div className="text-xs text-slate-500 dark:text-slate-400 font-sans py-1">
+              Add your income to see which deductions you haven't claimed yet.
             </div>
-          </div>
+          ) : hasOpenInsights ? (
+            <>
+              <div className="space-y-1">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest font-mono font-bold">Not Yet Claimed</div>
+                <div className="text-sm font-semibold font-sans text-slate-700 dark:text-slate-300">
+                  Based on what you've entered so far
+                </div>
+              </div>
 
-          {/* PRIORITIZED RANKED INSIGHT CHIPS */}
-          <div className="flex flex-wrap gap-2 text-[11px] font-mono pt-1">
-            <span className="px-2.5 py-1 bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded-lg border border-amber-500/20 font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-              HIGH PRIORITY: Missing Rent Receipt
-            </span>
-            <span className="px-2.5 py-1 bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded-lg border border-blue-500/20 font-bold flex items-center gap-1">
-              MEDIUM: Employer NPS Available
-            </span>
-          </div>
+              {/* PRIORITIZED RANKED INSIGHT CHIPS -- each one reflects a real,
+                  currently-zero entry in confirmedDeductions, not a guess. */}
+              <div className="flex flex-wrap gap-2 text-[11px] font-mono pt-1">
+                {hraUnclaimed && (
+                  <span className="px-2.5 py-1 bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded-lg border border-amber-500/20 font-bold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    HRA exemption not claimed
+                  </span>
+                )}
+                {employerNpsUnclaimed && (
+                  <span className="px-2.5 py-1 bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded-lg border border-blue-500/20 font-bold flex items-center gap-1">
+                    Employer NPS (80CCD(2)) not claimed
+                  </span>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="text-xs text-emerald-600 dark:text-emerald-400 font-sans font-semibold py-1 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>HRA and employer NPS are both accounted for.</span>
+            </div>
+          )}
         </div>
 
         {/* Analytics Preview Card (5 cols) with Sparkline Trend Badge */}
