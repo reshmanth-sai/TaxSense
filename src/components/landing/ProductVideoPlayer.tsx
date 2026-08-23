@@ -838,7 +838,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
 
                     <button
                       onClick={onStartFiling}
-                      className="h-12 px-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-500/20 active:scale-98 transition-all flex items-center gap-2 cursor-pointer relative z-10"
+                      className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-500/20 active:scale-98 transition-all flex items-center gap-2 cursor-pointer relative z-10"
                     >
                       <span>Open Filing Workspace</span>
                       <ArrowRight className="w-4 h-4" />

@@ -33,7 +33,7 @@ export const GetStartedSection: React.FC<GetStartedSectionProps> = React.memo(({
         <div className="flex flex-col items-center justify-center gap-4 pt-2 relative z-10">
           <button
             onClick={onStart}
-            className="group relative overflow-hidden px-9 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider rounded-2xl transition-all duration-300 cursor-pointer shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 active:scale-97 hover:-translate-y-0.5 flex items-center justify-center gap-2 border border-blue-400/30"
+            className="group relative overflow-hidden px-9 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-2xl transition-all duration-300 cursor-pointer shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 active:scale-97 hover:-translate-y-0.5 flex items-center justify-center gap-2"
           >
             <RollingText text="Calculate My Tax Savings" />
             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />

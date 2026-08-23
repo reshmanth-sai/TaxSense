@@ -547,7 +547,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           <div className="flex flex-wrap items-center justify-center gap-3.5">
             <button
               onClick={onStart}
-              className="group relative overflow-hidden px-8 py-[18px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-[13px] uppercase tracking-wider rounded-[14px] transition-all duration-300 shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:shadow-[0_12px_30px_rgba(37,99,235,0.4)] active:scale-[0.97] hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer border border-blue-400/30"
+              className="group relative overflow-hidden px-8 py-[18px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] uppercase tracking-wider rounded-[14px] transition-all duration-300 shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:shadow-[0_12px_30px_rgba(37,99,235,0.4)] active:scale-[0.97] hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
             >
               <RollingText text="Compare My Tax Regime" />
               <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />

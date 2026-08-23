@@ -152,7 +152,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
 
           <button
             onClick={onStart}
-            className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md border border-amber-400/30 hover:scale-[1.02] active:scale-95"
+            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95"
           >
             <span>{phase === 'closed' ? 'Compare regimes' : 'File now'}</span>
             <ArrowRight className="w-3 h-3" />

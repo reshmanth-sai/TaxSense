@@ -206,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
             {/* Outcome-Focused Primary Navbar CTA: "Upload Form 16 →" */}
             <button
               onClick={onStart}
-              className="group relative px-5 py-2.5 bg-[#0B1730] hover:bg-[#122244] dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-semibold text-[13px] rounded-xl transition-all duration-200 shadow-[0_4px_16px_rgba(11,23,48,0.15)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-2"
+              className="group relative px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[13px] rounded-xl transition-all duration-200 shadow-[0_4px_16px_rgba(37,99,235,0.2)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-2"
             >
               <span>Upload Form 16</span>
               <ArrowRight className="w-3.5 h-3.5 text-white/80 group-hover:translate-x-0.5 transition-transform" />
@@ -284,7 +284,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
                   setIsMobileMenuOpen(false);
                   onStart();
                 }}
-                className="mt-2 w-full py-3.5 bg-[#0B1730] dark:bg-blue-600 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg"
+                className="mt-2 w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-lg"
               >
                 <span>Upload Form 16</span>
                 <ArrowRight className="w-4 h-4" />
