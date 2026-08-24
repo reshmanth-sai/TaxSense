@@ -43,12 +43,16 @@ import {
   CopilotDetailsDrawer
 } from './components/dashboard/DashboardComponents';
 import LandingPage from './components/LandingPage';
-import WorkspaceSelection from './components/WorkspaceSelection';
+// WorkspaceSelection and Sidebar are the first two screens after the
+// landing page, but neither is needed for a visitor who never gets past
+// LandingPage -- lazy like everything else behind the Suspense boundary
+// below, rather than shipping in the pre-paint chunk.
+const WorkspaceSelection = lazy(() => import('./components/WorkspaceSelection'));
+const Sidebar = lazy(() => import('./components/sidebar/Sidebar').then(m => ({ default: m.Sidebar })));
 import { GoogleAuthService } from './services/GoogleAuthService';
 const AuditPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.AuditPanel })));
 const RecommendationsPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.RecommendationsPanel })));
 const FilingWorkspacePanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.FilingWorkspacePanel })));
-import { Sidebar } from './components/sidebar/Sidebar';
 import { useSidebarStore } from './components/sidebar/useSidebarStore';
 
 import {

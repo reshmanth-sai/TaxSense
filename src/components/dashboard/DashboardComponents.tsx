@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaxStore } from '../../store/useTaxStore';
 import { buildTaxData, formatINR } from '../../utils/taxCalculator';
-import { ExportService } from '../../services/ExportService';
 import {
   CheckCircle,
   AlertCircle,
@@ -479,7 +478,10 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
 
   const taxData = buildTaxData(incomeProfile, confirmedDeductions);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    // jsPDF (~150KB) only needs to load for the user who actually clicks
+    // this, not ship in the main bundle for every landing-page visitor.
+    const { ExportService } = await import('../../services/ExportService');
     ExportService.downloadJSON(taxData, formType === 'ITR-2' ? 'ITR-2' : 'ITR-1');
   };
 
