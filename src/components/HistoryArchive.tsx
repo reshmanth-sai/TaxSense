@@ -598,7 +598,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                     <div className="p-4 bg-white/80 dark:bg-slate-900/30 border border-slate-200 dark:border-white/[0.04] rounded-2xl flex items-center justify-between text-xs hover:border-slate-300 dark:hover:border-white/[0.08] transition-all">
                       <div>
                         <span className="text-[9px] text-slate-500 uppercase tracking-wider block font-bold">Estimated Savings</span>
-                        <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">{item.savings !== undefined ? formatINR(item.savings) : '—'}</span>
+                        <span className="font-mono tabular-nums text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">{item.savings !== undefined ? formatINR(item.savings) : '—'}</span>
                       </div>
                       <button
                         onClick={() => setPreviewDoc({ id: item.id, formType: item.formType, grossSalary: item.grossSalary, totalDeductions: item.totalDeductions, recommendedRegime: item.recommendedRegime, taxData: item.taxData })}
@@ -895,7 +895,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                             <th className="p-4">Tax Savings</th>
                           </tr>
                         </thead>
-                        <tbody className="text-slate-800 dark:text-slate-200 font-mono">
+                        <tbody className="text-slate-800 dark:text-slate-200 font-mono tabular-nums">
                           {activeHistory.map((item) => (
                             <tr key={item.id} className="border-b border-slate-200/60 dark:border-white/[0.02]">
                               <td className="p-4 font-bold text-slate-900 dark:text-white">{item.yearLabel}</td>

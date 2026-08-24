@@ -274,7 +274,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
 
             <div className="px-3.5 py-2 bg-slate-100/70 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08] rounded-xl text-left font-mono">
               <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-sans font-bold">Estimated Refund</span>
-              <span className="text-base font-black text-emerald-600 dark:text-emerald-400">
+              <span className="text-base font-black text-emerald-600 dark:text-emerald-400 tabular-nums">
                 {hasUploadedForm16 && incomeProfile.tdsDeducted
                   ? `₹${incomeProfile.tdsDeducted.toLocaleString('en-IN')}`
                   : '—'}
@@ -734,7 +734,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
           <div className="shrink-0 flex items-center gap-6">
             <div className="text-right font-mono">
               <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-sans font-bold">Old Regime Tax Saving</span>
-              <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">Save {formatINR(real80DSaving)}</span>
+              <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 tabular-nums">Save {formatINR(real80DSaving)}</span>
             </div>
 
             <button
@@ -886,7 +886,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
             </button>
           </div>
 
-          <div className="space-y-2 font-mono text-xs">
+          <div className="space-y-2 font-mono text-xs tabular-nums">
             <div className="flex justify-between">
               <span className="text-slate-500">Effective Tax Rate:</span>
               <strong className="text-slate-900 dark:text-white">{hasIncome ? `${effectiveTaxRate.toFixed(1)}%` : '—'}</strong>

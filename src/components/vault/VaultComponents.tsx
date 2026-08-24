@@ -1558,7 +1558,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
         </div>
 
         {/* Slabs Comparison Table */}
-        <div className="bg-slate-50/50 dark:bg-slate-950/40 border border-slate-200 dark:border-white/[0.02] rounded-2xl p-4 space-y-4 shadow-inner">
+        <div className="bg-slate-50/50 dark:bg-slate-950/40 border border-slate-200 dark:border-white/[0.02] rounded-2xl p-4 space-y-4 shadow-inner tabular-nums">
           <div className="flex items-center justify-between text-xs pb-2.5 border-b border-slate-200 dark:border-white/[0.03]">
             <span className="text-slate-550 font-bold font-mono text-[9px] uppercase tracking-wider">Parameters</span>
             <div className="flex items-center gap-6 font-mono font-bold text-[10px] uppercase tracking-wider text-slate-600 dark:text-slate-450">
@@ -1928,7 +1928,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
 
         {/* Big Savings Metric */}
         <div className="py-2 flex items-center justify-center select-all">
-          <div className="text-6xl sm:text-7xl md:text-8xl lg:text-[90px] font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-[#34D399] dark:via-emerald-400 dark:to-cyan-400 drop-shadow-sm">
+          <div className="text-6xl sm:text-7xl md:text-8xl lg:text-[90px] font-black font-mono tabular-nums tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-[#34D399] dark:via-emerald-400 dark:to-cyan-400 drop-shadow-sm">
             <HeroSavingsCounter value={savingsVal} />
           </div>
         </div>
@@ -2035,7 +2035,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
         </span>
 
         {/* 3-Column Comparison Flow */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono select-none">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono tabular-nums select-none">
           {/* Current Filing */}
           <div className="p-4 rounded-2xl bg-slate-100/60 dark:bg-slate-900/40 border border-slate-200/60 dark:border-white/[0.04] space-y-1">
             <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider block">Current Filing (Old Regime)</span>

@@ -566,7 +566,7 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
               <span className="text-[8px] text-slate-500 font-black uppercase tracking-wider font-mono block">
                 Extracted Payload Fields
               </span>
-              <div className="space-y-1.5 font-mono text-[10px] text-slate-700 dark:text-slate-300">
+              <div className="space-y-1.5 font-mono text-[10px] text-slate-700 dark:text-slate-300 tabular-nums">
                 <div className="flex justify-between border-b border-slate-200/30 dark:border-white/[0.02] pb-1">
                   <span className="text-slate-650 dark:text-slate-450">Gross Salary (Section 17)</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">
