@@ -116,7 +116,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
   const countdownLabel = phase === 'open' ? 'Due date' : 'Belated cut-off';
 
   return (
-    <div className="w-full bg-white/70 dark:bg-[#080D1A]/80 border-b border-slate-200/60 dark:border-white/[0.06] py-2 px-4 text-slate-700 dark:text-slate-300 text-[11px] font-sans select-none relative z-50 backdrop-blur-md">
+    <div className="w-full bg-white/70 dark:bg-[#080D1A]/80 border-b border-slate-200/60 dark:border-white/[0.06] py-2 px-4 text-slate-700 dark:text-slate-300 text-xs font-sans select-none relative z-50 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto flex items-center justify-between gap-3">
         {/* Left message group */}
         <div className="flex items-center gap-2.5 overflow-hidden">
@@ -144,7 +144,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
             <div className="flex items-center gap-1.5 text-xs font-sans text-slate-600 dark:text-slate-400">
               <Clock className={`w-3.5 h-3.5 ${accent.text}`} />
               <span className="hidden sm:inline text-slate-500 font-medium">{countdownLabel}:</span>
-              <span className={`font-mono border px-2 py-0.5 rounded-md font-bold text-[11px] tabular-nums ${accent.chip}`}>
+              <span className={`font-mono border px-2 py-0.5 rounded-md font-bold text-xs tabular-nums ${accent.chip}`}>
                 {days}d {hours}h {minutes}m {seconds}s
               </span>
             </div>
@@ -152,7 +152,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
 
           <button
             onClick={onStart}
-            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95"
+            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-2xs uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95"
           >
             <span>{phase === 'closed' ? 'Compare regimes' : 'File now'}</span>
             <ArrowRight className="w-3 h-3" />

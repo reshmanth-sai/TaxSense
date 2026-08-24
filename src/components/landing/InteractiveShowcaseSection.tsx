@@ -63,7 +63,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-center space-y-3 max-w-2xl mx-auto"
       >
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
           <Sliders className="w-3 h-3" />
           <span>Interactive Calculator</span>
         </div>
@@ -96,7 +96,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
               onChange={(e) => setSalary(Number(e.target.value))}
               className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
-            <div className="flex justify-between text-[10px] font-mono text-slate-400">
+            <div className="flex justify-between text-2xs font-mono text-slate-400">
               <span>₹6.0 Lakhs</span>
               <span>₹18.5 Lakhs</span>
               <span>₹30.0 Lakhs</span>
@@ -112,7 +112,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
               <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 dark:border-white/[0.04] bg-slate-50/50 dark:bg-slate-900/40 cursor-pointer hover:border-blue-400/40 transition-all">
                 <div>
                   <span className="text-xs font-bold text-slate-900 dark:text-white block">Sec 80C Investments</span>
-                  <span className="text-[10px] text-slate-500">PPF, EPF, ELSS (Max ₹1,50,000)</span>
+                  <span className="text-2xs text-slate-500">PPF, EPF, ELSS (Max ₹1,50,000)</span>
                 </div>
                 <input
                   type="checkbox"
@@ -125,7 +125,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
               <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 dark:border-white/[0.04] bg-slate-50/50 dark:bg-slate-900/40 cursor-pointer hover:border-blue-400/40 transition-all">
                 <div>
                   <span className="text-xs font-bold text-slate-900 dark:text-white block">Sec 80D Health Insurance</span>
-                  <span className="text-[10px] text-slate-500">Self & Family Premium (Max ₹25,000)</span>
+                  <span className="text-2xs text-slate-500">Self & Family Premium (Max ₹25,000)</span>
                 </div>
                 <input
                   type="checkbox"
@@ -138,7 +138,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
               <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 dark:border-white/[0.04] bg-slate-50/50 dark:bg-slate-900/40 cursor-pointer hover:border-blue-400/40 transition-all">
                 <div>
                   <span className="text-xs font-bold text-slate-900 dark:text-white block">House Rent Allowance (HRA)</span>
-                  <span className="text-[10px] text-slate-500">Rent Paid Allowance (₹1,20,000)</span>
+                  <span className="text-2xs text-slate-500">Rent Paid Allowance (₹1,20,000)</span>
                 </div>
                 <input
                   type="checkbox"
@@ -151,7 +151,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
               <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200/70 dark:border-white/[0.04] bg-slate-50/50 dark:bg-slate-900/40 cursor-pointer hover:border-blue-400/40 transition-all">
                 <div>
                   <span className="text-xs font-bold text-slate-900 dark:text-white block">Sec 80CCD(1B) NPS</span>
-                  <span className="text-[10px] text-slate-500">National Pension Scheme (₹50,000)</span>
+                  <span className="text-2xs text-slate-500">National Pension Scheme (₹50,000)</span>
                 </div>
                 <input
                   type="checkbox"
@@ -169,10 +169,10 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
           <PremiumCard className="p-8 bg-white dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.06] rounded-3xl space-y-6 text-left shadow-xl relative overflow-hidden">
             <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/[0.06]">
               <div>
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest font-bold block">Live Computation</span>
+                <span className="text-2xs font-mono text-slate-500 uppercase tracking-widest font-bold block">Live Computation</span>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">Tax Regime Breakdown</h3>
               </div>
-              <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-mono font-bold uppercase rounded-full">
+              <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-2xs font-mono font-bold uppercase rounded-full">
                 AI Recommendation: {recommendedRegime}
               </span>
             </div>
@@ -180,7 +180,7 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
             {/* Savings Callout Banner */}
             <div className="p-5 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-blue-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-mono text-emerald-700 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Total Tax Saved</span>
+                <span className="text-2xs font-mono text-emerald-700 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Total Tax Saved</span>
                 <span className="text-3xl font-extrabold font-mono text-slate-900 dark:text-white">
                   <CountUp value={savings} prefix="₹" />
                 </span>
@@ -198,27 +198,27 @@ export const InteractiveShowcaseSection: React.FC = React.memo(() => {
             {/* Side-by-side Cards */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/[0.04] rounded-2xl text-center space-y-2">
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block font-bold">Old Regime Tax</span>
+                <span className="text-2xs font-mono text-slate-500 uppercase tracking-wider block font-bold">Old Regime Tax</span>
                 <div className="text-xl font-mono font-bold text-slate-700 dark:text-slate-300">
                   <CountUp value={oldTax} prefix="₹" />
                 </div>
-                <div className="text-[10px] text-slate-500 font-mono pt-1">
+                <div className="text-2xs text-slate-500 font-mono pt-1">
                   Taxable: ₹{taxableOld.toLocaleString('en-IN')}
                 </div>
               </div>
 
               <div className="p-5 bg-emerald-50/60 dark:bg-[#16E27A]/10 border border-emerald-300/50 dark:border-[#16E27A]/30 rounded-2xl text-center space-y-2">
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-[#16E27A] uppercase tracking-wider block font-bold">New Regime Tax</span>
+                <span className="text-2xs font-mono text-emerald-600 dark:text-[#16E27A] uppercase tracking-wider block font-bold">New Regime Tax</span>
                 <div className="text-xl font-mono font-extrabold text-emerald-600 dark:text-[#16E27A]">
                   <CountUp value={newTax} prefix="₹" />
                 </div>
-                <div className="text-[10px] text-slate-500 font-mono pt-1">
+                <div className="text-2xs text-slate-500 font-mono pt-1">
                   Taxable: ₹{taxableNew.toLocaleString('en-IN')}
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50/70 dark:bg-slate-950/60 border border-slate-200/60 dark:border-white/[0.04] rounded-xl text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
+            <div className="p-4 bg-slate-50/70 dark:bg-slate-950/60 border border-slate-200/60 dark:border-white/[0.04] rounded-xl text-xs text-slate-600 dark:text-slate-400 space-y-1">
               <div className="flex items-center gap-1.5 text-slate-900 dark:text-white font-bold">
                 <ShieldCheck className="w-4 h-4 text-blue-500" />
                 <span>Standard Deduction Applied Automatically</span>

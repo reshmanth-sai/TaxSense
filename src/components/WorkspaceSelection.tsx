@@ -70,15 +70,15 @@ function FeatureItem({ feature }: FeatureItemProps) {
       </div>
       <div className="space-y-0.5">
         <h4 
-          className={`text-[12px] font-bold transition-colors duration-200 ${
+          className={`text-xs font-bold transition-colors duration-200 ${
             isWarning ? 'text-red-600 dark:text-[#ff7a7a]' : 'text-slate-800 dark:text-slate-200 group-hover/item:text-slate-900 dark:group-hover/item:text-white'
           }`}
         >
           {feature.title}
         </h4>
-        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">{feature.description}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">{feature.description}</p>
         {feature.subtext && (
-          <span className="text-[10px] block font-medium mt-0.5 text-violet-600 dark:text-[#9e9eff]">
+          <span className="text-2xs block font-medium mt-0.5 text-violet-600 dark:text-[#9e9eff]">
             {feature.subtext}
           </span>
         )}
@@ -347,7 +347,7 @@ export default function WorkspaceSelection({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
           </span>
-          <span className="text-[9px] text-slate-600 dark:text-slate-400 uppercase font-bold tracking-wider leading-none">Public Beta Active</span>
+          <span className="text-2xs text-slate-600 dark:text-slate-400 uppercase font-bold tracking-wider leading-none">Public Beta Active</span>
         </div>
       </motion.div>
 
@@ -414,10 +414,10 @@ export default function WorkspaceSelection({
 
           {/* Hero Section Copy (No period in headline!) */}
           <div className="text-center space-y-3 mb-10 max-w-xl relative z-10">
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
               Your Private AI Tax Assistant
             </h1>
-            <p className="text-[14px] sm:text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-medium">
+            <p className="text-sm sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-medium">
               Upload a Form 16 or type your salary, with nothing written to our servers -- or sign in to sync across devices.
             </p>
           </div>
@@ -436,13 +436,13 @@ export default function WorkspaceSelection({
             >
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">
+                  <span className="text-2xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">
                     Best for Quick Try
                   </span>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                     Try Instantly
                   </h3>
-                  <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-normal">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-normal">
                     Test the AI instantly in a secure, temporary session.
                   </p>
                 </div>
@@ -463,14 +463,14 @@ export default function WorkspaceSelection({
                     e.stopPropagation();
                     onLaunchSandbox();
                   }}
-                  className="w-full h-11 rounded-xl text-[12px] tracking-wide font-bold cursor-pointer flex items-center justify-center transition-all duration-200 bg-transparent hover:bg-slate-900/5 dark:hover:bg-white/[0.05] text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none relative border border-slate-200 dark:border-slate-800"
+                  className="w-full h-11 rounded-xl text-xs tracking-wide font-bold cursor-pointer flex items-center justify-center transition-all duration-200 bg-transparent hover:bg-slate-900/5 dark:hover:bg-white/[0.05] text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none relative border border-slate-200 dark:border-slate-800"
                 >
                   <span>Launch Sandbox</span>
                   <div className="absolute right-5 flex items-center justify-center">
                     <ArrowRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all translate-y-[1px]" />
                   </div>
                 </button>
-                <span className="text-[10px] font-mono mt-2.5 text-slate-500 dark:text-[#a1a1aa]">
+                <span className="text-2xs font-mono mt-2.5 text-slate-500 dark:text-[#a1a1aa]">
                   Ready in under 3 seconds.
                 </span>
               </div>
@@ -487,7 +487,7 @@ export default function WorkspaceSelection({
             >
               {/* Recommended Badge with Sparkle Accent */}
               <div 
-                className="absolute top-3 right-3 border border-[#2563EB]/25 text-[#2563EB] dark:text-[#60A5FA] px-3 py-1 rounded-[8px] text-[9px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
+                className="absolute top-3 right-3 border border-[#2563EB]/25 text-[#2563EB] dark:text-[#60A5FA] px-3 py-1 rounded-[8px] text-2xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
                 style={{ backgroundColor: 'rgba(37, 99, 235, 0.1)' }}
               >
                 <Sparkles className="w-2.5 h-2.5 text-[#2563EB] dark:text-[#60A5FA] animate-pulse" />
@@ -500,13 +500,13 @@ export default function WorkspaceSelection({
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-bold block">
+                  <span className="text-2xs text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-bold block">
                     Best for Long-Term
                   </span>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                     Continue Securely
                   </h3>
-                  <p className="text-[13px] text-slate-650 dark:text-slate-400 leading-normal">
+                  <p className="text-sm text-slate-650 dark:text-slate-400 leading-normal">
                     Securely sync your workspace across devices.
                   </p>
                 </div>
@@ -528,7 +528,7 @@ export default function WorkspaceSelection({
                     e.stopPropagation();
                     onGoogleSignIn();
                   }}
-                  className={`w-full h-11 rounded-xl text-[12px] tracking-wide font-bold cursor-pointer flex items-center justify-center transition-all duration-200 select-none group-active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none relative ${
+                  className={`w-full h-11 rounded-xl text-xs tracking-wide font-bold cursor-pointer flex items-center justify-center transition-all duration-200 select-none group-active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none relative ${
                     googleGsiState === 'success'
                       ? 'bg-emerald-50 dark:bg-[#10B981]/10 border border-emerald-200 dark:border-[#10B981]/25 text-emerald-700 dark:text-[#34D399]'
                       : (googleGsiState === 'loading' || isAuthenticating)
@@ -543,7 +543,7 @@ export default function WorkspaceSelection({
                           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" strokeDasharray="32" strokeDashoffset="8" />
                         </svg>
                       </div>
-                      <span className="text-[11px] font-bold transition-all duration-300">
+                      <span className="text-xs font-bold transition-all duration-300">
                         {LOADING_STEPS[loadingStepIdx]}
                       </span>
                     </>
@@ -552,7 +552,7 @@ export default function WorkspaceSelection({
                       <div className="absolute left-5 flex items-center justify-center">
                         <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <span className="text-[11px] font-bold">Signed In Successfully</span>
+                      <span className="text-xs font-bold">Signed In Successfully</span>
                     </>
                   ) : (
                     <>
@@ -564,7 +564,7 @@ export default function WorkspaceSelection({
                           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                         </svg>
                       </div>
-                      <span className="text-[12px] font-bold">Continue with Google</span>
+                      <span className="text-xs font-bold">Continue with Google</span>
                       <div className="absolute right-5 flex items-center justify-center">
                         <ArrowRight className="w-3.5 h-3.5 text-white group-hover:translate-x-0.5 transition-transform translate-y-[1px]" />
                       </div>
@@ -572,12 +572,12 @@ export default function WorkspaceSelection({
                   )}
                 </button>
                 
-                <span className="text-[10px] font-mono mt-2.5 text-slate-500 dark:text-[#a1a1aa]">
+                <span className="text-2xs font-mono mt-2.5 text-slate-500 dark:text-[#a1a1aa]">
                   Sync takes about 10 seconds.
                 </span>
 
                 {/* Privacy Reassurance Line */}
-                <div className="flex items-center justify-center gap-1.5 mt-2 text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+                <div className="flex items-center justify-center gap-1.5 mt-2 text-2xs text-slate-400 dark:text-slate-500 font-medium">
                   <Lock className="w-2.5 h-2.5 text-slate-400 dark:text-slate-500" />
                   <span>TaxSense never accesses Drive or Gmail.</span>
                 </div>
@@ -587,23 +587,23 @@ export default function WorkspaceSelection({
           </div>
 
           {/* Info Banner Box */}
-          <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-[8px] bg-slate-100/50 dark:bg-white/[0.015] border border-slate-200 dark:border-white/[0.04] text-[11px] text-slate-600 dark:text-slate-400 max-w-xl mx-auto mt-8 mb-6 relative z-10 select-none">
+          <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-[8px] bg-slate-100/50 dark:bg-white/[0.015] border border-slate-200 dark:border-white/[0.04] text-xs text-slate-600 dark:text-slate-400 max-w-xl mx-auto mt-8 mb-6 relative z-10 select-none">
             <Info className="w-3.5 h-3.5 text-primary-action flex-shrink-0" aria-hidden="true" />
             <span>Only Continue Securely saves your session — pick up where you left off on any device.</span>
           </div>
 
           {/* Centered Trust Footer Badges */}
           <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:flex-wrap items-center justify-center gap-y-3 gap-x-6 my-2 relative z-10 justify-items-center">
-            <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <span aria-hidden="true">🔒</span> No login required
             </div>
-            <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <span aria-hidden="true">🛡</span> No database record
             </div>
-            <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <span aria-hidden="true">⚡</span> Read by Google Gemini
             </div>
-            <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <span aria-hidden="true">☁</span> Secure Cloud Sync
             </div>
           </div>

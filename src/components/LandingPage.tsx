@@ -251,13 +251,13 @@ export default function LandingPage({ onStart }: LandingPageProps) {
       >
         {/* Typographically Optimized Counter */}
         <div className="flex items-baseline justify-center gap-0.5 font-mono">
-          <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100 leading-none">
+          <span className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-none">
             {activeIndex + 1}
           </span>
-          <span className="text-[10px] text-slate-400 dark:text-slate-600 font-semibold leading-none px-[0.5px]">
+          <span className="text-2xs text-slate-400 dark:text-slate-600 font-semibold leading-none px-[0.5px]">
             /
           </span>
-          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium leading-none">
+          <span className="text-2xs text-slate-400 dark:text-slate-500 font-medium leading-none">
             {sections.length}
           </span>
         </div>
@@ -356,7 +356,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 8 }}
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute left-10 px-3 py-1.5 bg-slate-900/90 dark:bg-[#0E131B]/95 backdrop-blur-md border border-slate-700/30 dark:border-white/[0.08] text-white text-[10px] font-bold uppercase tracking-wider rounded-lg whitespace-nowrap shadow-xl pointer-events-none"
+                      className="absolute left-10 px-3 py-1.5 bg-slate-900/90 dark:bg-[#0E131B]/95 backdrop-blur-md border border-slate-700/30 dark:border-white/[0.08] text-white text-2xs font-bold uppercase tracking-wider rounded-lg whitespace-nowrap shadow-xl pointer-events-none"
                     >
                       {s.label}
                     </motion.div>
@@ -376,7 +376,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: "15%", rotate: -90 }}
               whileHover={{ opacity: 1.0 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute left-10 top-1/2 origin-center text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] select-none pointer-events-none whitespace-nowrap"
+              className="absolute left-10 top-1/2 origin-center text-2xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] select-none pointer-events-none whitespace-nowrap"
             >
               Journey
             </motion.div>
@@ -544,10 +544,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                     TAXSENSE
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed font-sans font-medium">
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed font-sans font-medium">
                   Old vs New regime comparison and Form 16 parsing for Indian salaried taxpayers. No account, no database.
                 </p>
-                <div className="flex items-center gap-2 pt-1 text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
+                <div className="flex items-center gap-2 pt-1 text-2xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -560,8 +560,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               <div className="lg:col-span-7 grid grid-cols-3 gap-6 font-sans text-xs">
                 {/* Column 1: Product */}
                 <div className="space-y-2.5">
-                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Product</h4>
-                  <ul className="space-y-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
+                  <h4 className="text-2xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Product</h4>
+                  <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <li><button onClick={() => handleScrollTo('comparison')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Regime Optimizer</button></li>
                     <li><button onClick={() => handleScrollTo('interactive-showcase')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">OCR Form 16 Parser</button></li>
                     <li><button onClick={() => handleScrollTo('copilot')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">AI Copilot Chat</button></li>
@@ -571,8 +571,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
 
                 {/* Column 2: Resources */}
                 <div className="space-y-2.5">
-                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Resources</h4>
-                  <ul className="space-y-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
+                  <h4 className="text-2xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Resources</h4>
+                  <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <li><button onClick={() => handleScrollTo('comparison')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Tax Slabs 2025-26</button></li>
                     <li><button onClick={() => handleScrollTo('interactive-showcase')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">AY 2026-27 Guide</button></li>
                     <li><button onClick={() => handleScrollTo('security')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Security Specs</button></li>
@@ -581,8 +581,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
 
                 {/* Column 3: Legal & Trust */}
                 <div className="space-y-2.5">
-                  <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Legal & Trust</h4>
-                  <ul className="space-y-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
+                  <h4 className="text-2xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Legal & Trust</h4>
+                  <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <li><button onClick={() => handleScrollTo('privacy-policy')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Privacy Policy</button></li>
                     <li><button onClick={() => handleScrollTo('terms-of-service')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Terms of Service</button></li>
                     <li><button onClick={() => handleScrollTo('security')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Trust Center</button></li>
@@ -592,7 +592,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
             </div>
 
             {/* TIER 2: BOTTOM COPYRIGHT & ENCRYPTION BAR */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-mono text-slate-500 dark:text-slate-400 select-none">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-2xs font-mono text-slate-500 dark:text-slate-400 select-none">
               <div>
                 © {new Date().getFullYear()} TAXSENSE • Built for Indian Taxpayers • FY 2025–26 (AY 2026–27)
               </div>

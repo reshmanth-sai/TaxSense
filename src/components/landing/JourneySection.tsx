@@ -130,14 +130,14 @@ const JourneyStepNode: React.FC<JourneyStepNodeProps> = ({ item, idx, progress }
           {/* Title & Description inline spacing */}
           <div className="space-y-2">
             <div className="flex items-center justify-center gap-1.5">
-              <span className="text-[11px] font-mono font-medium text-slate-400 dark:text-slate-500">
+              <span className="text-xs font-mono font-medium text-slate-400 dark:text-slate-500">
                 {item.step}
               </span>
               <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white tracking-tight">
                 {item.title}
               </h3>
             </div>
-            <p className="text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed font-normal max-w-[220px]">
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal max-w-[220px]">
               {item.desc}
             </p>
           </div>
@@ -168,7 +168,7 @@ export const JourneySection: React.FC = React.memo(() => {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-center relative z-10"
       >
-        <span className="text-[10px] text-slate-500 dark:text-[#16E27A] font-mono font-bold uppercase tracking-[0.25em] mb-6 block">Simplifying Taxes</span>
+        <span className="text-2xs text-slate-500 dark:text-[#16E27A] font-mono font-bold uppercase tracking-[0.25em] mb-6 block">Simplifying Taxes</span>
         <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-none mb-3">
           The 4-Step Journey
         </h2>

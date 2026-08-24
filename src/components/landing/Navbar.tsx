@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
                   </span>
                   <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
-                <span className="text-[10px] font-mono text-slate-400 font-bold block mt-0.5 tracking-wider uppercase">
+                <span className="text-2xs font-mono text-slate-400 font-bold block mt-0.5 tracking-wider uppercase">
                   AI Tax OS
                 </span>
               </div>
@@ -110,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
           </div>
 
           {/* CENTER SECTION: PRODUCT-ORIENTED NAVIGATION */}
-          <nav aria-label="Main" className="hidden md:flex items-center gap-5 lg:gap-6 text-[13px] font-sans font-medium text-slate-600 dark:text-slate-300">
+          <nav aria-label="Main" className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-sans font-medium text-slate-600 dark:text-slate-300">
             {primaryLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
@@ -159,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="absolute top-full right-0 mt-3 w-52 p-2 rounded-2xl bg-white/95 dark:bg-[#0B1220]/95 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)] z-50 flex flex-col gap-1 text-[13px] font-sans text-slate-700 dark:text-slate-200"
+                    className="absolute top-full right-0 mt-3 w-52 p-2 rounded-2xl bg-white/95 dark:bg-[#0B1220]/95 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)] z-50 flex flex-col gap-1 text-sm font-sans text-slate-700 dark:text-slate-200"
                   >
                     {moreLinks.map((item) => (
                       item.external ? (
@@ -206,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onStart, activeSection, bannerVi
             {/* Outcome-Focused Primary Navbar CTA: "Upload Form 16 →" */}
             <button
               onClick={onStart}
-              className="group relative px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[13px] rounded-xl transition-all duration-200 shadow-[0_4px_16px_rgba(37,99,235,0.2)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-2"
+              className="group relative px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-[0_4px_16px_rgba(37,99,235,0.2)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-2"
             >
               <span>Upload Form 16</span>
               <ArrowRight className="w-3.5 h-3.5 text-white/80 group-hover:translate-x-0.5 transition-transform" />

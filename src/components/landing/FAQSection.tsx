@@ -91,7 +91,7 @@ export const FAQSection: React.FC = React.memo(() => {
         transition={{ duration: 0.8 }}
         className="text-center space-y-3"
       >
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
           <HelpCircle className="w-3.5 h-3.5" />
           <span>Clear Answers</span>
         </div>

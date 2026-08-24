@@ -32,7 +32,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
         transition={{ duration: 0.8 }}
         className="text-center space-y-3"
       >
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
           <Calculator className="w-3.5 h-3.5" />
           <span>30-Second Micro Audit</span>
         </div>
@@ -47,7 +47,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
       <PremiumCard className="p-8 bg-white dark:bg-[#0E131B] border border-slate-200 dark:border-white/[0.06] rounded-3xl space-y-8 text-left shadow-xl relative overflow-hidden max-w-2xl mx-auto">
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/[0.06]">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">Quick Audit Step {step} of 3</span>
-          <span className="text-[10px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase">No Document Required</span>
+          <span className="text-2xs font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase">No Document Required</span>
         </div>
 
         <AnimatePresence mode="wait">
@@ -164,7 +164,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
 
               {/* Final Result Card */}
               <div className="p-6 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-blue-500/10 border border-emerald-500/30 rounded-2xl space-y-3">
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Estimated Refund Unlocked</span>
+                <span className="text-2xs font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Estimated Refund Unlocked</span>
                 <div className="text-4xl font-extrabold font-mono text-slate-900 dark:text-white">
                   <CountUp value={totalEstimatedRefund} prefix="₹" />
                 </div>

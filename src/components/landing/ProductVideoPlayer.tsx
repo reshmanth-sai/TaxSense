@@ -81,8 +81,8 @@ const CursorPointer = ({
             <FileText className="w-4.5 h-4.5" />
           </div>
           <div className="text-left font-mono">
-            <div className="text-[10px] font-bold text-blue-300 leading-tight">Form16_FY26.pdf</div>
-            <div className="text-[10px] text-slate-400 font-semibold">1.4 MB • Dragging...</div>
+            <div className="text-2xs font-bold text-blue-300 leading-tight">Form16_FY26.pdf</div>
+            <div className="text-2xs text-slate-400 font-semibold">1.4 MB • Dragging...</div>
           </div>
         </motion.div>
       )}
@@ -148,10 +148,10 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
   ];
 
   return (
-    <div className="w-full bg-slate-100/80 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-white/[0.04] px-5 py-2 flex items-center justify-between font-mono text-[10px] select-none backdrop-blur-md">
+    <div className="w-full bg-slate-100/80 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-white/[0.04] px-5 py-2 flex items-center justify-between font-mono text-2xs select-none backdrop-blur-md">
       <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold truncate">
         <Sparkles className="w-3.5 h-3.5 animate-spin animate-duration-3000 shrink-0 text-purple-600 dark:text-purple-400" />
-        <span className="uppercase tracking-widest text-[10px] text-slate-500 font-extrabold shrink-0">AI REASONING:</span>
+        <span className="uppercase tracking-widest text-2xs text-slate-500 font-extrabold shrink-0">AI REASONING:</span>
         <AnimatePresence mode="wait">
           <motion.span
             key={reasoningTexts[activeStep]}
@@ -166,7 +166,7 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
         </AnimatePresence>
       </div>
 
-      <div className="hidden sm:flex items-center gap-2 text-[10px] font-extrabold shrink-0">
+      <div className="hidden sm:flex items-center gap-2 text-2xs font-extrabold shrink-0">
         <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
           ✓ CONFIDENCE 98%
         </span>
@@ -364,13 +364,13 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
             <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
             <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
             <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-            <span className="ml-3 text-[11px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-medium">
+            <span className="ml-3 text-xs font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-medium">
               <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> taxsense.in / demo
             </span>
           </div>
 
           {/* Minimal Step Indicator Tabs */}
-          <div className="hidden md:flex items-center gap-1.5 text-[11px] font-mono">
+          <div className="hidden md:flex items-center gap-1.5 text-xs font-mono">
             {[
               { id: 0, label: "Upload" },
               { id: 1, label: "Extraction" },
@@ -390,14 +390,14 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
                 }`}
               >
-                {activeStep > s.id && <span className="text-emerald-500 text-[10px]">✓</span>}
+                {activeStep > s.id && <span className="text-emerald-500 text-2xs">✓</span>}
                 <span>{s.label}</span>
               </button>
             ))}
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-mono text-[10px] font-extrabold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-mono text-2xs font-extrabold">
               AY 2026-27
             </span>
           </div>
@@ -425,7 +425,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
           <div className="absolute top-4 right-4 z-30">
             <button
               onClick={() => setInteractiveMode(!interactiveMode)}
-              className={`px-3.5 py-1.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl border text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer ${
                 interactiveMode
                   ? 'bg-emerald-500/20 border-emerald-500 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-500/30'
                   : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
@@ -628,7 +628,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         transition={{ delay: 0.1 }}
                         className="p-4 rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-all shadow-xs"
                       >
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">Gross Salary (Sec 17(1))</div>
+                        <div className="text-2xs text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">Gross Salary (Sec 17(1))</div>
                         <div className="text-base font-bold text-slate-900 dark:text-white">
                           <RollingCounter value={1450000} prefix="₹" />
                         </div>
@@ -640,7 +640,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         transition={{ delay: 0.2 }}
                         className="p-4 rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-all shadow-xs"
                       >
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">HRA Exemption (Sec 10(13A))</div>
+                        <div className="text-2xs text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">HRA Exemption (Sec 10(13A))</div>
                         <div className="text-base font-bold text-emerald-600 dark:text-emerald-400">
                           <RollingCounter value={120000} prefix="₹" />
                         </div>
@@ -652,7 +652,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         transition={{ delay: 0.3 }}
                         className="p-4 rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-all shadow-xs"
                       >
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">PF & Investments (Sec 80C)</div>
+                        <div className="text-2xs text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">PF & Investments (Sec 80C)</div>
                         <div className="text-base font-bold text-slate-900 dark:text-white">
                           <RollingCounter value={150000} prefix="₹" />
                         </div>
@@ -664,7 +664,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         transition={{ delay: 0.4 }}
                         className="p-4 rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-all shadow-xs"
                       >
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">TDS Deducted (Form 26AS)</div>
+                        <div className="text-2xs text-slate-500 dark:text-slate-400 uppercase font-bold mb-1">TDS Deducted (Form 26AS)</div>
                         <div className="text-base font-bold text-blue-600 dark:text-blue-400">
                           <RollingCounter value={194350} prefix="₹" />
                         </div>
@@ -697,7 +697,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                       <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1">
                         <div className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase font-bold">Old Tax Regime</div>
                         <div className="text-2xl font-black font-mono text-slate-400 line-through">₹1,63,800</div>
-                        <div className="text-[10px] text-slate-500 font-medium pt-1">Old Deductions: 80C + 80D + HRA</div>
+                        <div className="text-2xs text-slate-500 font-medium pt-1">Old Deductions: 80C + 80D + HRA</div>
                       </div>
 
                       <motion.div 
@@ -713,7 +713,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                         <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">
                           {currentTimeMs >= 9200 ? <RollingCounter value={145600} prefix="₹" /> : '₹1,45,600'}
                         </div>
-                        <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider pt-1">
+                        <div className="text-2xs text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider pt-1">
                           RECOMMENDED REGIME
                         </div>
                       </motion.div>
@@ -775,7 +775,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                           </div>
                           <div>
                             <span className="text-xs font-bold text-slate-900 dark:text-white block">Medical Insurance Sec 80D</span>
-                            <span className="text-[10px] text-purple-600 dark:text-purple-300 font-semibold">Premium detected in AIS records • 98% Confidence</span>
+                            <span className="text-2xs text-purple-600 dark:text-purple-300 font-semibold">Premium detected in AIS records • 98% Confidence</span>
                           </div>
                         </div>
                         <span className="text-xs font-mono font-bold text-purple-600 dark:text-purple-400">+₹7,800 Saved</span>
@@ -821,7 +821,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                     </div>
 
                     {/* Verification Badges Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full max-w-md text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 relative z-10">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full max-w-md text-2xs font-mono font-bold text-slate-700 dark:text-slate-300 relative z-10">
                       <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
                         ✓ Docs Verified
                       </div>

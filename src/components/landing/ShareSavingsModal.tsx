@@ -60,7 +60,7 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
           </button>
 
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-mono font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-2xs font-mono font-bold uppercase tracking-wider">
               <Sparkles className="w-3 h-3" /> Viral Share Card
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">Share Your Tax Savings</h3>
@@ -69,19 +69,19 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
 
           {/* Social Card Preview */}
           <div className="p-6 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-2xl border border-white/10 space-y-4 shadow-inner relative overflow-hidden">
-            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
+            <div className="flex justify-between items-center text-2xs font-mono text-slate-400">
               <span className="font-extrabold uppercase text-white">TaxSense AI</span>
               <span className="flex items-center gap-1 text-emerald-400"><ShieldCheck className="w-3 h-3" /> Privacy Masked</span>
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-mono uppercase text-emerald-400 font-bold block">Tax Savings Identified</span>
+              <span className="text-2xs font-mono uppercase text-emerald-400 font-bold block">Tax Savings Identified</span>
               <div className="text-3xl font-extrabold font-mono text-white">
                 +₹{savingsAmount.toLocaleString('en-IN')}
               </div>
             </div>
 
-            <p className="text-[11px] text-slate-300 leading-relaxed font-sans border-t border-white/10 pt-3">
+            <p className="text-xs text-slate-300 leading-relaxed font-sans border-t border-white/10 pt-3">
               "Compared Old vs New Tax Regime for my ₹{(ctcAmount / 100000).toFixed(1)}L CTC in 58 seconds with zero manual paperwork."
             </p>
           </div>

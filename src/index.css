@@ -32,6 +32,15 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", monospace;
   --font-serif: ui-serif, Georgia, serif;
 
+  /* The two scale steps above that Tailwind's default text-* utilities don't
+     already cover (text-xs/sm/base/lg/2xl/5xl/6xl give us 12/14/16/18/24/48/60
+     for free). Everything below reaches for one of these named sizes now
+     instead of an arbitrary text-[Npx]. */
+  --text-2xs: 0.625rem; /* 10px -- metadata floor: badges, pills, mono labels */
+  --text-2xs--line-height: 0.875rem;
+  --text-32: 2rem; /* 32px -- H2 (mobile) */
+  --text-32--line-height: 2.3rem;
+
   --color-primary-action: #2563EB;
   /* Blue CTA / primary action */
   --color-ai-brand: #8B5CF6;

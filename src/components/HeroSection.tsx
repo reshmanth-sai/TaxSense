@@ -527,7 +527,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
         transition={SPRING_GENTLE}
         className="space-y-6 z-10 max-w-4xl mx-auto"
       >
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:bg-[#10B981]/10 dark:border-[#10B981]/25 dark:text-[#34D399] text-[10px] font-bold tracking-wider uppercase backdrop-blur-md shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:bg-[#10B981]/10 dark:border-[#10B981]/25 dark:text-[#34D399] text-2xs font-bold tracking-wider uppercase backdrop-blur-md shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
           <span>AI Tax Ingestion Platform • FY 2025–26 (AY 2026–27)</span>
         </div>
@@ -539,7 +539,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           Old regime or new?{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-700 to-emerald-700 dark:from-[#34D399] dark:via-emerald-400 dark:to-blue-400">Know in 58 seconds.</span>
         </h1>
-        <p className="text-[16px] md:text-[18px] leading-[1.6] text-slate-650 dark:text-slate-350 max-w-[660px] mx-auto font-medium">
+        <p className="text-base md:text-lg leading-[1.6] text-slate-650 dark:text-slate-350 max-w-[660px] mx-auto font-medium">
           Upload your Form 16, or just type your salary. TaxSense compares Old vs New regimes to the rupee, flags 80C and 80D deductions you have missed, and shows what you get back.
         </p>
 
@@ -547,7 +547,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
           <div className="flex flex-wrap items-center justify-center gap-3.5">
             <button
               onClick={onStart}
-              className="group relative overflow-hidden px-8 py-[18px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] uppercase tracking-wider rounded-[14px] transition-all duration-300 shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:shadow-[0_12px_30px_rgba(37,99,235,0.4)] active:scale-[0.97] hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+              className="group relative overflow-hidden px-8 py-[18px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm uppercase tracking-wider rounded-[14px] transition-all duration-300 shadow-[0_8px_24px_rgba(37,99,235,0.25)] hover:shadow-[0_12px_30px_rgba(37,99,235,0.4)] active:scale-[0.97] hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
             >
               <RollingText text="Compare My Tax Regime" />
               <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
@@ -559,7 +559,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
                   if (demoEl) demoEl.scrollIntoView({ behavior: 'smooth' });
                   else onStart();
                 }}
-                className="group relative overflow-hidden px-7 py-[18px] bg-white/70 hover:bg-white text-slate-800 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-white dark:border-white/10 font-bold text-[13px] uppercase tracking-wider rounded-[14px] transition-all flex items-center gap-1.5 shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
+                className="group relative overflow-hidden px-7 py-[18px] bg-white/70 hover:bg-white text-slate-800 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-white dark:border-white/10 font-bold text-sm uppercase tracking-wider rounded-[14px] transition-all flex items-center gap-1.5 shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
               >
                 <RollingText text="Try Live Demo" />
                 <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
@@ -582,7 +582,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
               <span>AY 2026–27 tax slabs • No login • Nothing saved to our servers</span>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs font-mono text-slate-600 dark:text-slate-400 tracking-wider">
               <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> See your real savings in 58s</span>
               <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-500" /> Zero Login Required</span>
             </div>

@@ -252,7 +252,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center space-y-3"
         >
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
             <Bot className="w-3.5 h-3.5" />
             <span>Multilingual AI Copilot</span>
           </div>
@@ -323,8 +323,8 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
             <div className="flex flex-col items-start max-w-[88%] w-full space-y-4">
               {/* Reasoning Chain */}
               {copilotReasoning.length > 0 && (
-                <div className="w-full space-y-1.5 p-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-white/[0.04] rounded-xl text-[11px] font-mono text-slate-600 dark:text-slate-400">
-                  <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest font-extrabold mb-1">Reasoning Trace</div>
+                <div className="w-full space-y-1.5 p-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-white/[0.04] rounded-xl text-xs font-mono text-slate-600 dark:text-slate-400">
+                  <div className="text-2xs text-slate-400 dark:text-slate-500 uppercase tracking-widest font-extrabold mb-1">Reasoning Trace</div>
                   {copilotReasoning.map((step, idx) => (
                     <div key={idx} className="flex items-center gap-2">
                       <span className="text-emerald-500 font-bold">✓</span>
@@ -362,14 +362,14 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
               {!copilotIsThinking && copilotResponse && (
                 <div className="flex flex-col w-full gap-3 pt-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[10px] bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 px-2 py-0.5 rounded-md font-bold uppercase font-mono">
+                    <span className="text-2xs bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 px-2 py-0.5 rounded-md font-bold uppercase font-mono">
                       Confidence: {copilotConfidence}
                     </span>
-                    <span className="text-[10px] bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/[0.04] px-2 py-0.5 rounded-md font-bold uppercase font-mono">
+                    <span className="text-2xs bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/[0.04] px-2 py-0.5 rounded-md font-bold uppercase font-mono">
                       📜 {copilotCitations}
                     </span>
                     {copilotTools.map((tool, i) => (
-                      <span key={i} className="text-[10px] bg-emerald-50 dark:bg-[#16E27A]/10 text-emerald-600 dark:text-[#16E27A] border border-emerald-200 dark:border-[#16E27A]/20 px-2 py-0.5 rounded-md font-bold uppercase font-mono">
+                      <span key={i} className="text-2xs bg-emerald-50 dark:bg-[#16E27A]/10 text-emerald-600 dark:text-[#16E27A] border border-emerald-200 dark:border-[#16E27A]/20 px-2 py-0.5 rounded-md font-bold uppercase font-mono">
                         ⚙ {tool}
                       </span>
                     ))}
@@ -378,7 +378,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
                   <div className="pt-1">
                     <button
                       onClick={() => setReasoningExpanded(!reasoningExpanded)}
-                      className="inline-flex items-center gap-1.5 text-[10px] font-bold font-mono uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 text-2xs font-bold font-mono uppercase tracking-wider text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       <span>{reasoningExpanded ? "Hide Tax Computation Details" : "View Tax Computation Details"}</span>
                       {reasoningExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -394,7 +394,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
                           className="overflow-hidden"
                         >
                           <div className="mt-3 p-4 bg-slate-100/70 dark:bg-slate-950/60 border border-slate-200 dark:border-white/[0.04] rounded-xl text-xs leading-relaxed font-mono text-slate-700 dark:text-slate-300 space-y-2 border-l-4 border-l-emerald-500">
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Rupee-by-Rupee Breakdown</div>
+                            <div className="text-2xs font-bold uppercase tracking-widest text-slate-500 mb-1">Rupee-by-Rupee Breakdown</div>
                             <p className="whitespace-pre-line">
                               {copilotReasoningText.split(/(\*\*.*?\*\*)/g).map((part, idx) => {
                                 if (part.startsWith('**') && part.endsWith('**')) {

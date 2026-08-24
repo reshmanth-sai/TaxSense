@@ -20,7 +20,7 @@ export const LegalSection: React.FC = React.memo(() => {
           transition={{ duration: 0.6 }}
           className="space-y-2"
         >
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-bold font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-2xs font-bold font-mono uppercase tracking-widest">
             <Lock className="w-3.5 h-3.5" />
             <span>Privacy Policy</span>
           </div>
@@ -72,7 +72,7 @@ export const LegalSection: React.FC = React.memo(() => {
           transition={{ duration: 0.6 }}
           className="space-y-2"
         >
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-[10px] font-bold font-mono uppercase tracking-widest">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-2xs font-bold font-mono uppercase tracking-widest">
             <FileCheck className="w-3.5 h-3.5" />
             <span>Terms of Service</span>
           </div>

@@ -55,7 +55,7 @@ export const TippingPointVisualizer: React.FC = React.memo(() => {
         transition={{ duration: 0.8 }}
         className="text-center space-y-3 max-w-2xl mx-auto"
       >
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
           <TrendingUp className="w-3.5 h-3.5" />
           <span>Interactive Crossover Model</span>
         </div>
@@ -87,7 +87,7 @@ export const TippingPointVisualizer: React.FC = React.memo(() => {
               onChange={(e) => setCtc(Number(e.target.value))}
               className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
-            <div className="flex justify-between text-[10px] font-mono text-slate-400">
+            <div className="flex justify-between text-2xs font-mono text-slate-400">
               <span>₹6 Lakhs</span>
               <span>₹18 Lakhs</span>
               <span>₹30 Lakhs</span>
@@ -111,7 +111,7 @@ export const TippingPointVisualizer: React.FC = React.memo(() => {
               onChange={(e) => setClaimedDeductions(Number(e.target.value))}
               className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
             />
-            <div className="flex justify-between text-[10px] font-mono text-slate-400">
+            <div className="flex justify-between text-2xs font-mono text-slate-400">
               <span>₹0 (No Claims)</span>
               <span>₹3 Lakhs</span>
               <span>₹6 Lakhs (High Claims)</span>
@@ -123,7 +123,7 @@ export const TippingPointVisualizer: React.FC = React.memo(() => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">Tax Liability Comparison</span>
-            <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-mono font-bold uppercase rounded-full">
+            <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-2xs font-mono font-bold uppercase rounded-full">
               Winner: {winner} (Saves ₹{diff.toLocaleString('en-IN')})
             </span>
           </div>

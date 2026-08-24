@@ -14,7 +14,7 @@ export const GetStartedSection: React.FC<GetStartedSectionProps> = React.memo(({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-r from-blue-500/10 via-emerald-500/10 to-transparent blur-[90px] pointer-events-none z-0" />
 
         <div className="space-y-4 relative z-10 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-[10px] font-bold font-mono uppercase tracking-widest mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-[#16E27A] text-2xs font-bold font-mono uppercase tracking-widest mx-auto">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Instant Free Calculator</span>
           </div>
@@ -39,7 +39,7 @@ export const GetStartedSection: React.FC<GetStartedSectionProps> = React.memo(({
             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
           </button>
 
-          <div className="flex flex-wrap items-center justify-center gap-5 text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-mono text-slate-500 dark:text-slate-400 pt-2">
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 100% Free Individual Tool</span>
             <span>•</span>
             <span>No Credit Card Required</span>
