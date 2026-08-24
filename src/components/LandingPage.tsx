@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { useScroll, useSpring, useTransform, motion, AnimatePresence, useInView, useMotionValue, useReducedMotion } from 'motion/react';
+import { useScroll, useSpring, useTransform, motion, AnimatePresence, useInView, useMotionValue, useReducedMotion, MotionConfig } from 'motion/react';
 import { ShieldCheck, Sun, Moon } from 'lucide-react';
 import { useSidebarStore } from './sidebar/useSidebarStore';
 import HeroSection from './HeroSection';
@@ -184,6 +184,12 @@ export default function LandingPage({ onStart }: LandingPageProps) {
   }, [activeIndex]);
 
   return (
+    // reducedMotion="user" makes every motion/react component in this tree
+    // (whileInView entrances, hover lifts, the aurora blob, etc.) honour
+    // prefers-reduced-motion automatically -- the ten section subcomponents
+    // don't each need their own useReducedMotion() check for their JS-driven
+    // transforms; the CSS guard in index.css already covers CSS-driven motion.
+    <MotionConfig reducedMotion="user">
     <div className="min-h-screen bg-gradient-to-b from-sky-100 via-slate-50 to-emerald-50 text-slate-900 dark:bg-[#020202] dark:from-transparent dark:via-transparent dark:to-transparent dark:text-[#F6F7F8] font-sans antialiased selection:bg-sky-200 selection:text-slate-900 dark:selection:bg-[#16E27A] dark:selection:text-[#050607] overflow-x-hidden relative">
 
 
@@ -606,5 +612,6 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         </motion.footer>
       </div>
     </div>
+    </MotionConfig>
   );
 }
