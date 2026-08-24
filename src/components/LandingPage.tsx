@@ -22,6 +22,7 @@ const InteractiveShowcaseSection = lazy(() => import('./landing/InteractiveShowc
 const RefundFinderWidget = lazy(() => import('./landing/RefundFinderWidget').then(m => ({ default: m.RefundFinderWidget })));
 const CopilotSection = lazy(() => import('./landing/CopilotSection').then(m => ({ default: m.CopilotSection })));
 const SecuritySection = lazy(() => import('./landing/SecuritySection').then(m => ({ default: m.SecuritySection })));
+const LegalSection = lazy(() => import('./landing/LegalSection').then(m => ({ default: m.LegalSection })));
 const FAQSection = lazy(() => import('./landing/FAQSection').then(m => ({ default: m.FAQSection })));
 const GetStartedSection = lazy(() => import('./landing/GetStartedSection').then(m => ({ default: m.GetStartedSection })));
 
@@ -488,6 +489,14 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         </LazySection>
       </div>
 
+      {/* Privacy Policy + Terms of Service -- own real content, not a
+          second scroll target aliased to Security */}
+      <LazySection>
+        <Suspense fallback={<div className="min-h-[40vh] bg-transparent opacity-0" aria-hidden="true" />}>
+          <LegalSection />
+        </Suspense>
+      </LazySection>
+
       {/* SECTION 9: FAQ */}
       <div id="faq" className="w-full scroll-mt-28">
         <LazySection>
@@ -574,8 +583,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                 <div className="space-y-2.5">
                   <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Legal & Trust</h4>
                   <ul className="space-y-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                    <li><button onClick={() => handleScrollTo('security')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Privacy Policy</button></li>
-                    <li><button onClick={() => handleScrollTo('security')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Terms of Service</button></li>
+                    <li><button onClick={() => handleScrollTo('privacy-policy')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Privacy Policy</button></li>
+                    <li><button onClick={() => handleScrollTo('terms-of-service')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Terms of Service</button></li>
                     <li><button onClick={() => handleScrollTo('security')} className="hover:text-[#0B1730] dark:hover:text-white transition-colors">Trust Center</button></li>
                   </ul>
                 </div>
