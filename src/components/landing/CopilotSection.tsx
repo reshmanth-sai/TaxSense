@@ -327,7 +327,7 @@ export const CopilotSection: React.FC<CopilotSectionProps> = React.memo(({ sound
                   <div className="text-2xs text-slate-400 dark:text-slate-500 uppercase tracking-widest font-extrabold mb-1">Reasoning Trace</div>
                   {copilotReasoning.map((step, idx) => (
                     <div key={idx} className="flex items-center gap-2">
-                      <span className="text-emerald-500 font-bold">✓</span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" aria-hidden="true" />
                       <span>{step}</span>
                     </div>
                   ))}

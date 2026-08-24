@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { 
-  ShieldCheck, Lock, Cloud, FolderOpen, MessageSquare, ArrowRight, Check, Zap, Timer, Info, Sparkles
+  ShieldCheck, Shield, Lock, Cloud, FolderOpen, MessageSquare, ArrowRight, Check, Zap, Timer, Info, Sparkles
 } from 'lucide-react';
 import { useSidebarStore } from './sidebar/useSidebarStore';
 
@@ -595,16 +595,16 @@ export default function WorkspaceSelection({
           {/* Centered Trust Footer Badges */}
           <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:flex-wrap items-center justify-center gap-y-3 gap-x-6 my-2 relative z-10 justify-items-center">
             <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">🔒</span> No login required
+              <Lock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> No login required
             </div>
             <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">🛡</span> No database record
+              <Shield className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> No database record
             </div>
             <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">⚡</span> Read by Google Gemini
+              <Zap className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Read by Google Gemini
             </div>
             <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span aria-hidden="true">☁</span> Secure Cloud Sync
+              <Cloud className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Secure Cloud Sync
             </div>
           </div>
 

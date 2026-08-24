@@ -68,7 +68,9 @@ export const ComparisonSection: React.FC = React.memo(() => {
           >
             <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/[0.04]">
               <h3 className="text-base font-bold text-red-500 flex items-center gap-2">
-                <span className="w-7 h-7 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 text-sm">✕</span>
+                <span className="w-7 h-7 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
+                  <X className="w-4 h-4" aria-hidden="true" />
+                </span>
                 Traditional Filing
               </h3>
               <span className="text-2xs font-mono text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Legacy</span>
@@ -76,28 +78,28 @@ export const ComparisonSection: React.FC = React.memo(() => {
 
             <div className="space-y-4">
               <div className="pb-3 border-b border-slate-200 dark:border-white/[0.04] space-y-1 flex gap-3">
-                <span className="text-red-500 font-bold shrink-0 mt-0.5">✕</span>
+                <X className="w-4 h-4 text-red-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <span className="text-slate-900 dark:text-slate-200 font-bold block text-xs">Hours of Manual Spreadsheet Work</span>
                   <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Cross-referencing Form 16, AIS, and 26AS line-by-line across multiple browser windows.</span>
                 </div>
               </div>
               <div className="pb-3 border-b border-slate-200 dark:border-white/[0.04] space-y-1 flex gap-3">
-                <span className="text-red-500 font-bold shrink-0 mt-0.5">✕</span>
+                <X className="w-4 h-4 text-red-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <span className="text-slate-900 dark:text-slate-200 font-bold block text-xs">Blind Regime Selection</span>
                   <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Picking Old or New regime based on guesswork without seeing computed rupee differences.</span>
                 </div>
               </div>
               <div className="pb-3 border-b border-slate-200 dark:border-white/[0.04] space-y-1 flex gap-3">
-                <span className="text-red-500 font-bold shrink-0 mt-0.5">✕</span>
+                <X className="w-4 h-4 text-red-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <span className="text-slate-900 dark:text-slate-200 font-bold block text-xs">Missed Section 80 Deductions</span>
                   <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Overlooking NPS 80CCD(1B), preventive health checkups, or HRA rent calculation caps.</span>
                 </div>
               </div>
               <div className="space-y-1 flex gap-3">
-                <span className="text-red-500 font-bold shrink-0 mt-0.5">✕</span>
+                <X className="w-4 h-4 text-red-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <span className="text-slate-900 dark:text-slate-200 font-bold block text-xs">Zero AI Verification</span>
                   <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">No automated audit checks to catch arithmetic errors or income mismatch notices.</span>
@@ -122,7 +124,9 @@ export const ComparisonSection: React.FC = React.memo(() => {
 
           <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/[0.06]">
             <h3 className="text-base font-bold text-emerald-600 dark:text-[#16E27A] flex items-center gap-2">
-              <span className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-[#16E27A] text-sm">✓</span>
+              <span className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-[#16E27A]">
+                <Check className="w-4 h-4" aria-hidden="true" />
+              </span>
               TaxSense AI Filing
             </h3>
             <span className="text-2xs font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider">58 Seconds</span>
@@ -130,28 +134,28 @@ export const ComparisonSection: React.FC = React.memo(() => {
 
           <div className="space-y-4">
             <div className="pb-3 border-b border-slate-200 dark:border-white/[0.06] space-y-1 flex gap-3">
-              <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-emerald-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <span className="text-slate-900 dark:text-white font-bold block text-xs">Instant Form 16 PDF Auto-Parsing</span>
                 <span className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">Extracts salary Section 17(1), standard deductions, and TDS automatically in under 2 seconds.</span>
               </div>
             </div>
             <div className="pb-3 border-b border-slate-200 dark:border-white/[0.06] space-y-1 flex gap-3">
-              <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-emerald-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <span className="text-slate-900 dark:text-white font-bold block text-xs">Live Side-by-Side Regime Simulation</span>
                 <span className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">Displays exact rupee-by-rupee tax liability comparison between Old and New tax slabs.</span>
               </div>
             </div>
             <div className="pb-3 border-b border-slate-200 dark:border-white/[0.06] space-y-1 flex gap-3">
-              <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-emerald-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <span className="text-slate-900 dark:text-white font-bold block text-xs">AI Smart Deduction Finder</span>
                 <span className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">Scans for missed 80C, 80D, HRA, and NPS allowances to maximize your net refund.</span>
               </div>
             </div>
             <div className="space-y-1 flex gap-3">
-              <span className="text-emerald-500 font-bold shrink-0 mt-0.5">✓</span>
+              <Check className="w-4 h-4 text-emerald-500 font-bold shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <span className="text-slate-900 dark:text-white font-bold block text-xs">Current AY 2026-27 Rules</span>
                 <span className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed">Slabs, Section 87A rebate and cess follow the Finance Act for FY 2025-26, recomputed on every change.</span>

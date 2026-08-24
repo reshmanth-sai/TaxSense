@@ -297,7 +297,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
       // Ingest AI task status texts
       const getTaskStatusLocal = (start: number, done: number, label: string) => {
         if (currentElapsed < start) return null;
-        if (currentElapsed >= done) return `✓ Verified ${label}`;
+        if (currentElapsed >= done) return `Verified ${label}`;
         const prog = (currentElapsed - start) / (done - start);
         return prog < 0.5 ? `Reading...` : `Scanning...`;
       };

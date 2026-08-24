@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, ArrowRight, CheckCircle2, RotateCcw, Calculator, HelpCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, CheckCircle2, RotateCcw, Calculator, HelpCircle, Check, X } from 'lucide-react';
 import { PremiumCard } from './helpers/PremiumCard';
 import { CountUp } from './helpers/CountUp';
 
@@ -114,7 +114,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
                     answers.hasParentsHealthIns ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-[#16E27A]' : 'border-slate-200 dark:border-white/10'
                   }`}
                 >
-                  ✓ Yes (Senior Citizen Parents)
+                  <Check className="w-4 h-4 inline -mt-0.5 mr-1" aria-hidden="true" /> Yes (Senior Citizen Parents)
                 </button>
                 <button
                   onClick={() => { setAnswers(prev => ({ ...prev, hasParentsHealthIns: false })); setStep(3); }}
@@ -122,7 +122,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
                     !answers.hasParentsHealthIns ? 'border-slate-400 bg-slate-100 dark:bg-white/5' : 'border-slate-200 dark:border-white/10'
                   }`}
                 >
-                  ✕ No / Not Applicable
+                  <X className="w-4 h-4 inline -mt-0.5 mr-1" aria-hidden="true" /> No / Not Applicable
                 </button>
               </div>
             </motion.div>
@@ -150,7 +150,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
                     answers.investsNPS ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-[#16E27A]' : 'border-slate-200 dark:border-white/10'
                   }`}
                 >
-                  ✓ Yes (Active NPS Account)
+                  <Check className="w-4 h-4 inline -mt-0.5 mr-1" aria-hidden="true" /> Yes (Active NPS Account)
                 </button>
                 <button
                   onClick={() => setAnswers(prev => ({ ...prev, investsNPS: false }))}
@@ -158,7 +158,7 @@ export const RefundFinderWidget: React.FC<RefundFinderWidgetProps> = React.memo(
                     !answers.investsNPS ? 'border-slate-400 bg-slate-100 dark:bg-white/5' : 'border-slate-200 dark:border-white/10'
                   }`}
                 >
-                  ✕ No
+                  <X className="w-4 h-4 inline -mt-0.5 mr-1" aria-hidden="true" /> No
                 </button>
               </div>
 

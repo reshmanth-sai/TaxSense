@@ -167,8 +167,8 @@ const AIReasoningTicker = ({ activeStep, currentTimeMs }: { activeStep: number; 
       </div>
 
       <div className="hidden sm:flex items-center gap-2 text-2xs font-extrabold shrink-0">
-        <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-          ✓ CONFIDENCE 98%
+        <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center gap-1">
+          <Check className="w-3 h-3" aria-hidden="true" /> CONFIDENCE 98%
         </span>
       </div>
     </div>
@@ -390,7 +390,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
                 }`}
               >
-                {activeStep > s.id && <span className="text-emerald-500 text-2xs">✓</span>}
+                {activeStep > s.id && <Check className="w-3 h-3 text-emerald-500" aria-hidden="true" />}
                 <span>{s.label}</span>
               </button>
             ))}
@@ -822,17 +822,17 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
 
                     {/* Verification Badges Grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full max-w-md text-2xs font-mono font-bold text-slate-700 dark:text-slate-300 relative z-10">
-                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                        ✓ Docs Verified
+                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center inline-flex items-center justify-center gap-1">
+                        <Check className="w-3 h-3" aria-hidden="true" /> Docs Verified
                       </div>
-                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                        ✓ New Regime
+                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center inline-flex items-center justify-center gap-1">
+                        <Check className="w-3 h-3" aria-hidden="true" /> New Regime
                       </div>
                       <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center text-emerald-600 dark:text-emerald-400">
                         ₹51,480 Saved
                       </div>
-                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                        ✓ No account
+                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center inline-flex items-center justify-center gap-1">
+                        <Check className="w-3 h-3" aria-hidden="true" /> No account
                       </div>
                     </div>
 
