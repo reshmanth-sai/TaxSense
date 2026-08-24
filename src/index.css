@@ -181,10 +181,27 @@ a:focus-visible {
 }
 
 /*
- * Dark-mode overrides for three specific components, targeted by DOM id. The
- * !important is load-bearing here: these fight Tailwind utility classes
- * (bg-white, border-slate-200, etc.) applied directly in the component's JSX
- * at equal specificity.
+ * The ID-scoped !important block that used to live here targeted three
+ * components: ExtractionConfirm.tsx, FilingGuide.tsx (via #filing-guide-modal)
+ * and a loading state. Investigating it for removal turned up two different
+ * situations, not one:
+ *
+ * - ExtractionConfirm.tsx's root was `bg-transparent`, inheriting its actual
+ *   background from the modal wrapper in App.tsx (`bg-white dark:bg-slate-900`)
+ *   -- but the component's own text was hardcoded to slate-100/300/white with
+ *   no dark: variants at all. In light mode, that's near-white text on a white
+ *   card: unreadable. This CSS block's `.dark` scoping was the only thing
+ *   making the component legible, and only in dark mode -- light mode was
+ *   never actually fixed. ExtractionConfirm.tsx now has real light/dark
+ *   variants throughout instead.
+ * - FilingGuide.tsx's modal root is a hardcoded `bg-slate-900` with no dark:
+ *   conditional at all -- it was already dark-themed unconditionally,
+ *   independent of the app's light/dark toggle (by design, like a
+ *   permanently-dark panel). The override forcing it to #0E131B was a
+ *   negligible shade tweak on an already-dark card, not a fix for anything.
+ *   Its subregion/button/table selectors (.bg-slate-50, .bg-white,
+ *   button.bg-neutral-900, table thead/tbody) don't match any class actually
+ *   used in FilingGuide.tsx or ExtractionConfirm.tsx -- dead from the start.
  *
  * This block used to also target #deductions-card, #deductions-card-skeleton,
  * #portfolio-sync-widget, #export-hub-container and #preview-json-payload.
@@ -194,101 +211,6 @@ a:focus-visible {
  * directly into HistoryArchive.tsx via ExportService, and the component
  * itself has been deleted. All five removed as dead weight.
  */
-.dark #extraction-loading-state,
-.dark #extraction-confirm-card,
-.dark #filing-guide-modal {
-  background-color: #0E131B !important;
-  border-color: rgba(255, 255, 255, 0.06) !important;
-  color: #F6F7F8 !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.02) !important;
-  border-radius: 16px !important;
-}
-
-/* Background overrides for subregions */
-.dark #extraction-confirm-card .bg-slate-50,
-.dark #extraction-confirm-card .bg-slate-100,
-.dark #filing-guide-modal .bg-slate-50,
-.dark #filing-guide-modal .bg-slate-100,
-.dark #filing-guide-modal .bg-slate-100\/50,
-.dark #filing-guide-modal .bg-white {
-  background-color: rgba(255, 255, 255, 0.04) !important;
-  border-color: rgba(255, 255, 255, 0.06) !important;
-  color: #F6F7F8 !important;
-}
-
-/* Title and typography colors */
-.dark #extraction-confirm-card h3,
-.dark #extraction-confirm-card h4,
-.dark #filing-guide-modal h2,
-.dark #filing-guide-modal h3 {
-  color: #F6F7F8 !important;
-}
-
-/* Body / label text adjustments */
-.dark #extraction-confirm-card p,
-.dark #extraction-confirm-card label,
-.dark #filing-guide-modal p,
-.dark #filing-guide-modal label {
-  color: #8A96A8 !important;
-}
-
-/* Text inputs styling */
-.dark #extraction-confirm-card input[type="text"],
-.dark #extraction-confirm-card input[type="number"] {
-  background-color: rgba(255, 255, 255, 0.03) !important;
-  color: #F6F7F8 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.dark #extraction-confirm-card input[type="text"]:focus {
-  border-color: #16E27A !important;
-  outline: none !important;
-}
-
-/* Button variants styling */
-.dark #filing-guide-modal button.bg-white {
-  background-color: rgba(255, 255, 255, 0.03) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  color: #8A96A8 !important;
-}
-
-.dark #filing-guide-modal button.bg-white:hover {
-  background-color: rgba(255, 255, 255, 0.06) !important;
-  color: #F6F7F8 !important;
-}
-
-.dark #filing-guide-modal button.bg-neutral-900 {
-  background-color: #16E27A !important;
-  color: #050607 !important;
-  font-weight: 700 !important;
-}
-
-.dark #filing-guide-modal button.bg-neutral-900:hover {
-  background-color: #5BEAA5 !important;
-}
-
-/* Borders overrides */
-.dark #extraction-confirm-card .border-slate-100,
-.dark #extraction-confirm-card .border-slate-200,
-.dark #filing-guide-modal .border-slate-100,
-.dark #filing-guide-modal .border-slate-150,
-.dark #filing-guide-modal .border-slate-200 {
-  border-color: rgba(255, 255, 255, 0.06) !important;
-}
-
-.dark #extraction-confirm-card table thead tr {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-  color: #8A96A8 !important;
-}
-
-.dark #extraction-confirm-card table tbody tr {
-  border-color: rgba(255, 255, 255, 0.06) !important;
-  color: #F6F7F8 !important;
-}
-
-.dark #extraction-confirm-card table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-}
 
 /* Dark Mode Utility Class Tweaks to match premium dark style */
 .dark .text-slate-900,
