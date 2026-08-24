@@ -75,6 +75,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   const hasUploadedForm16 = uploadedFiles.length > 0;
   const verifiedFileCount = uploadedFiles.filter((f) => f.status === 'Verified').length;
   const unverifiedFileCount = uploadedFiles.length - verifiedFileCount;
+  const hasAnyData = hasUploadedForm16 || (incomeProfile?.grossSalary || 0) > 0;
 
   const now = Date.now();
   const dueDateMs = FILING_DEADLINES.dueDate.getTime();
@@ -120,6 +121,34 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
   const hraUnclaimed = hasIncome && (confirmedDeductions?.['HRA exemption'] || 0) === 0;
   const employerNpsUnclaimed = hasIncome && (confirmedDeductions?.['80CCD(2)'] || 0) === 0;
   const hasOpenInsights = hraUnclaimed || employerNpsUnclaimed;
+
+  // "Tax Health Score" used to be a flat 85/100 with a breakdown that
+  // asserted "Form 16 Ingested: Verified" and an "AIS Interest Match" check
+  // to every user regardless of what they'd entered -- and the app has no
+  // AIS/Form 26AS integration, so that check couldn't have run. This is the
+  // real version: three things the store can actually confirm.
+  const hasAnyDeductionClaimed = Object.values(confirmedDeductions || {}).some(
+    (v) => typeof v === 'number' && v > 0
+  );
+  const healthChecks = [
+    { label: 'PAN on file', passed: !!incomeProfile?.pan },
+    { label: 'Form 16 ingested', passed: hasUploadedForm16 },
+    { label: 'Deductions reviewed', passed: hasAnyDeductionClaimed },
+  ];
+  const healthPassed = healthChecks.filter((c) => c.passed).length;
+  const healthScore = Math.round((healthPassed / healthChecks.length) * 100);
+  const healthLabel = healthScore === 100 ? 'Complete' : healthScore > 0 ? 'In Progress' : 'Not Started';
+
+  // Regime figures shown in the Analytics Preview card, computed for
+  // whichever regime is currently on screen (recommended, or Old when the
+  // "Compare Old" toggle is on) rather than the earlier hardcoded 4.6%/₹15,000.
+  const recommendedBreakdown = betterRegime === 'Old' ? calculation.oldRegime : calculation.newRegime;
+  const previewBreakdown = showOldRegimePreview ? calculation.oldRegime : recommendedBreakdown;
+  const effectiveTaxRate = previewBreakdown.grossTotalIncome > 0
+    ? (previewBreakdown.totalTaxPayable / previewBreakdown.grossTotalIncome) * 100
+    : 0;
+  const isRefundDue = previewBreakdown.refundOrOwed < 0;
+  const refundOrOwedAmount = Math.abs(previewBreakdown.refundOrOwed);
 
   const getGoogleCalendarUrl = () => {
     const title = encodeURIComponent('TaxSense: ITR Filing Deadline (AY 2026-27)');
@@ -374,30 +403,60 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         </button>
       </motion.div>
 
+      {!hasAnyData ? (
+      /* ---------------------------------------------------- */
+      /* FIRST-RUN EMPTY STATE: nothing uploaded, nothing      */
+      /* entered -- one card instead of a grid built to show   */
+      /* data that doesn't exist yet.                          */
+      /* ---------------------------------------------------- */
+      <motion.div variants={itemVariants} className="bg-white/80 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] rounded-[24px] p-8 md:p-10 backdrop-blur-md text-center space-y-4">
+        <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+          <FileUp className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          Upload your Form 16 to see your regime comparison
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+          Or type your salary in manually -- either way, TaxSense compares Old vs New regime to the rupee and flags deductions you haven't claimed yet. The statutory due date is {dueDateLabel}.
+        </p>
+        <button
+          onClick={() => onNavigateStep(3)}
+          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-500/25 active:scale-98 transition-all inline-flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5 duration-200"
+        >
+          <span>Upload Form 16</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </motion.div>
+      ) : (
+      <>
       {/* ---------------------------------------------------- */}
       {/* 3. STATUS OVERVIEW GRID: Health + Deadline + Docs    */}
       {/* ---------------------------------------------------- */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         {/* Tax Health Score Card with Interactive "Why?" */}
         <div className="bg-white/80 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] hover:border-emerald-500/30 rounded-[24px] p-6 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg space-y-4 text-left group">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
               Tax Health Score
             </span>
-            <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-mono font-bold uppercase rounded-md border border-emerald-500/20">
-              Excellent
+            <span className={`px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded-md border ${
+              healthScore === 100
+                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+            }`}>
+              {healthLabel}
             </span>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col items-center justify-center text-emerald-600 dark:text-emerald-400 font-mono shrink-0">
-              <span className="text-2xl font-black leading-none">85</span>
+              <span className="text-2xl font-black leading-none">{healthScore}</span>
               <span className="text-[9px] text-slate-400">/ 100</span>
             </div>
             <div>
               <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1">
-                <span>Low Audit Risk</span>
+                <span>{healthPassed} of {healthChecks.length} checks passed</span>
                 <button
                   onClick={() => setShowTaxHealthDetails(!showTaxHealthDetails)}
                   className="text-emerald-500 hover:underline text-[11px] font-mono cursor-pointer"
@@ -405,7 +464,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                   (Why?)
                 </button>
               </div>
-              <div className="text-[11px] text-slate-500">80C & Form 16 cross-verified</div>
+              <div className="text-[11px] text-slate-500">Based on what you've entered so far</div>
             </div>
           </div>
 
@@ -426,9 +485,16 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                 exit={{ opacity: 0, height: 0 }}
                 className="space-y-2 pt-1 text-[11px] text-slate-600 dark:text-slate-400 font-mono"
               >
-                <div className="flex justify-between"><span>PAN Cross-Match:</span> <strong className="text-emerald-500">✔ Matched</strong></div>
-                <div className="flex justify-between"><span>Form 16 Ingested:</span> <strong className="text-emerald-500">✔ Verified</strong></div>
-                <div className="flex justify-between"><span>AIS Interest Match:</span> <strong className="text-amber-500">⚠️ Pending</strong></div>
+                {healthChecks.map((check) => (
+                  <div key={check.label} className="flex justify-between">
+                    <span>{check.label}:</span>
+                    {check.passed ? (
+                      <strong className="text-emerald-500">✔ Done</strong>
+                    ) : (
+                      <strong className="text-amber-500">⚠️ Pending</strong>
+                    )}
+                  </div>
+                ))}
               </motion.div>
             )}
           </AnimatePresence>
@@ -790,15 +856,17 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
           <div className="space-y-2 font-mono text-xs">
             <div className="flex justify-between">
               <span className="text-slate-500">Effective Tax Rate:</span>
-              <strong className="text-slate-900 dark:text-white">{showOldRegimePreview ? '7.2%' : '4.6%'}</strong>
+              <strong className="text-slate-900 dark:text-white">{hasIncome ? `${effectiveTaxRate.toFixed(1)}%` : '—'}</strong>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Refund Estimate:</span>
-              <strong className="text-emerald-600 dark:text-emerald-400">{showOldRegimePreview ? '₹0' : '₹15,000'}</strong>
+              <span className="text-slate-500">{isRefundDue ? 'Refund Estimate:' : 'Tax Owed:'}</span>
+              <strong className={isRefundDue ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}>
+                {hasIncome ? formatINR(refundOrOwedAmount) : '—'}
+              </strong>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-500">Net Taxable Income:</span>
-              <strong className="text-slate-900 dark:text-white">₹7,27,000</strong>
+              <strong className="text-slate-900 dark:text-white">{hasIncome ? formatINR(previewBreakdown.taxableIncome) : '—'}</strong>
             </div>
           </div>
         </div>
@@ -811,6 +879,8 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
       <motion.div variants={itemVariants}>
         <AIFilingReadinessEngine onNavigateStep={onNavigateStep} />
       </motion.div>
+      </>
+      )}
 
       {/* ---------------------------------------------------- */}
       {/* 7. REFINED FOOTER STATUS                              */}
