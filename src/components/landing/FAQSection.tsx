@@ -47,6 +47,9 @@ const faqsData: FAQItem[] = [
   }
 ];
 
+const slugify = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
 // Rendered from the same faqsData array shown on screen, so the structured
 // data can never list a question the page doesn't actually answer.
 const faqJsonLd = {
@@ -141,39 +144,42 @@ export const FAQSection: React.FC = React.memo(() => {
         ) : (
           filteredFaqs.map((faq) => {
             const isOpen = faqOpen === faq.q;
+            const slug = slugify(faq.q);
+            const headerId = `faq-header-${slug}`;
+            const panelId = `faq-panel-${slug}`;
             return (
               <PremiumCard
                 key={faq.q}
-                onClick={() => setFaqOpen(isOpen ? null : faq.q)}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                tabIndex={0}
-                role="button"
-                aria-expanded={isOpen}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setFaqOpen(isOpen ? null : faq.q);
-                  }
-                }}
-                className={`p-6 border transition-all duration-300 text-left cursor-pointer rounded-2xl ${
-                  isOpen 
-                    ? 'border-blue-500/50 dark:border-blue-500/30 bg-white dark:bg-[#0E131B] shadow-lg' 
+                className={`p-6 border transition-all duration-300 text-left rounded-2xl ${
+                  isOpen
+                    ? 'border-blue-500/50 dark:border-blue-500/30 bg-white dark:bg-[#0E131B] shadow-lg'
                     : 'border-slate-200/80 dark:border-white/[0.06] bg-white/70 dark:bg-[#0E131B]/50 hover:border-slate-300 dark:hover:border-white/10'
                 }`}
               >
-                <div className="flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  id={headerId}
+                  onClick={() => setFaqOpen(isOpen ? null : faq.q)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  className="w-full flex items-center justify-between gap-4 text-left cursor-pointer"
+                >
                   <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-snug">
                     {faq.q}
                   </span>
                   <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''}`} />
-                </div>
+                </button>
 
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={headerId}
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
