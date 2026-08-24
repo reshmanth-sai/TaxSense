@@ -27,12 +27,16 @@ export const CTCEfficiencyScorecard: React.FC<CTCEfficiencyScorecardProps> = ({
   const incomeProfile = useTaxStore((state) => state.incomeProfile);
   const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
 
-  const grossSalary = incomeProfile.grossSalary || 850000;
+  const grossSalary = incomeProfile.grossSalary || 0;
   const basicSalary = incomeProfile.basicSalary || Math.round(grossSalary * 0.4);
   const employerNPS = confirmedDeductions['80CCD(2)'] || 0;
 
   // Compute CTC Efficiency Metrics
   const analysis = useMemo(() => {
+    if (grossSalary <= 0) {
+      return { score: 0, basicRatio: '0.0', maxNPSAllowed: 0, tips: [] as { id: string; title: string; taxSaving: string; detail: string }[] };
+    }
+
     let score = 70;
     const tips = [];
 
@@ -103,23 +107,25 @@ export const CTCEfficiencyScorecard: React.FC<CTCEfficiencyScorecardProps> = ({
         </div>
 
         {/* Score Ring / Gauge */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="text-right">
-            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Tax Efficiency Score
-            </div>
-            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white flex items-center justify-end gap-1.5">
-              <span>{analysis.score}/100</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                analysis.score >= 85 
-                  ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
-                  : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-              }`}>
-                {analysis.score >= 85 ? 'Optimized' : 'Restructure HR CTC'}
-              </span>
+        {grossSalary > 0 && (
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="text-right">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                Tax Efficiency Score
+              </div>
+              <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white flex items-center justify-end gap-1.5">
+                <span>{analysis.score}/100</span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                  analysis.score >= 85
+                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                    : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                }`}>
+                  {analysis.score >= 85 ? 'Optimized' : 'Restructure HR CTC'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Recommended HR Restructuring Cards */}
@@ -128,6 +134,11 @@ export const CTCEfficiencyScorecard: React.FC<CTCEfficiencyScorecardProps> = ({
           Actionable HR CTC Optimization Tips
         </span>
 
+        {grossSalary <= 0 ? (
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Add your salary details to see personalized CTC restructuring tips.
+          </p>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {analysis.tips.map((tip) => (
             <div
@@ -148,6 +159,7 @@ export const CTCEfficiencyScorecard: React.FC<CTCEfficiencyScorecardProps> = ({
             </div>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

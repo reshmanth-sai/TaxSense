@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaxStore } from '../../store/useTaxStore';
+import { buildTaxData, formatINR } from '../../utils/taxCalculator';
+import { ExportService } from '../../services/ExportService';
 import {
   CheckCircle,
   AlertCircle,
@@ -469,7 +471,17 @@ interface PreviewProps {
 }
 
 export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, document: doc }) => {
+  const incomeProfile = useTaxStore((state) => state.incomeProfile);
+  const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
+  const formType = useTaxStore((state) => state.formType);
+
   if (!isOpen) return null;
+
+  const taxData = buildTaxData(incomeProfile, confirmedDeductions);
+
+  const handleDownload = () => {
+    ExportService.downloadJSON(taxData, formType === 'ITR-2' ? 'ITR-2' : 'ITR-1');
+  };
 
   return (
     <AnimatePresence>
@@ -544,12 +556,12 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
                   OCR Accuracy
                 </span>
                 <span className="text-xs text-purple-600 dark:text-purple-400 font-bold font-mono">
-                  {doc.confidence || 99}% Confidence
+                  {doc.confidence}% Confidence
                 </span>
               </div>
             </div>
 
-            {/* Simulated Extracted Form Fields */}
+            {/* Extracted Form Fields, read from the current tax profile */}
             <div className="border border-slate-200/50 dark:border-white/[0.04] bg-slate-50/50 dark:bg-slate-900/40 rounded-xl p-3.5 space-y-2">
               <span className="text-[8px] text-slate-500 font-black uppercase tracking-wider font-mono block">
                 Extracted Payload Fields
@@ -557,19 +569,27 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
               <div className="space-y-1.5 font-mono text-[10px] text-slate-700 dark:text-slate-300">
                 <div className="flex justify-between border-b border-slate-200/30 dark:border-white/[0.02] pb-1">
                   <span className="text-slate-650 dark:text-slate-450">Gross Salary (Section 17)</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">₹8,50,000</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                    {incomeProfile?.grossSalary ? formatINR(incomeProfile.grossSalary) : 'Not detected'}
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-slate-200/30 dark:border-white/[0.02] pb-1">
                   <span className="text-slate-650 dark:text-slate-450">Standard Deduction</span>
-                  <span className="text-slate-800 dark:text-slate-100">₹75,000</span>
+                  <span className="text-slate-800 dark:text-slate-100">
+                    {incomeProfile?.standardDeduction ? formatINR(incomeProfile.standardDeduction) : 'Not detected'}
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-slate-200/30 dark:border-white/[0.02] pb-1">
                   <span className="text-slate-650 dark:text-slate-450">PF Contribution (80C)</span>
-                  <span className="text-emerald-600 dark:text-emerald-400">₹40,800</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    {incomeProfile?.pfContribution ? formatINR(incomeProfile.pfContribution) : 'Not detected'}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-650 dark:text-slate-450">TDS Deducted (Employer)</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">₹15,000</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                    {incomeProfile?.tdsDeducted ? formatINR(incomeProfile.tdsDeducted) : 'Not detected'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -600,9 +620,9 @@ export const DocumentPreviewModal: React.FC<PreviewProps> = ({ isOpen, onClose, 
 
           <div className="flex justify-end gap-2.5 border-t border-slate-200/55 dark:border-white/[0.05] pt-4 mt-5">
             <SecondaryButton onClick={onClose}>Close</SecondaryButton>
-            <PrimaryButton className="flex items-center gap-1.5">
+            <PrimaryButton className="flex items-center gap-1.5" onClick={handleDownload}>
               <Download className="w-3.5 h-3.5" />
-              Download Source
+              Download Data (JSON)
             </PrimaryButton>
           </div>
         </motion.div>

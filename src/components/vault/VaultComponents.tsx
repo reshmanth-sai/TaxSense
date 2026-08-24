@@ -459,17 +459,6 @@ export const DocumentAttachment: React.FC<DocumentAttachmentProps> = ({
     setIsEditing(false);
   };
 
-  const handleDownloadMock = () => {
-    const element = document.createElement("a");
-    const fileContent = `TaxSense Document Vault - Mock Source Download\nID: ${file.id}\nName: ${file.name}\nSize: ${file.size}\nEmployer: ${file.employer}\nYear: ${file.financialYear}`;
-    const fileBlob = new Blob([fileContent], { type: 'text/plain' });
-    element.href = URL.createObjectURL(fileBlob);
-    element.download = file.name.endsWith('.pdf') ? file.name : file.name + '.txt';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
-
   return (
     <div
       className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-white/[0.06] shadow-xs dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.01)] rounded-[20px] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 backdrop-blur-md hover:border-blue-500/20 hover:scale-[1.005] transition-all duration-200 group relative text-left"
@@ -550,15 +539,6 @@ export const DocumentAttachment: React.FC<DocumentAttachmentProps> = ({
             <Eye className="w-4 h-4" />
           </button>
 
-          {/* Download mock source file */}
-          <button
-            onClick={handleDownloadMock}
-            title="Download Document Copy"
-            className="p-2 bg-slate-100/50 dark:bg-white/[0.02] hover:bg-slate-200/50 dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/[0.04] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-xl transition-all cursor-pointer shadow-inner active:scale-95"
-          >
-            <Download className="w-4 h-4" />
-          </button>
-
           {/* Delete File */}
           <button
             onClick={onDelete}
@@ -588,8 +568,12 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
   onActionClick
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
 
   const missing80D = !confirmedDeductions['80D'] || confirmedDeductions['80D'] === 0;
+  const avgConfidence = uploadedFiles.length > 0
+    ? Math.round(uploadedFiles.reduce((sum, f) => sum + (f.confidence || 0), 0) / uploadedFiles.length)
+    : null;
 
   return (
     <div className="bg-gradient-to-b from-purple-50/20 to-indigo-50/10 dark:from-slate-900/50 dark:to-slate-950/40 border border-purple-200 dark:border-purple-500/20 shadow-[0_8px_32px_0_rgba(168,85,247,0.02)] rounded-[24px] p-6 backdrop-blur-md space-y-4 text-left relative overflow-hidden">
@@ -603,10 +587,12 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
         <div className="space-y-1 flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-[9px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider font-mono">TaxSense Copilot</span>
-            <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full select-none">
-              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-450 uppercase tracking-wider">97% Confidence</span>
-            </div>
+            {avgConfidence !== null && (
+              <div className="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full select-none">
+                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-450 uppercase tracking-wider">{avgConfidence}% Confidence</span>
+              </div>
+            )}
           </div>
           <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 pt-0.5">Expert Verification Review</h4>
         </div>
@@ -637,15 +623,15 @@ export const CopilotPanel: React.FC<CopilotPanelProps> = ({
             {/* Documents analyzed */}
             <div className="space-y-1">
               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Documents Analyzed</span>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.04] rounded-lg">
-                  <FileText className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                  <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 font-sans">Form 16 Part B</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.04] rounded-lg">
-                  <FileText className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                  <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 font-sans">Section 12BB Declaration</span>
-                </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {uploadedFiles.length > 0 ? uploadedFiles.map((f) => (
+                  <div key={f.id} className="flex items-center gap-1.5 px-2 py-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.04] rounded-lg">
+                    <FileText className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+                    <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 font-sans truncate max-w-[160px]">{f.name}</span>
+                  </div>
+                )) : (
+                  <span className="text-[10px] text-slate-500 font-sans">No documents analyzed yet</span>
+                )}
               </div>
             </div>
 
@@ -1414,14 +1400,8 @@ export const ConfidenceBadge: React.FC<{ score: number }> = ({ score }) => {
             transition={{ duration: 0.15 }}
             className="absolute bottom-full right-0 mb-2 w-56 p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl text-[10px] leading-relaxed text-slate-700 dark:text-slate-300 space-y-1.5 pointer-events-none z-20 text-left font-sans"
           >
-            <p className="font-bold uppercase tracking-wider text-[8px] font-mono text-emerald-600 dark:text-emerald-450">AI Confidence Audit</p>
-            <p className="font-semibold text-slate-800 dark:text-slate-200">Verified against official AY 2026-27 tax rules.</p>
-            <div className="pt-1.5 border-t border-slate-200 dark:border-slate-900 text-slate-550 dark:text-slate-400 text-[8.5px] space-y-1">
-              <div>✓ Employer TAN signature matched</div>
-              <div>✓ Section 80C limit rules checked</div>
-              <div>✓ Pan checksum validated</div>
-              <div>✓ Basic/Gross ratio verified</div>
-            </div>
+            <p className="font-bold uppercase tracking-wider text-[8px] font-mono text-emerald-600 dark:text-emerald-450">Extraction Confidence</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-200">Average extraction confidence across your uploaded documents, based on how many core fields (employer, PAN, salary, TDS) each one carried.</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1720,6 +1700,10 @@ export const AuditPanel: React.FC<AuditPanelProps> = ({
   setActiveStep
 }) => {
   const [showCTA, setShowCTA] = useState(false);
+  const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
+  const confidenceScore = uploadedFiles.length > 0
+    ? Math.round(uploadedFiles.reduce((sum, f) => sum + (f.confidence || 0), 0) / uploadedFiles.length)
+    : 0;
 
   useEffect(() => {
     if (analysisProgress >= 4) {
@@ -1771,13 +1755,13 @@ export const AuditPanel: React.FC<AuditPanelProps> = ({
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono block">Validation details</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200 font-sans">AI Confidence Index</span>
               </div>
-              <ConfidenceBadge score={98} />
+              <ConfidenceBadge score={confidenceScore} />
             </div>
 
             <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.02] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: '98%' }}
+                animate={{ width: `${confidenceScore}%` }}
                 transition={{ duration: 1.2, ease: 'easeOut' }}
                 className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]"
               />
@@ -1867,6 +1851,28 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
   const savingsVal = taxCalculationResult.savings;
   const recommendedRegime = taxCalculationResult.recommendedRegime;
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+
+  const hasEmployer = !!incomeProfile?.employerName;
+  const hasPan = !!incomeProfile?.pan;
+  const hasSalary = incomeProfile?.grossSalary > 0;
+  const hasDeductions = Object.values(confirmedDeductions || {}).some(
+    (v) => typeof v === 'number' && v > 0
+  );
+
+  const verificationChecklist = [
+    { label: 'Employer data captured', verified: hasEmployer },
+    { label: 'PAN captured', verified: hasPan },
+    { label: 'Salary captured', verified: hasSalary },
+    { label: 'Calculated using AY 2026–27 rules', verified: true },
+  ];
+
+  const credentialChips = [
+    hasPan && 'PAN Captured',
+    hasSalary && 'Salary Captured',
+    hasEmployer && 'Employer Captured',
+    hasDeductions && 'Deductions Reviewed',
+    'AY 2026–27 Rules Applied',
+  ].filter(Boolean) as string[];
 
   const panelContainer = {
     animate: {
@@ -1986,22 +1992,12 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
               🛡 AI Verification Complete
             </h4>
             <div className="space-y-2 text-xs text-slate-600 dark:text-slate-350 font-semibold leading-relaxed">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>All employer data verified</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>All calculations matched</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>No compliance issues found</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>Verified against AY 2026–27 Rules</span>
-              </div>
+              {verificationChecklist.map((item) => (
+                <div key={item.label} className="flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${item.verified ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                  <span>{item.label}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -2014,14 +2010,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({
               variants={chipContainer}
               className="flex flex-wrap gap-2 pt-1"
             >
-              {[
-                'Form 16 Match',
-                'PAN Match',
-                'Salary Verification',
-                'Employer Profile',
-                'AY 2026–27 Rules',
-                'Income Ledger'
-              ].map((chip) => (
+              {credentialChips.map((chip) => (
                 <motion.div
                   key={chip}
                   variants={chipItem}

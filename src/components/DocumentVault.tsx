@@ -209,6 +209,13 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
     updateDeduction('section24b', repaired.section24b);
 
     // 4. Register document in workspace files history
+    // No confidence score comes back from extraction, so derive an honest
+    // one from how many of the core fields the document actually carried
+    // rather than asserting a fixed number.
+    const coreFields = [repaired.employerName, repaired.pan, repaired.grossSalary, repaired.tdsDeducted];
+    const filledCoreFields = coreFields.filter((v) => v !== '' && v !== 0).length;
+    const extractionConfidence = Math.round((filledCoreFields / coreFields.length) * 100);
+
     addUploadedFile({
       id: 'file-' + Date.now(),
       name: fileName,
@@ -218,7 +225,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
       pages,
       uploadTime: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
       status: 'Verified',
-      confidence: Math.round((repaired.confidence || 0.98) * 100)
+      confidence: extractionConfidence
     });
 
     setRawForm16Text(rawText);
@@ -351,48 +358,24 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         // Call the structured extraction API to parse text with Gemini
         setBackgroundStatusMessage('Analyzing extracted text with AI...');
         
-        const isMultiEmployerSample = file.name.includes('MultiEmployer');
         let data = null;
 
-        try {
-          const extractResponse = await fetch('/api/extract', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: result.text }),
-          });
+        const extractResponse = await fetch('/api/extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: result.text }),
+        });
 
-          if (!extractResponse.ok) {
-            const errData = await extractResponse.json().catch(() => ({}));
-            throw new Error(errData.error || 'Failed to extract structured parameters.');
-          }
+        if (!extractResponse.ok) {
+          const errData = await extractResponse.json().catch(() => ({}));
+          throw new Error(errData.error || 'Failed to extract structured parameters.');
+        }
 
-          const extractResult = await extractResponse.json();
-          if (extractResult.success && extractResult.data) {
-            data = extractResult.data;
-          } else {
-            throw new Error(extractResult.error || 'Structured data missing in API response.');
-          }
-        } catch (e: any) {
-          console.warn('Structured extraction failed, checking defaults:', e);
-          if (isMultiEmployerSample) {
-            data = {
-              grossSalary: 1875400,
-              otherIncome: 12000,
-              tdsDeducted: 194350,
-              employerName: 'Nova Analytics India Pvt. Ltd.',
-              employeeName: 'Riya Sharma',
-              pan: 'BQTPS4589L',
-              pfContribution: 72000,
-              basicSalary: 640000,
-              deduction80C: 150000,
-              deduction80D: 25000,
-              hraExemption: 58000,
-              deduction80CCD1B: 50000,
-              section24b: 180000
-            };
-          } else {
-            throw e;
-          }
+        const extractResult = await extractResponse.json();
+        if (extractResult.success && extractResult.data) {
+          data = extractResult.data;
+        } else {
+          throw new Error(extractResult.error || 'Structured data missing in API response.');
         }
 
         if (activeProcessingInterval) {
@@ -807,9 +790,9 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
             value={formType || 'ITR-1'} 
             type="info"
           />
-          <VerificationMetric 
-            label="Gross Salary" 
-            value={formatINR(incomeProfile?.grossSalary || 850000)} 
+          <VerificationMetric
+            label="Gross Salary"
+            value={incomeProfile?.grossSalary ? formatINR(incomeProfile.grossSalary) : 'Not detected'}
             type="success"
           />
           <VerificationMetric 
@@ -821,21 +804,20 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
 
         {/* 3. Extraction Summaries Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <SummaryCard 
+          <SummaryCard
             title="Identity Verification"
             items={[
-              { label: 'Employer identity matched', verified: true, type: 'identity' },
-              { label: 'PAN checksum validated', verified: true, type: 'identity' },
-              { label: 'Workspace session secure', verified: true, type: 'verification' }
+              { label: 'Employer name detected', verified: !!incomeProfile?.employerName, type: 'identity' },
+              { label: 'PAN detected', verified: !!incomeProfile?.pan, type: 'identity' },
             ]}
           />
 
-          <SummaryCard 
+          <SummaryCard
             title="Income & Tax Review"
             items={[
-              { label: 'Salary tags mapped', verified: true, type: 'salary' },
-              { label: 'Tax regime slabs evaluated', verified: true, type: 'tax' },
-              { label: 'TDS calculations matched', verified: true, type: 'tax' }
+              { label: 'Gross salary extracted', verified: !!incomeProfile?.grossSalary, type: 'salary' },
+              { label: 'Tax regime slabs evaluated', verified: !!incomeProfile?.grossSalary, type: 'tax' },
+              { label: 'TDS amount extracted', verified: !!incomeProfile?.tdsDeducted, type: 'tax' }
             ]}
           />
 
