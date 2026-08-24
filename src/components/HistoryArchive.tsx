@@ -20,7 +20,10 @@ import {
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaxStore } from '../store/useTaxStore';
-import { formatINR } from '../utils/taxCalculator';
+import { formatINR, calculateTax } from '../utils/taxCalculator';
+import { ExportService } from '../services/ExportService';
+import { TAX_CONFIG } from '../config';
+import { TaxData, FilingHistoryItem } from '../types';
 
 interface HistoryArchiveProps {
   setActiveStep: (step: number) => void;
@@ -195,9 +198,35 @@ const SavingsChart: React.FC<{ data: { year: string; savings: number; regime: st
   );
 });
 
+// Same convention the rest of the app uses (see store/useTaxStore.ts): the
+// sample timeline below is a local-dev / ?demo=true convenience, never shown
+// to a real visitor. This used to be `useState(true)` with no setter ever
+// called, meaning it was permanently true for every user in every
+// environment -- a fresh guest with zero real filings saw three fabricated
+// "Filed" returns for AY 2024-25 through 2026-27, complete with invented
+// savings figures and dates, presented as their own filing history.
+const isDevOrDemo = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+   window.location.hostname === '127.0.0.1' ||
+   window.location.search.includes('demo=true'));
+
+interface HistoryEntry {
+  id: string;
+  yearLabel: string;
+  date: string;
+  grossSalary: number;
+  totalDeductions: number;
+  netTaxPaid: number;
+  recommendedRegime: 'NEW' | 'OLD';
+  formType: 'ITR-1' | 'ITR-2';
+  savings?: number;
+  status: string;
+  taxData?: TaxData;
+}
+
 // Main History Archive redesign component
 export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setActiveStep }) => {
-  const [isDemoMode, setIsDemoMode] = React.useState(true);
+  const isDemoMode = isDevOrDemo;
   const [searchQuery, setSearchQuery] = React.useState('');
   const [activeFilter, setActiveFilter] = React.useState('ALL');
   const [isTimelineView, setIsTimelineView] = React.useState(false);
@@ -206,12 +235,23 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
   const [isComparisonOpen, setIsComparisonOpen] = React.useState(false);
 
   // Document Preview Modal state
-  const [previewDoc, setPreviewDoc] = React.useState<{ name: string; format: string } | null>(null);
+  // Carries the real history item being previewed (not just a display name)
+  // so the download button in the modal can export its actual data via
+  // ExportService, instead of the alert()-only mock it used to call.
+  const [previewDoc, setPreviewDoc] = React.useState<{
+    id: string;
+    formType: 'ITR-1' | 'ITR-2';
+    grossSalary: number;
+    totalDeductions: number;
+    recommendedRegime: 'NEW' | 'OLD';
+    taxData?: TaxData;
+  } | null>(null);
 
   const filingHistory = useTaxStore((state) => state.filingHistory) || [];
+  const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
 
   // MOCK DEMO TIMELINE DATA (AY 2024 to AY 2026 savings metrics)
-  const demoHistory = React.useMemo(() => [
+  const demoHistory: HistoryEntry[] = React.useMemo(() => [
     {
       id: "Filing AY 2026-27",
       yearLabel: "AY 2026–27",
@@ -220,7 +260,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
       totalDeductions: 310000,
       netTaxPaid: 112500,
       recommendedRegime: 'NEW' as const,
-      formType: "ITR-1",
+      formType: "ITR-1" as const,
       savings: 77896,
       status: "Filed"
     },
@@ -232,7 +272,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
       totalDeductions: 280000,
       netTaxPaid: 84300,
       recommendedRegime: 'NEW' as const,
-      formType: "ITR-1",
+      formType: "ITR-1" as const,
       savings: 46000,
       status: "Filed"
     },
@@ -244,24 +284,81 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
       totalDeductions: 210000,
       netTaxPaid: 53200,
       recommendedRegime: 'NEW' as const,
-      formType: "ITR-1",
+      formType: "ITR-1" as const,
       savings: 32000,
       status: "Filed"
     }
   ], []);
 
-  const activeHistory = isDemoMode || filingHistory.length === 0 ? demoHistory : filingHistory.map((item, idx) => ({
-    ...item,
-    yearLabel: `AY 202${6 - idx}–${27 - idx}`,
-    savings: item.recommendedRegime === 'NEW' ? 77896 : 38000,
-    status: 'Filed'
-  }));
+  // A real filing's savings used to be overwritten with a flat guess keyed
+  // only on which regime it recommended (77896 for New, 38000 for Old) --
+  // every "New Regime" filing showed the identical savings figure regardless
+  // of the taxpayer's actual income or deductions. executeFilingSubmission
+  // (App.tsx) always saves the full taxData alongside a history entry, so the
+  // real number is one calculateTax call away.
+  const realHistory: HistoryEntry[] = React.useMemo(() => filingHistory.map((item, idx) => {
+    const realSavings = item.taxData ? calculateTax(item.taxData).savings : undefined;
+    return {
+      ...item,
+      yearLabel: `AY 202${6 - idx}–${27 - idx}`,
+      savings: realSavings,
+      status: 'Filed'
+    };
+  }), [filingHistory]);
+
+  // isDemoMode (dev/?demo=true) shows the sample timeline deliberately. A
+  // real visitor who hasn't filed anything yet gets an empty list instead --
+  // rendered as a genuine empty state below, not a fabricated history.
+  const activeHistory = isDemoMode ? demoHistory : realHistory;
 
   // Computed Stats
   const yearsFiledCount = activeHistory.length;
   const totalSavedValue = activeHistory.reduce((acc, item) => acc + (item.savings || 0), 0);
   const returnsCount = activeHistory.length;
   const lastFilingLabel = activeHistory.length > 0 ? (activeHistory[0].id.includes("AY") ? activeHistory[0].id.split("Filing ")[1] || activeHistory[0].id : "TXS-356587") : "TXS-356587";
+  const yearSpanLabel = activeHistory.length > 0
+    ? `${activeHistory[activeHistory.length - 1].yearLabel} to ${activeHistory[0].yearLabel}`
+    : 'No filings yet';
+  const mostRecentSavings = activeHistory[0]?.savings;
+
+  // The "AI Tax Insights" panel below used to be four hardcoded values
+  // (a specific year, a specific "+42%", a specific literal formatINR(51965),
+  // a specific "3 years") shown regardless of what activeHistory actually
+  // contained. All four are plain arithmetic over the real entries -- no
+  // reason they weren't computed for real.
+  const insights = React.useMemo(() => {
+    const withSavings = activeHistory.filter((h) => h.savings !== undefined) as (HistoryEntry & { savings: number })[];
+    if (withSavings.length === 0) return null;
+
+    const highest = withSavings.reduce((a, b) => (b.savings > a.savings ? b : a));
+
+    // activeHistory is newest-first; compare the two most recent entries.
+    let mostImprovedLabel = 'Not enough history yet';
+    if (withSavings.length >= 2) {
+      const [latest, previous] = withSavings;
+      if (previous.savings > 0) {
+        const pctChange = Math.round(((latest.savings - previous.savings) / previous.savings) * 100);
+        mostImprovedLabel = `${pctChange >= 0 ? '+' : ''}${pctChange}% (${latest.yearLabel} vs ${previous.yearLabel})`;
+      } else {
+        mostImprovedLabel = `${latest.yearLabel} vs ${previous.yearLabel}`;
+      }
+    }
+
+    const average = Math.round(withSavings.reduce((sum, h) => sum + h.savings, 0) / withSavings.length);
+
+    const newCount = activeHistory.filter((h) => h.recommendedRegime === 'NEW').length;
+    const oldCount = activeHistory.length - newCount;
+    const regimeLabel = newCount >= oldCount
+      ? `New Regime (${newCount} year${newCount === 1 ? '' : 's'})`
+      : `Old Regime (${oldCount} year${oldCount === 1 ? '' : 's'})`;
+
+    return {
+      highestLabel: `${highest.yearLabel} (${formatINR(highest.savings)})`,
+      mostImprovedLabel,
+      averageLabel: formatINR(average),
+      regimeLabel,
+    };
+  }, [activeHistory]);
 
   const chartData = React.useMemo(() => {
     return activeHistory.map((item, idx) => {
@@ -289,8 +386,37 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
     });
   }, [activeHistory, searchQuery, activeFilter]);
 
-  const handleDownloadMock = (fileName: string) => {
-    alert(`Downloading ${fileName}...`);
+  // Reconstructs a reasonable TaxData when a history entry predates
+  // executeFilingSubmission always saving the full object (App.tsx) --
+  // derived entirely from that entry's own real aggregate fields, not
+  // invented. Real entries created since always carry taxData directly.
+  const resolveTaxData = (item: { grossSalary: number; totalDeductions: number; recommendedRegime: 'NEW' | 'OLD'; taxData?: TaxData }): TaxData => {
+    if (item.taxData) return item.taxData;
+    return {
+      assessmentYear: TAX_CONFIG.assessmentYear,
+      grossSalary: item.grossSalary,
+      hraExemption: 0,
+      ltaExemption: 0,
+      standardDeductionOld: TAX_CONFIG.standardDeductionOld,
+      standardDeductionNew: TAX_CONFIG.standardDeductionNew,
+      otherIncome: 0,
+      deduction80C: item.recommendedRegime === 'OLD' ? Math.min(item.totalDeductions, 150000) : 0,
+      deduction80D: item.recommendedRegime === 'OLD' ? Math.max(0, Math.min(item.totalDeductions - 150000, 25000)) : 0,
+      deduction80TTA: 0,
+      deduction80G: 0,
+      section24b: 0,
+      tdsDeducted: 0,
+    };
+  };
+
+  // Real exports via ExportService (jsPDF-generated PDF, structured ITR-schema
+  // JSON) -- this used to call an alert()-only mock that downloaded nothing.
+  const handleDownloadHistoryPDF = (item: { grossSalary: number; totalDeductions: number; recommendedRegime: 'NEW' | 'OLD'; formType: 'ITR-1' | 'ITR-2'; taxData?: TaxData }) => {
+    ExportService.downloadPDF(resolveTaxData(item), item.formType);
+  };
+
+  const handleDownloadHistoryJSON = (item: { grossSalary: number; totalDeductions: number; recommendedRegime: 'NEW' | 'OLD'; formType: 'ITR-1' | 'ITR-2'; taxData?: TaxData }) => {
+    ExportService.downloadJSON(resolveTaxData(item), item.formType);
   };
 
   return (
@@ -320,15 +446,29 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={() => alert("Upload ITR JSON portal matches...")}
-            className="h-11 px-4 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-white/[0.08] text-slate-800 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer transition-all active:scale-95"
+            disabled
+            title="Importing a previous return isn't built yet"
+            className="h-11 px-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/[0.08] text-slate-400 dark:text-slate-600 font-bold text-xs uppercase tracking-wider rounded-xl cursor-not-allowed opacity-60 flex items-center gap-1.5"
           >
             Import Previous Return
+            <span className="text-[9px] normal-case font-semibold tracking-normal">(coming soon)</span>
           </button>
         </div>
       </div>
 
-      {/* Main Grid Section */}
+      {activeHistory.length === 0 ? (
+        /* Genuine empty state for a real user with no filings yet -- this
+           used to be unreachable because demoHistory filled in regardless. */
+        <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white/60 dark:bg-slate-900/30 border-2 border-dashed border-slate-200/70 dark:border-slate-800/60 rounded-3xl">
+          <div className="w-14 h-14 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4">
+            <History className="w-7 h-7 text-slate-400" />
+          </div>
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 tracking-tight">No filings yet</h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-2 max-w-sm mx-auto">
+            Complete a filing and it will appear here, with your real savings figure and a downloadable copy.
+          </p>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-left items-start">
         
         {/* LEFT COLUMN: Stats, Chart, Timeline (8 cols) */}
@@ -340,7 +480,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
               { 
                 title: 'Years Filed', 
                 val: `${yearsFiledCount} Years`, 
-                sub: 'AY 2024 to AY 2027', 
+                sub: yearSpanLabel, 
                 icon: Calendar,
                 color: 'text-blue-600 dark:text-blue-400',
                 bg: 'bg-blue-500/10'
@@ -348,7 +488,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
               { 
                 title: 'Total Tax Saved', 
                 val: formatINR(totalSavedValue), 
-                sub: '+₹77,896 saved this year', 
+                sub: mostRecentSavings !== undefined ? `${formatINR(mostRecentSavings)} in most recent filing` : 'Complete a filing to see this', 
                 icon: TrendingUp,
                 color: 'text-emerald-600 dark:text-emerald-400',
                 bg: 'bg-emerald-500/10'
@@ -356,7 +496,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
               { 
                 title: 'Returns Generated', 
                 val: `${returnsCount} Returns`, 
-                sub: '100% Audit Verified', 
+                sub: 'Self-computed, not filed', 
                 icon: FileCheck2,
                 color: 'text-purple-600 dark:text-purple-300',
                 bg: 'bg-purple-500/10'
@@ -458,10 +598,10 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                     <div className="p-4 bg-white/80 dark:bg-slate-900/30 border border-slate-200 dark:border-white/[0.04] rounded-2xl flex items-center justify-between text-xs hover:border-slate-300 dark:hover:border-white/[0.08] transition-all">
                       <div>
                         <span className="text-[9px] text-slate-500 uppercase tracking-wider block font-bold">Estimated Savings</span>
-                        <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">{formatINR(item.savings || 77896)}</span>
+                        <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">{item.savings !== undefined ? formatINR(item.savings) : '—'}</span>
                       </div>
                       <button
-                        onClick={() => setPreviewDoc({ name: `${item.id}.pdf`, format: 'ITR-1 Verified PDF' })}
+                        onClick={() => setPreviewDoc({ id: item.id, formType: item.formType, grossSalary: item.grossSalary, totalDeductions: item.totalDeductions, recommendedRegime: item.recommendedRegime, taxData: item.taxData })}
                         className="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-900 text-slate-800 dark:text-slate-200 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
                       >
                         <Eye className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
@@ -485,13 +625,13 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                       </div>
                       <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">{item.date} • {item.recommendedRegime === 'NEW' ? 'New Regime' : 'Old Regime'}</div>
                       <p className="text-xs text-slate-600 dark:text-slate-300 font-medium pt-2 leading-relaxed">
-                        Tax optimized and generated successfully. Total estimated tax savings: <strong className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">{formatINR(item.savings || 77896)}</strong>
+                        Tax optimized and generated. Total estimated tax savings: <strong className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">{item.savings !== undefined ? formatINR(item.savings) : 'not available'}</strong>
                       </p>
                     </div>
 
                     <div className="pt-4 mt-4 border-t border-slate-200/80 dark:border-white/[0.04] flex items-center justify-between select-none">
                       <button
-                        onClick={() => setPreviewDoc({ name: `${item.id}_ITR.pdf`, format: 'ITR-1 Verified PDF' })}
+                        onClick={() => setPreviewDoc({ id: item.id, formType: item.formType, grossSalary: item.grossSalary, totalDeductions: item.totalDeductions, recommendedRegime: item.recommendedRegime, taxData: item.taxData })}
                         className="text-[10.5px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-1.5"
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -500,7 +640,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
 
                       <button
                         title="Download JSON return file"
-                        onClick={() => handleDownloadMock(`${item.id}.json`)}
+                        onClick={() => handleDownloadHistoryJSON(item)}
                         className="p-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 transition-all cursor-pointer flex items-center gap-1.5 text-[10px] font-bold"
                       >
                         <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -525,24 +665,30 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
               AI Tax Insights
             </span>
             
-            <div className="space-y-3.5 text-xs text-slate-700 dark:text-slate-300 font-semibold">
-              <div className="flex justify-between items-center py-1">
-                <span className="text-slate-500 dark:text-slate-400">Highest Savings:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">AY 2026–27 (₹77,896)</span>
+            {insights ? (
+              <div className="space-y-3.5 text-xs text-slate-700 dark:text-slate-300 font-semibold">
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-slate-500 dark:text-slate-400">Highest Savings:</span>
+                  <span className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">{insights.highestLabel}</span>
+                </div>
+                <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
+                  <span className="text-slate-500 dark:text-slate-400">Most Improved Year:</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{insights.mostImprovedLabel}</span>
+                </div>
+                <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
+                  <span className="text-slate-500 dark:text-slate-400">Average Savings:</span>
+                  <span className="font-mono text-slate-900 dark:text-white font-bold">{insights.averageLabel}</span>
+                </div>
+                <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
+                  <span className="text-slate-500 dark:text-slate-400">Regime Recommendation:</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{insights.regimeLabel}</span>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
-                <span className="text-slate-500 dark:text-slate-400">Most Improved Year:</span>
-                <span className="font-bold text-slate-900 dark:text-white">+42%</span>
-              </div>
-              <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
-                <span className="text-slate-500 dark:text-slate-400">Average Savings:</span>
-                <span className="font-mono text-slate-900 dark:text-white font-bold">{formatINR(51965)}</span>
-              </div>
-              <div className="flex justify-between items-center py-1 border-t border-slate-200/60 dark:border-white/[0.04] pt-2">
-                <span className="text-slate-500 dark:text-slate-400">Regime Recommendation:</span>
-                <span className="font-bold text-slate-900 dark:text-white">New Regime (3 years)</span>
-              </div>
-            </div>
+            ) : (
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium py-2">
+                Complete a filing to see insights across your history.
+              </p>
+            )}
 
             <div className="pt-2 border-t border-slate-200/80 dark:border-white/[0.04]">
               <button
@@ -555,34 +701,40 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
             </div>
           </div>
 
-          {/* Archived Documents Section */}
+          {/* Archived Documents Section -- used to list four hardcoded
+              documents ("AI Audit Report PDF", "Form 16 Snapshot", etc.) with
+              fabricated file sizes, none of which existed. This shows the
+              user's real uploaded files instead; there's no standalone
+              preview/download for them yet, so each one opens the actual
+              Document Vault rather than a fake preview modal. */}
           <div className="bg-white/80 dark:bg-[#060A10]/70 border border-slate-200/80 dark:border-white/[0.06] rounded-3xl p-6 backdrop-blur-xl space-y-4 select-none shadow-sm text-left">
             <span className="text-[10.5px] font-extrabold text-slate-900 dark:text-slate-200 uppercase tracking-widest block border-b border-slate-200/80 dark:border-white/[0.04] pb-2.5">
-              Archived Documents
+              Uploaded Documents
             </span>
-            
-            <div className="space-y-3 font-semibold text-xs text-slate-700 dark:text-slate-300">
-              {[
-                { name: 'ITR Return PDF', format: 'PDF Document • 1.2 MB' },
-                { name: 'AI Audit Report PDF', format: 'Verification Ledger • 840 KB' },
-                { name: 'Form 16 Snapshot', format: 'Form 16 Match • 420 KB' },
-                { name: 'Recommendation Summary', format: 'Exemption Blueprint • 210 KB' }
-              ].map((doc) => (
-                <div 
-                  key={doc.name} 
-                  onClick={() => setPreviewDoc(doc)}
-                  className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-white/[0.04] rounded-2xl hover:border-slate-300 dark:hover:border-white/[0.1] transition-all cursor-pointer group"
-                >
-                  <div>
-                    <div className="text-[11.5px] font-bold text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{doc.name}</div>
-                    <div className="text-[9.5px] text-slate-500 dark:text-slate-400 font-medium">{doc.format}</div>
+
+            {uploadedFiles.length === 0 ? (
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium py-2">
+                No documents uploaded yet.
+              </p>
+            ) : (
+              <div className="space-y-3 font-semibold text-xs text-slate-700 dark:text-slate-300">
+                {uploadedFiles.map((file) => (
+                  <div
+                    key={file.id}
+                    onClick={() => setActiveStep(3)}
+                    className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-white/[0.04] rounded-2xl hover:border-slate-300 dark:hover:border-white/[0.1] transition-all cursor-pointer group"
+                  >
+                    <div>
+                      <div className="text-[11.5px] font-bold text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{file.name}</div>
+                      <div className="text-[9.5px] text-slate-500 dark:text-slate-400 font-medium">{file.size} • {file.status}</div>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] rounded-xl text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      <Eye className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                  <div className="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/[0.06] rounded-xl text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    <Download className="h-3.5 w-3.5" />
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Protected security card */}
@@ -595,8 +747,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
               {[
                 'Stored in this browser only',
                 'No filing shared automatically',
-                'AI audit ledger preserved',
-                'Immutable filing timestamp log',
+                'Recomputed live from your own inputs',
                 'Never written to a server database'
               ].map((check) => (
                 <div key={check} className="flex items-center gap-2.5">
@@ -609,6 +760,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
 
         </div>
       </div>
+      )}
 
       {/* QUICK DOCUMENT PREVIEW MODAL */}
       {createPortal(
@@ -634,8 +786,8 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                       <FileCheck2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold tracking-tight">{previewDoc.name}</h3>
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono font-medium">{previewDoc.format}</span>
+                      <h3 className="text-base font-bold tracking-tight">{previewDoc.id}</h3>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono font-medium">{previewDoc.formType} Computation</span>
                     </div>
                   </div>
 
@@ -654,28 +806,34 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                   </div>
                   <div className="flex justify-between items-center font-mono">
                     <span className="text-slate-500">Assessment Year:</span>
-                    <span className="font-bold">AY 2026–27</span>
-                  </div>
-                  <div className="flex justify-between items-center font-mono">
-                    <span className="text-slate-500">Verification Seal:</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400 text-[10px]">TAX-SENSE-SEAL-OK</span>
+                    <span className="font-bold">AY {TAX_CONFIG.assessmentYear}</span>
                   </div>
                 </div>
 
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  This document has been verified against AY 2026–27 income tax statutory rules. It is safely archived in your local browser sandbox database.
+                  This is a self-computed worksheet based on the figures you entered -- not a filed return, and not verified by anyone but this calculator. It's stored in this browser only.
                 </p>
 
                 <div className="pt-2 flex gap-3">
                   <button
                     onClick={() => {
-                      handleDownloadMock(previewDoc.name);
+                      handleDownloadHistoryPDF(previewDoc);
                       setPreviewDoc(null);
                     }}
-                    className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+                    className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Download File</span>
+                    <span>Download PDF</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDownloadHistoryJSON(previewDoc);
+                      setPreviewDoc(null);
+                    }}
+                    className="flex-1 h-11 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-white/[0.06] text-slate-800 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download JSON</span>
                   </button>
                 </div>
               </motion.div>
@@ -712,7 +870,7 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                       </div>
                       <div>
                         <h3 className="text-base font-bold tracking-tight">Multi-Year Exemption Comparison</h3>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono font-medium">AY 2024-25 to AY 2026-27</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono font-medium">{yearSpanLabel}</span>
                       </div>
                     </div>
                     <button
@@ -723,7 +881,9 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                     </button>
                   </div>
 
-                  {/* Slabs Comparison Table */}
+                  {/* Slabs Comparison Table -- used to be three rows with fixed
+                      years and amounts regardless of what activeHistory held;
+                      now it's a direct map over the real entries. */}
                   <div className="pt-2 space-y-4">
                     <div className="overflow-x-auto border border-slate-200 dark:border-white/[0.06] rounded-2xl bg-slate-50/80 dark:bg-slate-950/60 shadow-inner">
                       <table className="w-full text-left text-xs font-semibold">
@@ -736,45 +896,45 @@ export const HistoryArchive: React.FC<HistoryArchiveProps> = React.memo(({ setAc
                           </tr>
                         </thead>
                         <tbody className="text-slate-800 dark:text-slate-200 font-mono">
-                          <tr className="border-b border-slate-200/60 dark:border-white/[0.02]">
-                            <td className="p-4 font-bold text-slate-900 dark:text-white">AY 2026–27</td>
-                            <td className="p-4">₹14.5L</td>
-                            <td className="p-4 text-blue-600 dark:text-blue-400 font-bold">NEW</td>
-                            <td className="p-4 text-emerald-600 dark:text-emerald-400 font-extrabold">₹77,896</td>
-                          </tr>
-                          <tr className="border-b border-slate-200/60 dark:border-white/[0.02]">
-                            <td className="p-4 font-bold text-slate-900 dark:text-white">AY 2025–26</td>
-                            <td className="p-4">₹11.8L</td>
-                            <td className="p-4 text-blue-600 dark:text-blue-400 font-bold">NEW</td>
-                            <td className="p-4 text-emerald-600 dark:text-emerald-400 font-extrabold">₹46,000</td>
-                          </tr>
-                          <tr className="border-b border-slate-200/60 dark:border-white/[0.02]">
-                            <td className="p-4 font-bold text-slate-900 dark:text-white">AY 2024–25</td>
-                            <td className="p-4">₹9.2L</td>
-                            <td className="p-4 text-blue-600 dark:text-blue-400 font-bold">NEW</td>
-                            <td className="p-4 text-emerald-600 dark:text-emerald-400 font-extrabold">₹32,000</td>
-                          </tr>
+                          {activeHistory.map((item) => (
+                            <tr key={item.id} className="border-b border-slate-200/60 dark:border-white/[0.02]">
+                              <td className="p-4 font-bold text-slate-900 dark:text-white">{item.yearLabel}</td>
+                              <td className="p-4">{formatINR(item.grossSalary)}</td>
+                              <td className="p-4 text-blue-600 dark:text-blue-400 font-bold">{item.recommendedRegime}</td>
+                              <td className="p-4 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                {item.savings !== undefined ? formatINR(item.savings) : '—'}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
 
-                    {/* AI Explanation of comparison */}
-                    <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-start gap-3 text-xs leading-relaxed">
-                      <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-                      <div className="space-y-1 font-semibold">
-                        <span className="text-blue-600 dark:text-blue-400 block text-[10px] uppercase tracking-wider font-extrabold">AI Comparative Audit</span>
-                        <p className="text-slate-700 dark:text-slate-300 font-medium">
-                          Your savings increased significantly in AY 2026–27 because your employer NPS contributions increased under Section 80CCD(2). The AI recommended maintaining the New Tax Regime, yielding substantial benefits over standard Old exemptions.
-                        </p>
+                    {/* This used to assert a specific cause ("because your
+                        employer NPS contributions increased") for whichever
+                        year happened to be on screen, regardless of whether
+                        that's what actually happened. The stored history
+                        doesn't track per-deduction changes between years, so
+                        there's no real basis for a causal claim -- this states
+                        the comparison itself rather than inventing a reason. */}
+                    {insights && (
+                      <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-start gap-3 text-xs leading-relaxed">
+                        <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                        <div className="space-y-1 font-semibold">
+                          <span className="text-blue-600 dark:text-blue-400 block text-[10px] uppercase tracking-wider font-extrabold">Summary</span>
+                          <p className="text-slate-700 dark:text-slate-300 font-medium">
+                            Highest savings: {insights.highestLabel}. Recommended regime across your history: {insights.regimeLabel}.
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="pt-6 border-t border-slate-200 dark:border-white/[0.06] flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider font-mono">
                     <Lock className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Zero-Knowledge Encrypted Sandbox</span>
+                    <span>Stored in this browser only</span>
                   </div>
                   <button
                     onClick={() => setIsComparisonOpen(false)}

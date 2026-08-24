@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
 import CountUp from './components/CountUp';
 import { motion, AnimatePresence } from 'motion/react';
-import { TaxData, FilingHistoryItem } from './types';
+import { TaxData } from './types';
 import { TAX_CONFIG } from './config';
 import { calculateTax, formatINR } from './utils/taxCalculator';
 const DeductionCard = lazy(() => import('./components/DeductionCard'));
 const RegimeComparison = lazy(() => import('./components/RegimeComparison'));
 const ExtractionConfirm = lazy(() => import('./components/ExtractionConfirm'));
-const ExportControl = lazy(() => import('./components/ExportControl'));
 const FilingGuide = lazy(() => import('./components/FilingGuide'));
 const DocumentVault = lazy(() => import('./components/DocumentVault'));
 const AICopilot = lazy(() => import('./components/copilot/AICopilot').then(m => ({ default: m.AICopilot })));
@@ -45,7 +44,6 @@ import {
 } from './components/dashboard/DashboardComponents';
 import LandingPage from './components/LandingPage';
 import WorkspaceSelection from './components/WorkspaceSelection';
-import { ExportService } from './services/ExportService';
 import { GoogleAuthService } from './services/GoogleAuthService';
 const AuditPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.AuditPanel })));
 const RecommendationsPanel = lazy(() => import('./components/vault/VaultComponents').then(m => ({ default: m.RecommendationsPanel })));
@@ -687,49 +685,12 @@ export default function App() {
     setShowCelebration(true);
   };
 
-  const handleDownloadHistoryJSON = (item: FilingHistoryItem) => {
-    let dataToExport = item.taxData;
-    if (!dataToExport) {
-      dataToExport = {
-        assessmentYear: TAX_CONFIG.assessmentYear,
-        grossSalary: item.grossSalary,
-        hraExemption: 0,
-        ltaExemption: 0,
-        standardDeductionOld: TAX_CONFIG.standardDeductionOld,
-        standardDeductionNew: TAX_CONFIG.standardDeductionNew,
-        otherIncome: 0,
-        deduction80C: item.recommendedRegime === 'OLD' ? Math.min(item.totalDeductions, 150000) : 0,
-        deduction80D: item.recommendedRegime === 'OLD' ? Math.max(0, Math.min(item.totalDeductions - 150000, 25000)) : 0,
-        deduction80TTA: 0,
-        deduction80G: 0,
-        section24b: 0,
-        tdsDeducted: 0,
-      };
-    }
-    ExportService.downloadJSON(dataToExport, item.formType);
-  };
-
-  const handleDownloadHistoryPDF = (item: FilingHistoryItem) => {
-    let dataToExport = item.taxData;
-    if (!dataToExport) {
-      dataToExport = {
-        assessmentYear: TAX_CONFIG.assessmentYear,
-        grossSalary: item.grossSalary,
-        hraExemption: 0,
-        ltaExemption: 0,
-        standardDeductionOld: TAX_CONFIG.standardDeductionOld,
-        standardDeductionNew: TAX_CONFIG.standardDeductionNew,
-        otherIncome: 0,
-        deduction80C: item.recommendedRegime === 'OLD' ? Math.min(item.totalDeductions, 150000) : 0,
-        deduction80D: item.recommendedRegime === 'OLD' ? Math.max(0, Math.min(item.totalDeductions - 150000, 25000)) : 0,
-        deduction80TTA: 0,
-        deduction80G: 0,
-        section24b: 0,
-        tdsDeducted: 0,
-      };
-    }
-    ExportService.downloadPDF(dataToExport, item.formType);
-  };
+  // handleDownloadHistoryJSON/PDF used to live here, calling ExportService,
+  // but were never passed to <HistoryArchive> or called anywhere -- that
+  // component reads filingHistory from the store directly and had its own
+  // separate (alert()-only, non-functional) download handler instead. Real
+  // downloads now live directly in HistoryArchive.tsx, next to the data they
+  // export.
 
   // Get dynamic greeting greeting message based on time of day
   const getGreeting = () => {

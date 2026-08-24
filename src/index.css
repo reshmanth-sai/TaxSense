@@ -179,12 +179,11 @@ a:focus-visible {
  *
  * This block used to also target #deductions-card, #deductions-card-skeleton,
  * #portfolio-sync-widget, #export-hub-container and #preview-json-payload.
- * The first three ids don't exist anywhere in src/; the last two belong to
- * ExportControl.tsx, which is lazy-imported in App.tsx but never actually
- * rendered anywhere (`grep -rn "<ExportControl" src/` returns nothing --
- * PDFComputationExporter appears to have superseded it). All five removed as
- * dead weight; if ExportControl.tsx gets wired back in, its dark-mode styling
- * needs writing fresh rather than restoring this.
+ * The first three ids didn't exist anywhere in src/; the last two belonged to
+ * ExportControl.tsx, which was lazy-imported in App.tsx but never actually
+ * rendered -- its real capability (PDF/JSON download) has since been wired
+ * directly into HistoryArchive.tsx via ExportService, and the component
+ * itself has been deleted. All five removed as dead weight.
  */
 .dark #extraction-loading-state,
 .dark #extraction-confirm-card,
