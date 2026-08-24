@@ -552,27 +552,17 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
               <RollingText text="Compare My Tax Regime" />
               <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
             </button>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => {
-                  const demoEl = document.getElementById('demo-player');
-                  if (demoEl) demoEl.scrollIntoView({ behavior: 'smooth' });
-                  else onStart();
-                }}
-                className="group relative overflow-hidden px-7 py-[18px] bg-white/70 hover:bg-white text-slate-800 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-white dark:border-white/10 font-bold text-sm uppercase tracking-wider rounded-[14px] transition-all flex items-center gap-1.5 shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
-              >
-                <RollingText text="Try Live Demo" />
-                <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-              </button>
-              <button
-                onClick={resetTimeline}
-                className="px-5 py-[18px] bg-white/70 hover:bg-white text-slate-600 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-slate-400 dark:border-white/10 rounded-[14px] transition-all flex items-center justify-center shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
-                aria-label="Replay the product demo"
-                title="Replay Interactive Workflow"
-              >
-                <RotateCcw className={`w-4 h-4 transition-transform ${isSpinning ? 'animate-spin text-blue-500' : ''}`} />
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                const demoEl = document.getElementById('demo-player');
+                if (demoEl) demoEl.scrollIntoView({ behavior: 'smooth' });
+                else onStart();
+              }}
+              className="group px-3 py-[18px] text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white font-semibold text-sm underline decoration-slate-300 dark:decoration-slate-600 underline-offset-4 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <RollingText text="Try Live Demo" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           {/* Hero Trust Signals & Authentic Social Proof */}
@@ -598,6 +588,17 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         className="mt-10 w-full relative z-10 scroll-mt-36 sm:scroll-mt-40"
       >
+        <div className="flex items-center justify-end mb-2">
+          <button
+            onClick={resetTimeline}
+            className="px-3 py-1.5 bg-white/70 hover:bg-white text-slate-600 border border-slate-200/80 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-slate-400 dark:border-white/10 rounded-full transition-all flex items-center gap-1.5 text-xs font-semibold shadow-sm dark:shadow-none backdrop-blur-md cursor-pointer"
+            aria-label="Replay the product demo"
+            title="Replay Interactive Workflow"
+          >
+            <RotateCcw className={`w-3.5 h-3.5 transition-transform ${isSpinning ? 'animate-spin text-blue-500' : ''}`} />
+            <span>Replay demo</span>
+          </button>
+        </div>
         <ProductVideoPlayer key={replayKey} onStartFiling={onStart} />
       </motion.div>
     </div>
