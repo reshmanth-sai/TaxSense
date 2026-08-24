@@ -430,12 +430,45 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
       ) : (
       <>
       {/* ---------------------------------------------------- */}
+      {/* TIER 1: THE REGIME VERDICT -- the one number this     */}
+      {/* product exists to tell you, given its own full-width, */}
+      {/* largest-type card instead of a 5-column sub-line.     */}
+      {/* ---------------------------------------------------- */}
+      <motion.div variants={itemVariants} className="bg-gradient-to-br from-emerald-600/[0.07] via-blue-600/[0.03] to-transparent border border-emerald-500/20 rounded-[24px] p-6 md:p-8 backdrop-blur-md shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-mono">
+              {betterRegime} Regime Recommended
+            </span>
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <span className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white font-mono tabular-nums">
+                {formatINR(savings)}
+              </span>
+              <span className="text-sm md:text-base font-bold text-slate-500 dark:text-slate-400">
+                saved vs {betterRegime === 'New' ? 'Old' : 'New'} Regime
+              </span>
+            </div>
+          </div>
+
+          <div className="shrink-0 flex items-center gap-3">
+            <button
+              onClick={() => onNavigateStep(5)}
+              className="px-5 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
+            >
+              <span>See the Breakdown</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ---------------------------------------------------- */}
       {/* 3. STATUS OVERVIEW GRID: Health + Deadline + Docs    */}
       {/* ---------------------------------------------------- */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {/* Tax Health Score Card with Interactive "Why?" */}
-        <div className="bg-white/80 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] hover:border-emerald-500/30 rounded-[24px] p-6 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg space-y-4 text-left group">
+        <div className="bg-slate-50/60 dark:bg-slate-900/25 border border-slate-200/50 dark:border-white/[0.03] hover:border-emerald-500/25 rounded-2xl p-5 backdrop-blur-md transition-colors duration-200 space-y-3 text-left group">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
               Tax Health Score
@@ -501,7 +534,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         </div>
 
         {/* Compact Deadline Card with Statutory Milestones Drawer */}
-        <div className="bg-white/80 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] hover:border-amber-500/30 rounded-[24px] p-6 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg space-y-4 text-left">
+        <div className="bg-slate-50/60 dark:bg-slate-900/25 border border-slate-200/50 dark:border-white/[0.03] hover:border-amber-500/25 rounded-2xl p-5 backdrop-blur-md transition-colors duration-200 space-y-3 text-left">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
               ITR Filing Deadline
@@ -600,7 +633,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         </div>
 
         {/* Document Status Preview Card */}
-        <div className="bg-white/80 dark:bg-slate-900/35 border border-slate-200/60 dark:border-white/[0.04] hover:border-blue-500/30 rounded-[24px] p-6 backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg space-y-4 text-left">
+        <div className="bg-slate-50/60 dark:bg-slate-900/25 border border-slate-200/50 dark:border-white/[0.03] hover:border-blue-500/25 rounded-2xl p-5 backdrop-blur-md transition-colors duration-200 space-y-3 text-left">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
               Documents Ready
