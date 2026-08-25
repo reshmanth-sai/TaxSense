@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   FileCheck2, 
@@ -15,8 +15,10 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTaxStore } from '../store/useTaxStore';
 import { calculateTax, formatINR } from '../utils/taxCalculator';
+import { pathForStep } from '../routes/stepRoutes';
 
 interface SmartDocumentChecklistProps {
   onNavigateToVault?: () => void;
@@ -47,8 +49,17 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
   const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
   const incomeProfile = useTaxStore((state) => state.incomeProfile);
   const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
-  const setActiveStep = useTaxStore((state) => state.setActiveStep);
+  const rawSetActiveStep = useTaxStore((state) => state.setActiveStep);
   const addUploadedFile = useTaxStore((state) => state.addUploadedFile);
+  const navigate = useNavigate();
+  // Mirrors App.tsx's navigateToStep: this component reads setActiveStep
+  // directly from the store rather than as a prop, so it needs its own
+  // local wrapper to keep the URL in sync with handleOpenVault's fallback
+  // below (see App.tsx's navigateToStep comment for why).
+  const setActiveStep = useCallback((step: number) => {
+    rawSetActiveStep(step);
+    navigate(pathForStep(step));
+  }, [rawSetActiveStep, navigate]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadCategory, setActiveUploadCategory] = useState<ChecklistDocItem | null>(null);

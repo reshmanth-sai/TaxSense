@@ -158,15 +158,18 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Single choke point for every "go to step N" call in the app. All real
+  // Single choke point for every "go to step N" call in the app. Most real
   // navigation call sites across App.tsx and its children funnel through
   // either this function (via the onNavigateStep/setActiveStep props) or a
   // direct call inside App.tsx itself -- so wrapping it here, plus updating
   // every direct call site, is enough to make every one of them a real
   // navigation, with no changes needed in Sidebar, CommandPalette,
   // HistoryArchive, VaultComponents, DashboardCommandCenter,
-  // AIFilingReadinessEngine, SmartDocumentChecklist, RegimeComparison, or
-  // SearchModal.
+  // AIFilingReadinessEngine, or SearchModal. RegimeComparison.tsx and
+  // SmartDocumentChecklist.tsx are the exception: they pull setActiveStep
+  // directly from useTaxStore rather than receiving it as a prop from
+  // here, so each wraps the store's setActiveStep with its own local
+  // navigate(pathForStep(...)) call, mirroring this function's logic.
   const navigateToStep = useCallback((step: number) => {
     setActiveStep(step);
     navigate(pathForStep(step));
@@ -312,21 +315,25 @@ export default function App() {
   // right screen. This is what actually fixes "no back button" and "no
   // refresh-safety" -- navigateToStep alone only fixes forward navigation.
   //
-  // setStep() only sets currentStep, not activeStep (see useTaxStore.ts) --
-  // the store's default activeStep is 2, so a stale deep activeStep (e.g.
-  // 6) combined with currentStep 'HOME' would otherwise leave the store in
-  // a broken combination that could flash the wrong screen on the next
-  // forward navigation. Reset activeStep to 2 alongside setStep('HOME') to
-  // keep the two in sync.
+  // setActiveStep() writes BOTH activeStep and currentStep via its own
+  // internal stepMap (see useTaxStore.ts), while setStep() writes only
+  // currentStep. On the HOME branch we need currentStep === 'HOME', which
+  // setActiveStep(2) alone would not produce (its stepMap maps 2 ->
+  // 'LANDING') -- so call setActiveStep(2) FIRST to reset activeStep, then
+  // setStep('HOME') SECOND so 'HOME' wins as the final currentStep value.
+  // Both calls are unconditional (no `if (x !== y)` guards): guarding on
+  // the current closure's `currentStep`/`activeStep` reads stale
+  // pre-effect values and can silently skip a write that's actually still
+  // needed (e.g. activeStep already matches but currentStep is stale from
+  // a prior bad state) -- these are cheap synchronous store writes, so
+  // there's no cost to always performing them, and neither branch calls
+  // navigate() for the path it's reacting to, so there's no navigation
+  // loop risk.
   useEffect(() => {
     if (!hydrated) return; // wait for the persisted store to rehydrate first
     if (location.pathname === HOME_PATH) {
-      if (currentStep !== 'HOME') {
-        setStep('HOME');
-      }
-      if (activeStep !== 2) {
-        setActiveStep(2);
-      }
+      setActiveStep(2);
+      setStep('HOME');
       return;
     }
     const match = stepForPath(location.pathname);
@@ -336,9 +343,13 @@ export default function App() {
       navigate(HOME_PATH, { replace: true });
       return;
     }
-    if (match.activeStep !== activeStep) {
-      setActiveStep(match.activeStep);
-    }
+    // Unconditional: stepForPath's currentStep values and useTaxStore's
+    // internal stepMap are consistent with each other (both map
+    // 2/3->LANDING, 4->CONFIRM_EXTRACTION, 5->CHAT_QA, 6/10->FINAL_EXPORT,
+    // 11->LANDING), so setActiveStep(match.activeStep) alone repairs both
+    // fields even when activeStep already matches but currentStep is
+    // stale (e.g. left at 'HOME' by a prior bad state).
+    setActiveStep(match.activeStep);
   }, [location.pathname, hydrated]);
   const ingestionState = useTaxStore((state) => state.ingestionState);
   const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
