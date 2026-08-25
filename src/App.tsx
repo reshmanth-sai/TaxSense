@@ -499,8 +499,8 @@ export default function App() {
       setUser(profile);
       setAuthMode('GOOGLE');
 
-      const redirectStep = (window as any)._migrationRedirectStep || 11;
-      (window as any)._migrationRedirectStep = null;
+      const redirectPath = new URLSearchParams(window.location.search).get('redirect');
+      const redirectStep = redirectPath ? stepForPath(redirectPath)?.activeStep ?? 11 : 11;
       navigateToStep(redirectStep);
     }, 600);
   };
@@ -901,8 +901,8 @@ export default function App() {
                 setIsAuthenticating(false);
                 setAuthMode('GUEST');
                 setUser(null);
-                const redirectStep = (window as any)._migrationRedirectStep || 11;
-                (window as any)._migrationRedirectStep = null;
+                const redirectPath = new URLSearchParams(window.location.search).get('redirect');
+                const redirectStep = redirectPath ? stepForPath(redirectPath)?.activeStep ?? 11 : 11;
                 navigateToStep(redirectStep);
               }, 600);
             }}
