@@ -172,7 +172,8 @@ export default function App() {
   // navigate(pathForStep(...)) call, mirroring this function's logic.
   const navigateToStep = useCallback((step: number) => {
     setActiveStep(step);
-    navigate(pathForStep(step));
+    const path = pathForStep(step);
+    if (path !== window.location.pathname) navigate(path);
   }, [setActiveStep, navigate]);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [authEmail, setAuthEmail] = useState('guest@taxsense.in');
@@ -341,6 +342,16 @@ export default function App() {
       // Unknown path -- there is no 404 screen in this app yet, so land
       // on the landing page rather than showing a blank render.
       navigate(HOME_PATH, { replace: true });
+      return;
+    }
+    if (match.activeStep >= 3 && authMode === null) {
+      // An unauthenticated deep link straight into the app shell --
+      // previously unreachable (activeStep only crossed 3 via in-app UI
+      // after authMode was already set). Send them through the entry
+      // screen first, preserving where they were headed via ?redirect=
+      // (consumed by the post-login/guest-launch redirect logic) so they
+      // land back here afterward.
+      navigate(`/start?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
       return;
     }
     // Unconditional: stepForPath's currentStep values and useTaxStore's
@@ -581,12 +592,29 @@ export default function App() {
     }
   };
 
-  // Auto-forward logged-in users past the login screen
+  // Auto-forward logged-in users past the login screen. Gated on the URL
+  // (not activeStep === 2 -- that value is now also the sync effect's
+  // HOME-branch reset default, so it fires on "/" too and would otherwise
+  // create a back-button trap: Back to "/" -> bounced forward to
+  // /dashboard via push -> Back does nothing, repeatedly). A replace here
+  // (not a push) also means landing on /start authenticated doesn't leave
+  // a dead history entry to bounce through on the way back out.
+  // The ?redirect= guard is load-bearing (found via live testing, not code
+  // review): onLaunchSandbox/handleGoogleLoginSuccess set authMode and then
+  // synchronously navigateToStep(redirectStep) themselves. authMode lands
+  // before location does, so without this guard the effect fires in the gap,
+  // wins the race via replace:true, and silently discards the redirect target
+  // (e.g. /start?redirect=%2Fvault landed on /dashboard instead of /vault).
   useEffect(() => {
-    if (hydrated && activeStep === 2 && authMode !== null) {
-      navigateToStep(11);
+    if (
+      hydrated &&
+      location.pathname === '/start' &&
+      authMode !== null &&
+      !new URLSearchParams(location.search).get('redirect')
+    ) {
+      navigate(pathForStep(11), { replace: true });
     }
-  }, [hydrated, activeStep, authMode]);
+  }, [hydrated, location.pathname, location.search, authMode, navigate]);
 
   // Guest Session Inactivity Expiry (15 minutes)
   useEffect(() => {

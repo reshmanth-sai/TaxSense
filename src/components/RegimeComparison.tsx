@@ -60,7 +60,8 @@ const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean 
   // CTA below (see App.tsx's navigateToStep comment for why).
   const setActiveStep = useCallback((step: number) => {
     rawSetActiveStep(step);
-    navigate(pathForStep(step));
+    const path = pathForStep(step);
+    if (path !== window.location.pathname) navigate(path);
   }, [rawSetActiveStep, navigate]);
 
   const [activeSection, setActiveSection] = useState<'overview' | 'recommendation' | 'details' | 'legal'>('overview');
