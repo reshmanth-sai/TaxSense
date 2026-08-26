@@ -4,7 +4,7 @@
 
 **Goal:** Replace TaxSense's `activeStep` integer + `currentStep` string dual-state navigation model with real URL routing (react-router-dom), so the app gets a working back button, refresh-safety, and deep links — without a big-bang rewrite of `App.tsx` or its 47 call sites across 10 files.
 
-**Architecture:** `App.tsx` currently branches its entire authenticated-shell render tree on a numeric `activeStep` (2, 3, 4, 5, 6, 10, 11) plus a redundant `currentStep` string ('HOME' | 'LANDING' | 'CONFIRM_EXTRACTION' | 'CHAT_QA' | 'FINAL_EXPORT') stored in Zustand. All 47 navigation call sites across 10 files funnel through either the store's `setActiveStep` (passed down as a raw prop reference) or `onNavigateStep` (a one-line wrapper `(step) => setActiveStep(step)` defined in exactly two places in `App.tsx`). That means real routing can be introduced by changing what those two wrapper definitions *do* — making them also call React Router's `navigate()` — without touching Sidebar, CommandPalette, HistoryArchive, VaultComponents, DashboardCommandCenter, AIFilingReadinessEngine, SmartDocumentChecklist, RegimeComparison, or SearchModal at all. A `useEffect` watching `location.pathname` handles the reverse direction (back/forward/refresh/deep-link → store state), so the existing `{activeStep === N && (...)}` conditional rendering keeps working unchanged. Splitting `App.tsx`'s 1,591 lines into real per-route files is a separate, optional, higher-risk task (Task 8) — the routing *behavior* fix (Tasks 1–7) does not depend on it and should ship first.
+**Architecture:** `App.tsx` currently branches its entire authenticated-shell render tree on a numeric `activeStep` (2, 3, 4, 5, 6, 10, 11) plus a redundant `currentStep` string ('HOME' | 'LANDING' | 'CONFIRM_EXTRACTION' | 'CHAT_QA' | 'FINAL_EXPORT') stored in Zustand. All 47 navigation call sites across 10 files funnel through either the store's `setActiveStep` (passed down as a raw prop reference) or `onNavigateStep` (a one-line wrapper `(step) => setActiveStep(step)` defined in exactly two places in `App.tsx`). That means real routing can be introduced by changing what those two wrapper definitions *do* — making them also call React Router's `navigate()` — without touching Sidebar, CommandPalette, HistoryArchive, VaultComponents, DashboardCommandCenter, AIFilingReadinessEngine, SmartDocumentChecklist, RegimeComparison, or SearchModal at all. A `useEffect` watching `location.pathname` handles the reverse direction (back/forward/refresh/deep-link → store state), so the existing `{activeStep === N && (...)}` conditional rendering keeps working unchanged. *(**Amendment note**, recorded during the final whole-branch review: the claim above that `SmartDocumentChecklist` and `RegimeComparison` need no changes turned out to be **wrong**, and Task 3's review caught it. Both components pull `setActiveStep` directly off `useTaxStore` rather than receiving it as a prop from `App.tsx`, so neither one routes through either wrapper. Each therefore needed its own local `navigate(pathForStep(...))` wrapper mirroring `navigateToStep` — see `src/components/SmartDocumentChecklist.tsx` and `src/components/RegimeComparison.tsx`. The other seven components listed are genuinely untouched.)* Splitting `App.tsx`'s 1,591 lines into real per-route files is a separate, optional, higher-risk task (Task 8) — the routing *behavior* fix (Tasks 1–7) does not depend on it and should ship first.
 
 **Tech Stack:** React 19, Vite 6, Zustand (existing store, unmodified in shape — only how its setter is *wrapped* changes), react-router-dom (new dependency, added in Task 1), TypeScript, Express (`server.ts`, already SPA-fallback-safe — see Global Constraints).
 
@@ -12,7 +12,9 @@
 
 ## Global Constraints
 
-- **No test framework exists in this repo.** There is no jest/vitest/testing-library — only `npx tsc --noEmit`, `npm run build`, and `npm run check:classes` (a custom Tailwind dead-class guard) as automated checks, run together via `npm run verify`. Every task's "run tests" step in this plan means `npm run verify`, followed by manual live-browser verification (the project's established practice — see "Manual verification" below). Do not introduce a test framework as part of this plan; that's out of scope.
+- **No test framework exists in this repo.** There is no jest/vitest/testing-library — only `npx tsc --noEmit` and `npm run build` as automated checks. Every task's "run tests" step in this plan means running those two commands, followed by manual live-browser verification (the project's established practice — see "Manual verification" below). Do not introduce a test framework as part of this plan; that's out of scope.
+
+> **Amendment note (recorded during the final whole-branch review, after Task 7):** this constraint originally referenced `npm run check:classes` (a custom Tailwind dead-class guard) and an aggregate `npm run verify` script. **Neither script exists in this repo.** `package.json`'s actual scripts are `dev`, `build`, `start`, `clean`, and `lint` (`lint` is itself just `tsc --noEmit`). Wherever this plan says "run `npm run verify`", read it as "run `npx tsc --noEmit` and `npm run build`".
 - **Manual verification method:** This project's established practice (used throughout its recent fix-ledger work) is to start the dev server, then use direct DOM/network inspection — `document.body.innerText`, `getComputedStyle`, `window.location`, network request logs — rather than trusting screenshots, which have proven unreliable in the available browser tooling. Every task below that has a "Manually verify" step gives the exact thing to check this way.
 - **Dev server:** `npm run dev` runs `tsx server.ts` (a custom Express server, not plain `vite dev`), defaulting to port 3000 (respects `$PORT`). Do not use a bare `vite` dev command.
 - **SPA fallback already works in all three environments — do not add server-side routing config.** Verified while writing this plan:
@@ -309,25 +311,127 @@ Add this new `useEffect` in `App.tsx`, placed after the `navigateToStep` definit
 
 This references `setStep('HOME')` — check `src/store/useTaxStore.ts` for the existing `setStep` action's exact signature (it's already used elsewhere in `App.tsx`, e.g. inside `ExtractionConfirm.tsx`'s `handleApply` calling `setStep('CHAT_QA')`) and confirm `'HOME'` is a valid argument for it before wiring this in — if `setStep` only sets `currentStep` and not also resetting `activeStep` to something sane, add whatever the equivalent of the old `activeStep: 2` default is so a user landing on `/` from a stale deep state doesn't end up in a broken combination. Read `setStep`'s implementation in the store file before writing this step's final code; do not guess at its behavior.
 
-- [ ] **Step 5: Type-check and build**
+- [ ] **Step 5 (added during pre-flight review — see plan Amendment note below): Replace direct `setActiveStep(N)`/`setStep('HOME')` call sites inside `App.tsx` that are not part of the original 8-site enumeration**
+
+The Global Constraints' "8 wrapper/prop-pass sites" list covers every navigation call that flows through a *prop* into a child component. It does not cover calls made directly inside `App.tsx`'s own effects and inline JSX handlers, which bypass both wrapper points. Confirmed via `grep -n "setActiveStep([0-9]" src/App.tsx` and `grep -n "setStep(" src/App.tsx` after Task 3 Steps 1-4 are applied (re-run these to get exact current line numbers — Steps 1-4 shift everything below them). At time of writing (pre-Task-3 line numbers), these are the sites, none of which are touched by Steps 1-4 above and all of which represent real user-facing or session-driven navigation that must stay URL-consistent for the back-button/refresh-safety goal to actually hold:
+
+1. **Auto-forward effect** (~line 505-509) — logged-in users are bounced past the login screen:
+```tsx
+  useEffect(() => {
+    if (hydrated && activeStep === 2 && authMode !== null) {
+      setActiveStep(11);
+    }
+  }, [hydrated, activeStep, authMode]);
+```
+Change `setActiveStep(11)` to `navigateToStep(11)`.
+
+2. **Guest session inactivity expiry** (~line 511-524) — kicks an idle guest back to the start screen:
+```tsx
+          if (inactiveMs > maxInactiveMs) {
+            clearSession();
+            setActiveStep(2);
+            alert("Your guest session has expired due to 15 minutes of inactivity.");
+          }
+```
+Change `setActiveStep(2)` to `navigateToStep(2)`.
+
+3. **Global keyboard shortcuts** (~line 556-594) — digit keys 1-6 jump between the 6 authenticated screens while `activeStep >= 3`:
+```tsx
+        switch (e.key) {
+          case '1':
+            setActiveStep(11); // Dashboard Hub
+            break;
+          case '2':
+            setActiveStep(3);  // Documents
+            break;
+          case '3':
+            setActiveStep(4);  // AI Analysis
+            break;
+          case '4':
+            setActiveStep(5);  // Recommendations
+            break;
+          case '5':
+            setActiveStep(6);  // Tax Return
+            break;
+          case '6':
+            setActiveStep(10); // History logs
+            break;
+```
+Change all six `setActiveStep(N)` calls in this switch to `navigateToStep(N)`. (Note this effect's dependency array is `[activeStep]` — do not add `navigateToStep` to it; `navigateToStep`'s own identity is stable via `useCallback` from Step 1, so omitting it does not create a stale closure over anything that matters here, consistent with the existing dependency array's scope.)
+
+4. **`acceptExtractedData` handler** (~line 628-646) — routes to the AI diagnosis stage after a user confirms extracted data:
+```tsx
+    setShowConfirmScreen(false);
+    setActiveStep(4); // Route to Copilot diagnosis stage
+```
+Change `setActiveStep(4)` to `navigateToStep(4)`.
+
+5. **`onBackToHome` prop passed to `WorkspaceSelection`** (~line 867) — this one calls `setStep`, not `setActiveStep`, and is a separate bug from the others: it changes `currentStep` to `'HOME'` (which flips the render to `<LandingPage>` per the `if (currentStep === 'HOME')` check) without touching the URL at all, so the address bar keeps showing `/start` while the landing page renders.
+```tsx
+            onBackToHome={() => setStep('HOME')}
+```
+Change to:
+```tsx
+            onBackToHome={() => { setStep('HOME'); navigate(HOME_PATH); }}
+```
+
+6. **`onLogout` handler passed to `Sidebar`** (~line 890-895):
+```tsx
+                onLogout={() => {
+                  GoogleAuthService.revokeSession();
+                  clearSession();
+                  setGoogleGsiState('ready');
+                  setActiveStep(2);
+                }}
+```
+Change `setActiveStep(2)` to `navigateToStep(2)`.
+
+7. **Sticky "Continue" button** (~line 947-954) — inline JSX button, not a child-component prop:
+```tsx
+                          <button
+                            onClick={() => setActiveStep(6)}
+```
+Change `setActiveStep(6)` to `navigateToStep(6)`.
+
+8. **Filing-celebration "View Timeline history" button** (~line 1453-1458):
+```tsx
+                      <button
+                        onClick={() => {
+                          setShowCelebration(false);
+                          setGuidedFilingStep(1);
+                          setActiveStep(10); // Route directly to Timeline Archives (Stage 10)
+                        }}
+```
+Change `setActiveStep(10)` to `navigateToStep(10)`.
+
+After this step, confirm no real-navigation direct calls remain: `grep -n "setActiveStep([0-9]" src/App.tsx` should return nothing (every numeric direct call has become `navigateToStep`), and `grep -n "setStep('HOME')" src/App.tsx` should show only the fixed two-line version from item 5 above plus the sync effect's own internal `setStep('HOME')` call from Step 4 (that one is correct as-is — it runs in response to a URL change, not as a source of one, so it must not also call `navigate()` or it would create a navigation loop).
+
+> **Amendment note (recorded during SDD pre-flight review, before Task 1 was dispatched):** the plan's Global Constraints originally claimed the 8 enumerated prop/wrapper sites were exhaustive. They are exhaustive for calls made *through props into child components*, but not for calls made directly inside `App.tsx`. This step closes that gap. See the SDD ledger for this plan for the full ruling.
+
+- [ ] **Step 6: Type-check and build**
 
 Run: `npx tsc --noEmit && npm run build`
 Expected: both succeed. If `tsc` reports unused-variable errors for `setActiveStep` (now only used inside `navigateToStep` and the sync effect, not passed as a raw prop anywhere), that's expected and fine — it's still used, just not passed directly as a prop anymore.
 
-- [ ] **Step 6: Manually verify forward navigation**
+**Pre-existing baseline note:** `npx tsc --noEmit` on this branch's base commit already reports 8 errors unrelated to routing (`src/components/dashboard/DashboardCommandCenter.tsx` framer-motion variant typing, `src/components/SmartDocumentChecklist.tsx` a missing `pages` field on a test fixture object). These are not part of this plan's scope. The bar for this and every later "type-check" step in this plan is **no new errors beyond that pre-existing baseline of 8**, not a fully clean `tsc` run. `npm run build` (Vite/esbuild) is unaffected by these and must stay fully clean.
+
+- [ ] **Step 7: Manually verify forward navigation**
 
 Start the dev server. In the browser:
 - Log in as guest, land on `/dashboard`.
 - Click "Document Vault" in the sidebar. Check `window.location.pathname` — expect `/vault`.
 - Click through to Optimize/Tax Return equivalents (whatever sidebar items map to steps 4/5/6) and confirm each updates `window.location.pathname` to match the table in Global Constraints.
+- Press keyboard shortcuts `1`-`6` (per Step 5 item 3) and confirm `window.location.pathname` updates each time, not just the visible screen.
+- Click the sticky "Continue" button on `/recommendations` (Step 5 item 7) and confirm the URL updates to `/filing`.
 
-- [ ] **Step 7: Manually verify backward navigation and refresh**
+- [ ] **Step 8: Manually verify backward navigation and refresh**
 
 - From `/vault`, click into `/dashboard`, then press the browser Back button. Expect the URL to return to `/vault` and the Document Vault screen to render (not a blank page).
 - With the URL at `/vault`, reload the page (`navigate` with `force: true` if using the Claude_Browser MCP tool, or a real refresh). Expect the app to boot straight to Document Vault, not bounce to the landing page or dashboard.
 - Manually type a URL ending in `/recommendations` and load it directly (simulating a bookmarked deep link). Expect the Recommendations screen to render.
+- From `/start`, trigger `onBackToHome` (Step 5 item 5) and confirm the URL changes to `/` and stays there on refresh.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/App.tsx
@@ -438,6 +542,11 @@ Expected: no matches (Task 4 replaced both uses).
 Run: `grep -n "setActiveStep={setActiveStep}\|onNavigateStep={(step) => setActiveStep" src/App.tsx`
 Expected: no matches (Task 3 replaced all of them with `navigateToStep`).
 
+- [ ] **Step 2b: Confirm no remaining direct `setActiveStep(N)` calls (Task 3 Step 5's amendment)**
+
+Run: `grep -n "setActiveStep([0-9]" src/App.tsx`
+Expected: no matches — Task 3 Step 5 converted all 13 of these (auto-forward effect, guest expiry, 6 keyboard shortcuts, `acceptExtractedData`, `onLogout`, sticky continue button, celebration button) to `navigateToStep`. Also run `grep -n "onBackToHome={() => setStep('HOME')}" src/App.tsx` (no trailing `navigate(HOME_PATH)`) — expect no matches, since Task 3 Step 5 item 5 added the `navigate(HOME_PATH)` call alongside it.
+
 - [ ] **Step 3: Type-check and build**
 
 Run: `npx tsc --noEmit && npm run build`
@@ -463,8 +572,8 @@ git commit --allow-empty -m "chore: confirm legacy activeStep wiring fully repla
 
 - [ ] **Step 1: Run the full verify script**
 
-Run: `npm run verify`
-Expected: `tsc --noEmit`, `npm run build`, and `npm run check:classes` all pass.
+Run: `npx tsc --noEmit` and `npm run build` (there is no `npm run verify` or `npm run check:classes` script in this repo — see the Global Constraints amendment note).
+Expected: `tsc --noEmit` reports no new errors beyond the pre-existing baseline of 8, and `npm run build` is fully clean.
 
 - [ ] **Step 2: Click through every route from a cold start**
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   Check, 
   ShieldCheck, 
@@ -15,9 +15,11 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { useTaxStore } from '../store/useTaxStore';
 import { calculateTax, formatINR } from '../utils/taxCalculator';
 import { TaxData } from '../types';
+import { pathForStep } from '../routes/stepRoutes';
 
 // Animated Counter for savings
 const SavingsCounter: React.FC<{ value: number }> = React.memo(({ value }) => {
@@ -50,8 +52,18 @@ const SavingsCounter: React.FC<{ value: number }> = React.memo(({ value }) => {
 const RegimeComparison = React.memo(({ hideHero = false }: { hideHero?: boolean }) => {
   const incomeProfile = useTaxStore((state) => state.incomeProfile);
   const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
-  const { addChatMessage, setIsFloatingAIChatOpen, setActiveStep } = useTaxStore();
-  
+  const { addChatMessage, setIsFloatingAIChatOpen, setActiveStep: rawSetActiveStep } = useTaxStore();
+  const navigate = useNavigate();
+  // Mirrors App.tsx's navigateToStep: this component reads setActiveStep
+  // directly from the store rather than as a prop, so it needs its own
+  // local wrapper to keep the URL in sync with the "Switch to New Regime"
+  // CTA below (see App.tsx's navigateToStep comment for why).
+  const setActiveStep = useCallback((step: number) => {
+    rawSetActiveStep(step);
+    const path = pathForStep(step);
+    if (path !== window.location.pathname) navigate(path);
+  }, [rawSetActiveStep, navigate]);
+
   const [activeSection, setActiveSection] = useState<'overview' | 'recommendation' | 'details' | 'legal'>('overview');
   const [isWhatChangedOpen, setIsWhatChangedOpen] = useState(false);
 

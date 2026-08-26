@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense, useRef } from 'react';
 import CountUp from './components/CountUp';
 import { motion, AnimatePresence } from 'motion/react';
 import { TaxData } from './types';
@@ -27,6 +27,8 @@ const PDFComputationExporter = lazy(() => import('./components/export/PDFComputa
 const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })));
 import { useTaxStore, useTaxStoreHydrated, UserProfile } from './store/useTaxStore';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { pathForStep, stepForPath, HOME_PATH } from './routes/stepRoutes';
 import {
   DashboardCard,
   SectionHeader,
@@ -152,6 +154,27 @@ export default function App() {
   const [isFilingGuideOpen, setIsFilingGuideOpen] = useState(false);
   const activeStep = useTaxStore((state) => state.activeStep);
   const setActiveStep = useTaxStore((state) => state.setActiveStep);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Single choke point for every "go to step N" call in the app. Most real
+  // navigation call sites across App.tsx and its children funnel through
+  // either this function (via the onNavigateStep/setActiveStep props) or a
+  // direct call inside App.tsx itself -- so wrapping it here, plus updating
+  // every direct call site, is enough to make every one of them a real
+  // navigation, with no changes needed in Sidebar, CommandPalette,
+  // HistoryArchive, VaultComponents, DashboardCommandCenter,
+  // AIFilingReadinessEngine, or SearchModal. RegimeComparison.tsx and
+  // SmartDocumentChecklist.tsx are the exception: they pull setActiveStep
+  // directly from useTaxStore rather than receiving it as a prop from
+  // here, so each wraps the store's setActiveStep with its own local
+  // navigate(pathForStep(...)) call, mirroring this function's logic.
+  const navigateToStep = useCallback((step: number) => {
+    setActiveStep(step);
+    const path = pathForStep(step);
+    if (path !== window.location.pathname) navigate(path);
+  }, [setActiveStep, navigate]);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [authEmail, setAuthEmail] = useState('guest@taxsense.in');
   const [authPassword, setAuthPassword] = useState('••••••••••••');
@@ -286,6 +309,59 @@ export default function App() {
   const currentStep = useTaxStore((state) => state.currentStep);
   const isPrivacyBlurred = useTaxStore((state) => state.isPrivacyBlurred);
   const setStep = useTaxStore((state) => state.setStep);
+
+  // Reverse direction of navigateToStep: when the URL changes because of
+  // browser back/forward, a typed-in URL, or a page refresh, sync the
+  // store so the existing {activeStep === N && (...)} rendering picks the
+  // right screen. This is what actually fixes "no back button" and "no
+  // refresh-safety" -- navigateToStep alone only fixes forward navigation.
+  //
+  // setActiveStep() writes BOTH activeStep and currentStep via its own
+  // internal stepMap (see useTaxStore.ts), while setStep() writes only
+  // currentStep. On the HOME branch we need currentStep === 'HOME', which
+  // setActiveStep(2) alone would not produce (its stepMap maps 2 ->
+  // 'LANDING') -- so call setActiveStep(2) FIRST to reset activeStep, then
+  // setStep('HOME') SECOND so 'HOME' wins as the final currentStep value.
+  // Both calls are unconditional (no `if (x !== y)` guards): guarding on
+  // the current closure's `currentStep`/`activeStep` reads stale
+  // pre-effect values and can silently skip a write that's actually still
+  // needed (e.g. activeStep already matches but currentStep is stale from
+  // a prior bad state) -- these are cheap synchronous store writes, so
+  // there's no cost to always performing them, and neither branch calls
+  // navigate() for the path it's reacting to, so there's no navigation
+  // loop risk.
+  useEffect(() => {
+    if (!hydrated) return; // wait for the persisted store to rehydrate first
+    if (location.pathname === HOME_PATH) {
+      setActiveStep(2);
+      setStep('HOME');
+      return;
+    }
+    const match = stepForPath(location.pathname);
+    if (!match) {
+      // Unknown path -- there is no 404 screen in this app yet, so land
+      // on the landing page rather than showing a blank render.
+      navigate(HOME_PATH, { replace: true });
+      return;
+    }
+    if (match.activeStep >= 3 && authMode === null) {
+      // An unauthenticated deep link straight into the app shell --
+      // previously unreachable (activeStep only crossed 3 via in-app UI
+      // after authMode was already set). Send them through the entry
+      // screen first, preserving where they were headed via ?redirect=
+      // (consumed by the post-login/guest-launch redirect logic) so they
+      // land back here afterward.
+      navigate(`/start?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
+      return;
+    }
+    // Unconditional: stepForPath's currentStep values and useTaxStore's
+    // internal stepMap are consistent with each other (both map
+    // 2/3->LANDING, 4->CONFIRM_EXTRACTION, 5->CHAT_QA, 6/10->FINAL_EXPORT,
+    // 11->LANDING), so setActiveStep(match.activeStep) alone repairs both
+    // fields even when activeStep already matches but currentStep is
+    // stale (e.g. left at 'HOME' by a prior bad state).
+    setActiveStep(match.activeStep);
+  }, [location.pathname, hydrated]);
   const ingestionState = useTaxStore((state) => state.ingestionState);
   const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
 
@@ -434,9 +510,9 @@ export default function App() {
       setUser(profile);
       setAuthMode('GOOGLE');
 
-      const redirectStep = (window as any)._migrationRedirectStep || 11;
-      (window as any)._migrationRedirectStep = null;
-      setActiveStep(redirectStep);
+      const redirectPath = new URLSearchParams(window.location.search).get('redirect');
+      const redirectStep = redirectPath ? stepForPath(redirectPath)?.activeStep ?? 11 : 11;
+      navigateToStep(redirectStep);
     }, 600);
   };
 
@@ -516,12 +592,29 @@ export default function App() {
     }
   };
 
-  // Auto-forward logged-in users past the login screen
+  // Auto-forward logged-in users past the login screen. Gated on the URL
+  // (not activeStep === 2 -- that value is now also the sync effect's
+  // HOME-branch reset default, so it fires on "/" too and would otherwise
+  // create a back-button trap: Back to "/" -> bounced forward to
+  // /dashboard via push -> Back does nothing, repeatedly). A replace here
+  // (not a push) also means landing on /start authenticated doesn't leave
+  // a dead history entry to bounce through on the way back out.
+  // The ?redirect= guard is load-bearing (found via live testing, not code
+  // review): onLaunchSandbox/handleGoogleLoginSuccess set authMode and then
+  // synchronously navigateToStep(redirectStep) themselves. authMode lands
+  // before location does, so without this guard the effect fires in the gap,
+  // wins the race via replace:true, and silently discards the redirect target
+  // (e.g. /start?redirect=%2Fvault landed on /dashboard instead of /vault).
   useEffect(() => {
-    if (hydrated && activeStep === 2 && authMode !== null) {
-      setActiveStep(11);
+    if (
+      hydrated &&
+      location.pathname === '/start' &&
+      authMode !== null &&
+      !new URLSearchParams(location.search).get('redirect')
+    ) {
+      navigate(pathForStep(11), { replace: true });
     }
-  }, [hydrated, activeStep, authMode]);
+  }, [hydrated, location.pathname, location.search, authMode, navigate]);
 
   // Guest Session Inactivity Expiry (15 minutes)
   useEffect(() => {
@@ -533,7 +626,7 @@ export default function App() {
           const maxInactiveMs = 15 * 60 * 1000; // 15 minutes of inactivity
           if (inactiveMs > maxInactiveMs) {
             clearSession();
-            setActiveStep(2);
+            navigateToStep(2);
             alert("Your guest session has expired due to 15 minutes of inactivity.");
           }
         }
@@ -581,22 +674,22 @@ export default function App() {
       if (activeStep >= 3 && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
         switch (e.key) {
           case '1':
-            setActiveStep(11); // Dashboard Hub
+            navigateToStep(11); // Dashboard Hub
             break;
           case '2':
-            setActiveStep(3);  // Documents
+            navigateToStep(3);  // Documents
             break;
           case '3':
-            setActiveStep(4);  // AI Analysis
+            navigateToStep(4);  // AI Analysis
             break;
           case '4':
-            setActiveStep(5);  // Recommendations
+            navigateToStep(5);  // Recommendations
             break;
           case '5':
-            setActiveStep(6);  // Tax Return
+            navigateToStep(6);  // Tax Return
             break;
           case '6':
-            setActiveStep(10); // History logs
+            navigateToStep(10); // History logs
             break;
           case '7':
             setIsSettingsOpen(prev => !prev); // Toggle Settings
@@ -657,7 +750,7 @@ export default function App() {
     updateDeduction('section24b', confirmedData.section24b || 0);
 
     setShowConfirmScreen(false);
-    setActiveStep(4); // Route to Copilot diagnosis stage
+    navigateToStep(4); // Route to Copilot diagnosis stage
   };
 
   const handleNumericChange = (field: 'grossSalary' | 'otherIncome' | 'tdsDeducted', val: string) => {
@@ -721,7 +814,7 @@ export default function App() {
   }
 
   if (currentStep === 'HOME') {
-    return <LandingPage onStart={() => { setActiveStep(2); }} />;
+    return <LandingPage onStart={() => { navigateToStep(2); }} />;
   }
 
   return (
@@ -836,13 +929,13 @@ export default function App() {
                 setIsAuthenticating(false);
                 setAuthMode('GUEST');
                 setUser(null);
-                const redirectStep = (window as any)._migrationRedirectStep || 11;
-                (window as any)._migrationRedirectStep = null;
-                setActiveStep(redirectStep);
+                const redirectPath = new URLSearchParams(window.location.search).get('redirect');
+                const redirectStep = redirectPath ? stepForPath(redirectPath)?.activeStep ?? 11 : 11;
+                navigateToStep(redirectStep);
               }, 600);
             }}
             onGoogleSignIn={handleGoogleSignIn}
-            onBackToHome={() => setStep('HOME')}
+            onBackToHome={() => { setStep('HOME'); navigate(HOME_PATH); }}
           />
         </div>
 
@@ -851,7 +944,7 @@ export default function App() {
             <div className="relative z-10 flex-1 flex flex-col md:flex-row h-screen overflow-hidden bg-transparent">
               <Sidebar
                 activeStep={activeStep}
-                setActiveStep={setActiveStep}
+                setActiveStep={navigateToStep}
                 taxCalculationResult={taxCalculationResult}
                 taxData={taxData}
                 ingestionState={ingestionState}
@@ -869,7 +962,7 @@ export default function App() {
                   GoogleAuthService.revokeSession();
                   clearSession();
                   setGoogleGsiState('ready');
-                  setActiveStep(2);
+                  navigateToStep(2);
                 }}
               />
 
@@ -924,7 +1017,7 @@ export default function App() {
                       <div className="flex items-center gap-3">
                         {showStickyContinue && activeStep === 5 && (
                           <button
-                            onClick={() => setActiveStep(6)}
+                            onClick={() => navigateToStep(6)}
                             className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-md flex items-center gap-1.5 active:scale-95 duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
                           >
                             <span>Continue</span>
@@ -1003,7 +1096,7 @@ export default function App() {
                         >
                           <Suspense fallback={<div className="h-[600px] bg-slate-900/10 animate-pulse rounded-3xl" />}>
                             <DashboardCommandCenter
-                              onNavigateStep={(step) => setActiveStep(step)}
+                              onNavigateStep={navigateToStep}
                               onOpenWhatIf={() => setIsWhatIfOpen(true)}
                               onOpenPdf={() => setIsPdfModalOpen(true)}
                               onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
@@ -1025,7 +1118,7 @@ export default function App() {
                           <Suspense fallback={<div className="h-[400px] bg-slate-900/10 animate-pulse rounded-3xl" />}>
                             <DocumentVault
                               onFileUpload={() => { }}
-                              setActiveStep={setActiveStep}
+                              setActiveStep={navigateToStep}
                               onViewExtractedFields={() => setShowConfirmScreen(true)}
                             />
                           </Suspense>
@@ -1059,7 +1152,7 @@ export default function App() {
                                 taxData={taxData}
                                 taxCalculationResult={taxCalculationResult}
                                 formType={formType}
-                                setActiveStep={setActiveStep}
+                                setActiveStep={navigateToStep}
                               />
                             </Suspense>
                           )}
@@ -1095,7 +1188,7 @@ export default function App() {
                                 confirmedDeductions={confirmedDeductions}
                                 formType={formType}
                                 formatINR={formatINR}
-                                setActiveStep={setActiveStep}
+                                setActiveStep={navigateToStep}
                               />
                             </Suspense>
                           )}
@@ -1122,7 +1215,7 @@ export default function App() {
                               executeFilingSubmission={executeFilingSubmission}
                               taxCalculationResult={taxCalculationResult}
                               formatINR={formatINR}
-                              setActiveStep={setActiveStep}
+                              setActiveStep={navigateToStep}
                             />
                           </Suspense>
                         </motion.div>
@@ -1132,7 +1225,7 @@ export default function App() {
                       {activeStep === 10 && (
                         <Suspense fallback={<div className="h-96 bg-slate-900/10 animate-pulse rounded-2xl" />}>
                           <HistoryArchive
-                            setActiveStep={setActiveStep}
+                            setActiveStep={navigateToStep}
                           />
                         </Suspense>
                       )}
@@ -1440,7 +1533,7 @@ export default function App() {
                         onClick={() => {
                           setShowCelebration(false);
                           setGuidedFilingStep(1);
-                          setActiveStep(10); // Route directly to Timeline Archives (Stage 10)
+                          navigateToStep(10); // Route directly to Timeline Archives (Stage 10)
                         }}
                         className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-emerald-500/20 select-none active:scale-95 block z-10 relative"
                       >
@@ -1580,7 +1673,7 @@ export default function App() {
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
-        onNavigateStep={(step) => setActiveStep(step)}
+        onNavigateStep={navigateToStep}
         onOpenWhatIf={() => setIsWhatIfOpen(true)}
         onOpenPdf={() => setIsPdfModalOpen(true)}
       />
