@@ -12,6 +12,7 @@ import {
   mapError,
   logStructured
 } from './services/ai/googleClient';
+import { buildSystemPrompt, validateChatContext } from './services/ai/promptBuilder';
 
 const app = express();
 app.use(express.json());
@@ -318,12 +319,25 @@ app.post('/api/chat', async (req, res) => {
   const correlationId = (req.headers['x-correlation-id'] as string) || requestId;
 
   try {
-    const { messages, systemPrompt } = req.body;
+    const { messages, context } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       res.status(400).json({ error: 'Conversation messages array is required.' });
       return;
     }
+
+    // The system prompt is built here, from a fixed template plus this
+    // validated context -- never from a client-supplied prompt string. See
+    // services/ai/promptBuilder.ts for why: accepting a free-text prompt
+    // let any caller replace the assistant's identity/purpose entirely,
+    // turning this endpoint into a general-purpose LLM proxy against this
+    // app's Gemini quota.
+    const validated = validateChatContext(context);
+    if (validated.valid === false) {
+      res.status(400).json({ error: `Invalid context: ${validated.error}` });
+      return;
+    }
+    const systemPrompt = buildSystemPrompt(validated.context);
 
     // Set streaming headers
     res.setHeader('Content-Type', 'text/event-stream');
@@ -339,7 +353,7 @@ app.post('/api/chat', async (req, res) => {
       model: 'gemini-2.0-flash',
       contents,
       config: {
-        systemInstruction: systemPrompt || 'You are an AI assistant.',
+        systemInstruction: systemPrompt,
         temperature: 0.7,
       },
       requestId,

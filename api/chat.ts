@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateContentStreamWithLogging, mapError } from '../services/ai/googleClient';
+import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -18,13 +19,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    const { messages, systemPrompt } = req.body;
-    
+    const { messages, context } = req.body;
+
     if (!messages || !Array.isArray(messages)) {
       res.write(`data: ${JSON.stringify({ error: 'Conversation messages array is required.' })}\n\n`);
       res.end();
       return;
     }
+
+    // See services/ai/promptBuilder.ts: the system prompt is built here from
+    // a fixed template plus validated context, never from a client-supplied
+    // prompt string.
+    const validated = validateChatContext(context);
+    if (validated.valid === false) {
+      const errorMessage = 'Invalid context: ' + validated.error;
+      res.write(`data: ${JSON.stringify({ error: errorMessage })}\n\n`);
+      res.end();
+      return;
+    }
+    const systemPrompt = buildSystemPrompt(validated.context);
 
     const contents = messages.map((msg: any) => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
@@ -36,7 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         model: 'gemini-2.0-flash',
         contents,
         config: {
-          systemInstruction: systemPrompt || 'You are an AI assistant.',
+          systemInstruction: systemPrompt,
           temperature: 0.7,
         },
         requestId,
