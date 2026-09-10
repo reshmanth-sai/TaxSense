@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateContentStreamWithLogging, mapError } from '../services/ai/googleClient';
 import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder';
+import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -12,6 +13,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       res.status(405).json({ error: 'Method Not Allowed' });
       return;
     }
+
+    if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
+    if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
     // Set streaming headers
     res.setHeader('Content-Type', 'text/event-stream');
