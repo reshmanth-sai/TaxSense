@@ -1,8 +1,5 @@
 <div align="center">
 
-  <br />
-  <img src="https://raw.githubusercontent.com/reshmanth-sai/TaxSense/main/public/favicon.svg" alt="TaxSense Logo" width="84" height="84" />
-  <br />
 
   # TaxSense
   ### AI Tax Operating System for India
