@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Award,
@@ -12,7 +12,8 @@ import {
   Sun,
   Moon,
   Laptop,
-  SlidersHorizontal
+  SlidersHorizontal,
+  BookOpen
 } from 'lucide-react';
 import { useSidebarStore, SidebarTheme } from './useSidebarStore';
 import { SidebarHeader } from './SidebarHeader';
@@ -38,6 +39,7 @@ interface SidebarProps {
   onLogout: () => void;
   onGoogleSignIn: () => void;
   onOpenWhatIf?: () => void;
+  onOpenFilingGuide?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -56,7 +58,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setIsSettingsOpen,
   onLogout,
   onGoogleSignIn,
-  onOpenWhatIf
+  onOpenWhatIf,
+  onOpenFilingGuide
 }) => {
   const isCollapsed = useSidebarStore((state) => state.isCollapsed);
   const sidebarBehavior = useSidebarStore((state) => state.sidebarBehavior);
@@ -341,6 +344,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 isActive={activeStep === 10}
                 isExpanded={isExpandedVisual}
                 onClick={() => setActiveStep(10)}
+              />
+              <SidebarItem
+                label="Filing Guide"
+                icon={BookOpen}
+                isActive={false}
+                isExpanded={isExpandedVisual}
+                onClick={() => onOpenFilingGuide && onOpenFilingGuide()}
               />
             </nav>
           </div>

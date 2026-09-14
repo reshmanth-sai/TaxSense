@@ -951,6 +951,7 @@ export default function App() {
                 isSettingsOpen={isSettingsOpen}
                 setIsSettingsOpen={setIsSettingsOpen}
                 onOpenWhatIf={() => setIsWhatIfOpen(true)}
+                onOpenFilingGuide={() => setIsFilingGuideOpen(true)}
                 onGoogleSignIn={handleGoogleSignIn}
                 onLogout={() => {
                   GoogleAuthService.revokeSession();

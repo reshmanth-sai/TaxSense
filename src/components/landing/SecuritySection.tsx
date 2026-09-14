@@ -45,7 +45,7 @@ export const SecuritySection: React.FC = React.memo(() => {
               <span className="text-2xs font-mono text-emerald-600 dark:text-[#16E27A] font-bold uppercase tracking-wider block">Guest mode</span>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Run a full regime comparison without giving us a name, an email, or a phone number. Signing in is optional and only adds cross-device sync.
+              Run a full regime comparison without giving us a name, an email, or a phone number. Signing in is optional and only keeps your workspace saved in this browser instead of clearing it after 30 minutes.
             </p>
           </PremiumCard>
         </CardSpotlight>

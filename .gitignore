@@ -10,3 +10,9 @@ coverage/
 AGENTS.md
 CLAUDE.md
 
+
+# IJFW session bookkeeping (regenerated per machine/session; conflicts on every merge)
+.ijfw/.*
+.ijfw/index/
+.ijfw/metrics/
+.ijfw/sessions/

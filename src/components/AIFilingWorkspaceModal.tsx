@@ -12,7 +12,8 @@ import {
   FileCheck2,
   Eye
 } from 'lucide-react';
-import { formatINR } from '../utils/taxCalculator';
+import { formatINR, calculateTax, buildTaxData } from '../utils/taxCalculator';
+import { useTaxStore } from '../store/useTaxStore';
 
 interface AIFilingWorkspaceModalProps {
   isOpen: boolean;
@@ -73,10 +74,31 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
   const [reasoningIndex, setReasoningIndex] = useState(0);
   const [isLaunching, setIsLaunching] = useState(false);
 
+  const incomeProfile = useTaxStore((state) => state.incomeProfile);
+  const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
+  const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
+
+  // Real, data-derived summary of what was (and was not) checked. TaxSense
+  // never sees the user's AIS/26AS, so it cannot claim those were reconciled.
+  const reviewSummary = React.useMemo(() => {
+    const taxData = buildTaxData(incomeProfile, confirmedDeductions);
+    const result = calculateTax(taxData);
+    const chosen = recommendedRegime === 'OLD' ? result.oldRegime : result.newRegime;
+    const hasSalary = (incomeProfile.grossSalary || 0) > 0;
+    const tdsDeclared = incomeProfile.tdsDeducted || 0;
+    const hasDeductions = Object.values(confirmedDeductions).some((v) => (v || 0) > 0);
+    const warnings: string[] = [];
+    if (!hasSalary) warnings.push('no salary figure has been entered yet');
+    if (hasSalary && tdsDeclared === 0) warnings.push('no TDS was found on your Form 16 -- confirm it against your 26AS');
+    if (recommendedRegime === 'OLD' && !hasDeductions) warnings.push('the old regime was chosen but no deductions are recorded');
+    if (chosen.totalTaxPayable > 0 && tdsDeclared > chosen.totalTaxPayable * 1.5) warnings.push('TDS is well above the computed tax -- the refund figure deserves a second look');
+    return { documentCount: uploadedFiles.length, hasSalary, tdsDeclared, warnings };
+  }, [incomeProfile, confirmedDeductions, uploadedFiles.length, recommendedRegime]);
+
   const reasoningThoughts = [
     "Calculating deductions under Sec 80C & 80D...",
     "Comparing Old vs New Regime tax slabs...",
-    "Validating AIS & 26AS data integrity...",
+    "Checking salary and deduction figures for gaps...",
     "Assembling local browser workspace payload...",
     "Generating verified JSON return package...",
     "Assembling your filing summary..."
@@ -388,11 +410,19 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                 <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl text-left space-y-1.5">
                   <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
                     <ShieldCheck className="w-4 h-4" />
-                    <span className="text-[10.5px] font-extrabold uppercase tracking-wider">AI Trust Verification</span>
+                    <span className="text-[10.5px] font-extrabold uppercase tracking-wider">What was checked</span>
                   </div>
                   <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                    Your filing workspace has been prepared successfully. No inconsistencies were detected across Form 16, AIS data, or salary records. All calculations passed statutory validation under AY 2026–27 rules.
+                    {reviewSummary.hasSalary
+                      ? `Computed from ${reviewSummary.documentCount > 0 ? `${reviewSummary.documentCount} uploaded document${reviewSummary.documentCount === 1 ? '' : 's'} and ` : ''}the salary and deduction figures in your workspace, using AY 2026–27 slab rules.`
+                      : 'Prepared from the figures currently in your workspace using AY 2026–27 slab rules.'}
+                    {' '}TaxSense does not receive your AIS or Form 26AS, so TDS and tax-credit figures are <strong>not</strong> reconciled against Income Tax Department records -- compare them on the e-filing portal before you submit.
                   </p>
+                  {reviewSummary.warnings.length > 0 && (
+                    <ul className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed font-medium list-disc pl-4 pt-1 space-y-0.5">
+                      {reviewSummary.warnings.map((w) => <li key={w}>Heads up: {w}.</li>)}
+                    </ul>
+                  )}
                 </div>
 
                 {/* GENERATED PAYLOAD CHIP */}

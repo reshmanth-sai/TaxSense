@@ -126,16 +126,16 @@ const SECURE_FEATURES: Feature[] = [
     iconClass: 'group-hover/item:-translate-y-0.5 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-blue-500 dark:group-hover/item:text-[#60A5FA]',
     hoverContainerClass: 'group-hover/item:bg-blue-500/10 group-hover/item:border-blue-500/30 dark:group-hover/item:bg-blue-500/20 dark:group-hover/item:border-blue-400/30',
-    title: 'Cloud Sync',
-    description: 'Access your workspace from any device',
+    title: 'Saved in this browser',
+    description: 'Your workspace survives closing the tab -- on this device',
   },
   {
     icon: FolderOpen,
     iconClass: 'group-hover/item:scale-110 transition-transform duration-300',
     hoverColorClass: 'group-hover/item:text-emerald-500 dark:group-hover/item:text-emerald-400',
     hoverContainerClass: 'group-hover/item:bg-emerald-500/10 group-hover/item:border-emerald-500/30 dark:group-hover/item:bg-emerald-400/15 dark:group-hover/item:border-emerald-400/30',
-    title: 'Saved workspace',
-    description: 'Your session is stored against your account',
+    title: 'No auto-expiry',
+    description: 'Skips the 30-minute sandbox cleanup until you sign out',
   },
   {
     icon: MessageSquare,
@@ -418,7 +418,7 @@ export default function WorkspaceSelection({
               Your Private AI Tax Assistant
             </h1>
             <p className="text-sm sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto font-medium">
-              Upload a Form 16 or type your salary, with nothing written to our servers -- or sign in to sync across devices.
+              Upload a Form 16 or type your salary, with nothing written to our servers -- or sign in to keep your workspace in this browser.
             </p>
           </div>
 
@@ -481,7 +481,7 @@ export default function WorkspaceSelection({
               onClick={onGoogleSignIn}
               role="button"
               tabIndex={0}
-              aria-label="Continue Securely with Google cloud sync."
+              aria-label="Continue Securely with Google: keep your workspace saved in this browser."
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onGoogleSignIn(); }}
               className="p-8 rounded-[24px] flex flex-col justify-between text-left cursor-pointer select-none relative overflow-hidden group h-full focus-visible:ring-2 focus-visible:ring-[#00f0ff] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none glass-card-secure"
             >
@@ -507,7 +507,7 @@ export default function WorkspaceSelection({
                     Continue Securely
                   </h3>
                   <p className="text-sm text-slate-650 dark:text-slate-400 leading-normal">
-                    Securely sync your workspace across devices.
+                    Keep your workspace saved in this browser between visits.
                   </p>
                 </div>
 
@@ -573,7 +573,7 @@ export default function WorkspaceSelection({
                 </button>
                 
                 <span className="text-2xs font-mono mt-2.5 text-slate-500 dark:text-[#a1a1aa]">
-                  Sync takes about 10 seconds.
+                  Sign-in takes about 10 seconds.
                 </span>
 
                 {/* Privacy Reassurance Line */}
@@ -589,7 +589,7 @@ export default function WorkspaceSelection({
           {/* Info Banner Box */}
           <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-[8px] bg-slate-100/50 dark:bg-white/[0.015] border border-slate-200 dark:border-white/[0.04] text-xs text-slate-600 dark:text-slate-400 max-w-xl mx-auto mt-8 mb-6 relative z-10 select-none">
             <Info className="w-3.5 h-3.5 text-primary-action flex-shrink-0" aria-hidden="true" />
-            <span>Only Continue Securely saves your session — pick up where you left off on any device.</span>
+            <span>Only Continue Securely keeps your session — pick up where you left off in this browser. Nothing is uploaded to our servers.</span>
           </div>
 
           {/* Centered Trust Footer Badges */}
@@ -604,7 +604,7 @@ export default function WorkspaceSelection({
               <Zap className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Read by Google Gemini
             </div>
             <div className="text-2xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Cloud className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Secure Cloud Sync
+              <Cloud className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Saved in this browser
             </div>
           </div>
 

@@ -41,7 +41,7 @@ export interface UploadedFile {
   /** Page count, when the document was parsed and reported one. */
   pages?: number;
   uploadTime: string;
-  status: 'Verified' | 'Failed' | 'Processing';
+  status: 'Verified' | 'Attached' | 'Failed' | 'Processing';
   confidence: number;
 }
 

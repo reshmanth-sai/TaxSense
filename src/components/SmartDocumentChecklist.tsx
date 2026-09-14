@@ -33,7 +33,8 @@ export interface ChecklistDocItem {
   sectionRef: string;
   description: string;
   isRequired: boolean;
-  isVerified: boolean;
+  /** True when a file whose name matches this category's keywords is in the vault. Filename match only -- contents are not validated. */
+  isAttached: boolean;
   matchedFileName?: string;
   claimAmount?: number;
   recommendation: string;
@@ -66,7 +67,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
   const [activeUploadCategory, setActiveUploadCategory] = useState<ChecklistDocItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed);
-  const [filterMode, setFilterMode] = useState<'ALL' | 'MISSING' | 'VERIFIED'>('ALL');
+  const [filterMode, setFilterMode] = useState<'ALL' | 'MISSING' | 'ATTACHED'>('ALL');
 
   // Compute active tax regime using calculateTax
   const activeRegime = useMemo(() => {
@@ -103,11 +104,11 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       employer: incomeProfile.employerName || 'Direct Upload',
       financialYear: 'FY 2025-26',
       uploadTime: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-      status: 'Verified',
-      confidence: 99
+      status: 'Attached',
+      confidence: 0
     });
 
-    setToastMessage(`✨ Uploaded ${fileCustomName} to Vault! Verified under ${item?.title || 'Checklist'}.`);
+    setToastMessage(`Added ${fileCustomName} to your vault under ${item?.title || 'Checklist'}.`);
     setTimeout(() => setToastMessage(null), 3000);
 
     e.target.value = '';
@@ -151,7 +152,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 203 of IT Act',
       description: 'Official employer certificate detailing gross salary, HRA exemptions, and TDS deducted.',
       isRequired: (incomeProfile.grossSalary || 0) > 0,
-      isVerified: form16Matched || uploadedFiles.length > 0,
+      isAttached: form16Matched || uploadedFiles.length > 0,
       matchedFileName: getMatchingFileName(['form 16', 'form16', 'salary', 'w2', 'payslip']) || (uploadedFiles.length > 0 ? uploadedFiles[0]?.name : undefined),
       claimAmount: incomeProfile.grossSalary,
       recommendation: 'Required to auto-populate salary breakdown and verify TDS tax credits.',
@@ -168,14 +169,14 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 10(13A)',
       description: 'Monthly rent paid receipts. Landlord PAN required if annual rent exceeds ₹1,00,000.',
       isRequired: !isNewRegime && hraClaim > 0,
-      isVerified: rentMatched,
+      isAttached: rentMatched,
       matchedFileName: getMatchingFileName(['rent', 'receipt', 'lease', 'tenant', 'landlord', 'hra']),
       claimAmount: hraClaim,
       notApplicableReason: isNewRegime ? 'Optional in New Regime' : hraClaim === 0 ? 'No HRA claim made' : undefined,
       recommendation: isNewRegime
         ? 'Optional backup for your records. Standard deduction applies automatically.'
         : rentMatched 
-        ? 'Rent receipts verified in vault.' 
+        ? 'Rent receipts attached in vault.' 
         : 'Upload rent receipts to support your HRA claim.',
       defaultKeywords: ['rent', 'receipt', 'lease', 'tenant', 'landlord', 'hra']
     });
@@ -190,14 +191,14 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 80D',
       description: 'Premium payment receipt for self, family, or senior citizen parents health insurance.',
       isRequired: !isNewRegime && sec80DClaim > 0,
-      isVerified: healthMatched,
+      isAttached: healthMatched,
       matchedFileName: getMatchingFileName(['80d', 'health', 'medical', 'insurance', 'mediclaim']),
       claimAmount: sec80DClaim,
       notApplicableReason: isNewRegime ? 'Optional in New Regime' : sec80DClaim === 0 ? 'No 80D claim made' : undefined,
       recommendation: isNewRegime
         ? 'Optional insurance receipt storage.'
         : healthMatched 
-        ? '80D receipt verified in vault.' 
+        ? '80D receipt attached in vault.' 
         : 'Keep insurance premium payment receipt in vault to support your claim.',
       defaultKeywords: ['80d', 'health', 'medical', 'insurance', 'mediclaim']
     });
@@ -212,7 +213,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 80C',
       description: 'ELSS mutual fund statement, PPF passbook, LIC premium receipt, or school tuition fee receipt.',
       isRequired: !isNewRegime && sec80CClaim > 0,
-      isVerified: sec80CMatched,
+      isAttached: sec80CMatched,
       matchedFileName: getMatchingFileName(['80c', 'elss', 'ppf', 'lic', 'mutual', 'investment', 'tuition']),
       claimAmount: sec80CClaim,
       notApplicableReason: isNewRegime ? 'Optional in New Regime' : sec80CClaim === 0 ? 'No 80C claim made' : undefined,
@@ -234,14 +235,14 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 80CCD(1B)',
       description: 'Annual transaction statement or receipt showing PRAN contribution up to ₹50,000.',
       isRequired: !isNewRegime && npsClaim > 0,
-      isVerified: npsMatched,
+      isAttached: npsMatched,
       matchedFileName: getMatchingFileName(['nps', '80ccd', 'pension', 'pran']),
       claimAmount: npsClaim,
       notApplicableReason: isNewRegime ? 'Optional in New Regime' : npsClaim === 0 ? 'No NPS claim made' : undefined,
       recommendation: isNewRegime
         ? 'Optional pension statement storage.'
         : npsMatched 
-        ? 'NPS PRAN statement verified.' 
+        ? 'NPS PRAN statement attached.' 
         : 'Upload NPS contribution receipt to justify extra ₹50k deduction.',
       defaultKeywords: ['nps', '80ccd', 'pension', 'pran']
     });
@@ -256,14 +257,14 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 24(b)',
       description: 'Provisional or final home loan interest certificate issued by lending bank.',
       isRequired: !isNewRegime && sec24bClaim > 0,
-      isVerified: homeMatched,
+      isAttached: homeMatched,
       matchedFileName: getMatchingFileName(['24b', 'home loan', 'housing', 'mortgage', 'interest']),
       claimAmount: sec24bClaim,
       notApplicableReason: isNewRegime ? 'Optional in New Regime' : sec24bClaim === 0 ? 'No home loan interest claimed' : undefined,
       recommendation: isNewRegime
         ? 'Optional housing loan document storage.'
         : homeMatched 
-        ? 'Bank interest certificate verified.' 
+        ? 'Bank interest certificate attached.' 
         : 'Upload bank interest statement to substantiate home loan deduction.',
       defaultKeywords: ['24b', 'home loan', 'housing', 'mortgage', 'interest']
     });
@@ -277,11 +278,11 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       sectionRef: 'Sec 203AA',
       description: 'Official Income Tax Department tax credit ledger summarizing TDS, TCS, and advance tax payments.',
       isRequired: false,
-      isVerified: aisMatched,
+      isAttached: aisMatched,
       matchedFileName: getMatchingFileName(['26as', 'ais', 'tis', 'tax credit']),
-      recommendation: aisMatched 
-        ? 'Matched against official AIS records.' 
-        : 'Recommended: Download AIS from e-filing portal to ensure zero TDS mismatches.',
+      recommendation: aisMatched
+        ? 'Statement attached for your records. TaxSense does not read AIS/26AS -- compare the TDS figure against your Form 16 on the e-filing portal yourself.'
+        : 'Recommended: Download AIS from the e-filing portal and compare its TDS total with your Form 16 before filing.',
       defaultKeywords: ['26as', 'ais', 'tis', 'tax credit']
     });
 
@@ -289,27 +290,27 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
   }, [uploadedFiles, incomeProfile, confirmedDeductions, activeRegime]);
 
   const requiredItems = useMemo(() => checklistItems.filter(i => i.isRequired), [checklistItems]);
-  const verifiedRequiredItems = useMemo(() => requiredItems.filter(i => i.isVerified), [requiredItems]);
+  const attachedRequiredItems = useMemo(() => requiredItems.filter(i => i.isAttached), [requiredItems]);
   
   const completenessScore = useMemo(() => {
     if (requiredItems.length === 0) return 100;
-    return Math.round((verifiedRequiredItems.length / requiredItems.length) * 100);
-  }, [requiredItems, verifiedRequiredItems]);
+    return Math.round((attachedRequiredItems.length / requiredItems.length) * 100);
+  }, [requiredItems, attachedRequiredItems]);
 
   const filteredItems = useMemo(() => {
-    if (filterMode === 'MISSING') return checklistItems.filter(i => i.isRequired && !i.isVerified);
-    if (filterMode === 'VERIFIED') return checklistItems.filter(i => i.isVerified);
+    if (filterMode === 'MISSING') return checklistItems.filter(i => i.isRequired && !i.isAttached);
+    if (filterMode === 'ATTACHED') return checklistItems.filter(i => i.isAttached);
     return checklistItems;
   }, [checklistItems, filterMode]);
 
-  const missingCount = checklistItems.filter(i => i.isRequired && !i.isVerified).length;
+  const missingCount = checklistItems.filter(i => i.isRequired && !i.isAttached).length;
 
   // Progressive Compact Items Logic (Saves 70% vertical space!)
   const displayedItems = useMemo(() => {
     if (!isCollapsed) return filteredItems;
     
     // When collapsed: show actionable missing items first
-    const missingActionItems = filteredItems.filter(i => i.isRequired && !i.isVerified);
+    const missingActionItems = filteredItems.filter(i => i.isRequired && !i.isAttached);
     if (missingActionItems.length > 0) {
       return missingActionItems;
     }
@@ -360,7 +361,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Evaluates required document proof for {activeRegime} Tax Regime.
+              Tracks which proofs are attached for the {activeRegime} Tax Regime. Matching is by filename; contents are not validated.
             </p>
           </div>
         </div>
@@ -380,7 +381,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
                   ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' 
                   : 'bg-red-500/10 text-red-500 border border-red-500/20'
               }`}>
-                {completenessScore >= 80 ? 'Ready to File' : completenessScore >= 50 ? 'Moderate' : 'Action Needed'}
+                {completenessScore >= 80 ? 'Proofs Attached' : completenessScore >= 50 ? 'Partially Attached' : 'Proofs Missing'}
               </span>
             </div>
           </div>
@@ -390,7 +391,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
       {/* Filter Tabs & Progressive Toggle Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200/60 dark:border-white/[0.04] pt-3">
         <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900/60 p-1 rounded-xl border border-slate-200/60 dark:border-white/[0.03]">
-          {(['ALL', 'MISSING', 'VERIFIED'] as const).map((mode) => (
+          {(['ALL', 'MISSING', 'ATTACHED'] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => {
@@ -403,7 +404,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
                   : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
               }`}
             >
-              {mode === 'ALL' ? `All (${checklistItems.length})` : mode === 'MISSING' ? `Missing (${checklistItems.filter(i => i.isRequired && !i.isVerified).length})` : `Verified (${checklistItems.filter(i => i.isVerified).length})`}
+              {mode === 'ALL' ? `All (${checklistItems.length})` : mode === 'MISSING' ? `Missing (${checklistItems.filter(i => i.isRequired && !i.isAttached).length})` : `Attached (${checklistItems.filter(i => i.isAttached).length})`}
             </button>
           ))}
         </div>
@@ -427,7 +428,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               className={`p-3.5 rounded-2xl border transition-all duration-200 ${
-                item.isVerified
+                item.isAttached
                   ? 'bg-emerald-500/[0.02] dark:bg-emerald-500/[0.03] border-emerald-500/20'
                   : item.isRequired
                   ? 'bg-amber-500/[0.02] dark:bg-amber-500/[0.03] border-amber-500/20 hover:border-amber-500/40'
@@ -437,7 +438,7 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    {item.isVerified ? (
+                    {item.isAttached ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                     ) : item.isRequired ? (
                       <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
@@ -475,10 +476,10 @@ export const SmartDocumentChecklist: React.FC<SmartDocumentChecklistProps> = ({
                     </div>
                   )}
 
-                  {item.isVerified ? (
+                  {item.isAttached ? (
                     <div className="flex items-center gap-2">
                       <span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl text-[10.5px] font-bold uppercase tracking-wider flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Verified
+                        <CheckCircle2 className="w-3 h-3" /> Attached
                       </span>
                       <button
                         type="button"

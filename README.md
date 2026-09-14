@@ -211,7 +211,6 @@ TaxSense follows a calm, AI-first design language inspired by **Linear**, **Verc
 | **State Management** | Zustand 5.0 (with LocalStorage Hydration) |
 | **AI Infrastructure** | Google Gemini API (`@google/genai` v2) |
 | **Backend API** | Express.js 4.0 (Node.js) |
-| **Database (Optional)** | Supabase Cloud DB |
 | **PDF Engine** | `jsPDF`, `html2canvas` |
 
 ---
@@ -230,7 +229,7 @@ src/
  │    ├── security/          # Security Inspector Modal
  │    ├── sidebar/           # Responsive Navigation Sidebar
  │    └── vault/             # Document Vault components
- ├── lib/                    # Supabase client & API helpers
+ ├── lib/                    # Shared helpers (tax engine)
  ├── store/                  # Zustand global state persistence
  ├── types.ts                # TypeScript interfaces & tax schemas
  ├── utils/                  # CBDT calculation rules & audio pool
@@ -281,8 +280,6 @@ cp .env.example .env
 Add your Gemini API Key in `.env`:
 ```env
 GEMINI_API_KEY="your-google-gemini-api-key"
-VITE_SUPABASE_URL="https://your-supabase-project.supabase.co"
-VITE_SUPABASE_ANON_KEY="your-supabase-anon-key"
 PORT=3000
 ```
 
@@ -306,8 +303,6 @@ npm start
 | :--- | :---: | :--- |
 | `GEMINI_API_KEY` | **Yes** | Google Gemini API Key from Google AI Studio |
 | `VITE_GOOGLE_CLIENT_ID` | Optional | Google OAuth Client ID, required only if you want "Continue with Google" (guest mode works without it) |
-| `VITE_SUPABASE_URL` | Optional | Supabase Endpoint URL — the app runs fully without Supabase configured; this is unused, dormant infrastructure for now |
-| `VITE_SUPABASE_ANON_KEY` | Optional | Supabase Anonymous Client API Key (see above) |
 | `PORT` | Optional | Express server port (Default: `3000`) |
 | `APP_URL` | Optional | Application URL (Default: `http://localhost:3000`) |
 

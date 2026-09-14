@@ -51,7 +51,7 @@ export const LegalSection: React.FC = React.memo(() => {
           </div>
           <div className="space-y-1.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">If you sign in with Google</h3>
-            <p>Signing in is optional and only adds cross-device sync of the same workspace data described above -- it does not add any new category of data collection. We never access your Drive or Gmail, and your data is never used to train an AI model.</p>
+            <p>Signing in is optional and only keeps the same workspace data described above saved in this browser (instead of clearing it after 30 minutes) -- it does not add any new category of data collection, and nothing is uploaded to our servers. We never access your Drive or Gmail, and your data is never used to train an AI model.</p>
           </div>
           <div className="space-y-1.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">What we don't do</h3>
