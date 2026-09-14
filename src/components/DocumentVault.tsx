@@ -53,6 +53,21 @@ let activeProcessingInterval: NodeJS.Timeout | null = null;
 // store once its pending fetches finally resolve.
 let processingGeneration = 0;
 
+async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
+  try {
+    const text = await res.text();
+    if (!text) return `${fallback} (HTTP ${res.status})`;
+    try {
+      const json = JSON.parse(text);
+      return json.error || json.message || `${fallback} (HTTP ${res.status})`;
+    } catch {
+      return text.length < 120 ? text : `${fallback} (HTTP ${res.status})`;
+    }
+  } catch {
+    return `${fallback} (HTTP ${res.status})`;
+  }
+}
+
 export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtractedFields }: DocumentVaultProps) {
   const incomeProfile = useTaxStore((state) => state.incomeProfile);
   const confirmedDeductions = useTaxStore((state) => state.confirmedDeductions);
@@ -255,8 +270,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
       body: JSON.stringify({ text }),
     }).then(async res => {
       if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || 'Structured extraction failed.');
+        const errMsg = await extractErrorMessage(res, 'Structured extraction failed');
+        throw new Error(errMsg);
       }
       return res.json();
     });
@@ -357,8 +372,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         const response = await responsePromise;
         if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
         if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.error || 'Failed to extract PDF content.');
+          const errMsg = await extractErrorMessage(response, 'Failed to extract PDF content');
+          throw new Error(errMsg);
         }
 
         const result = await response.json();
@@ -378,8 +393,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         });
 
         if (!extractResponse.ok) {
-          const errData = await extractResponse.json().catch(() => ({}));
-          throw new Error(errData.error || 'Failed to extract structured parameters.');
+          const errMsg = await extractErrorMessage(extractResponse, 'Failed to extract structured parameters');
+          throw new Error(errMsg);
         }
 
         const extractResult = await extractResponse.json();
@@ -456,8 +471,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
       });
 
       if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || 'Failed to extract structured parameters.');
+        const errMsg = await extractErrorMessage(response, 'Failed to extract structured parameters');
+        throw new Error(errMsg);
       }
 
       const result = await response.json();

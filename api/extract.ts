@@ -75,8 +75,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       correlationId,
     });
 
-    const jsonStr = response.text?.trim() || '{}';
-    const parsedData = JSON.parse(jsonStr);
+    let jsonStr = response.text?.trim() || '{}';
+    if (jsonStr.startsWith('```')) {
+      jsonStr = jsonStr.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+    }
+    let parsedData: any = {};
+    try {
+      parsedData = JSON.parse(jsonStr);
+    } catch (parseErr) {
+      console.error('[Extract] Failed to parse JSON from response:', jsonStr);
+      throw new Error('Gemini returned a response that could not be parsed as JSON.');
+    }
 
     // Sanitize numerical inputs to ensure no negatives or NaN
     const safeData: any = { ...parsedData };
