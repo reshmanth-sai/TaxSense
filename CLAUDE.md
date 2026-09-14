@@ -26,6 +26,7 @@ style.terseness: moderate
 style.emoji_use: rare
 expertise.html: novice
 expertise.typescript: novice
+expertise.javascript: novice
 expertise.json: novice
 expertise.markdown: novice
 </ijfw-profile>
