@@ -141,9 +141,9 @@ export const GenerateReturnCard: React.FC<GenerateReturnCardProps> = React.memo(
       <div className="bg-emerald-500/10 dark:bg-emerald-500/[0.04] border border-emerald-500/20 dark:border-emerald-500/10 rounded-2xl p-4.5 flex items-start gap-3.5 text-left">
         <Lock className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Zero-Knowledge Sandbox Guard</span>
+          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Local-Only Sandbox</span>
           <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            Your figures stay in this browser and are never written to our database. Generated filing logs remain heavily encrypted. Nothing is submitted automatically without your signature.
+            Your figures stay in this browser and are never written to our database. Nothing is submitted automatically without your signature.
           </p>
         </div>
       </div>

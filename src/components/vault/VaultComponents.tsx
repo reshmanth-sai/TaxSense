@@ -801,7 +801,7 @@ export const BreathingIllustration: React.FC<{ active: boolean }> = ({ active })
 // ----------------------------------------------------
 export const ReassuranceText: React.FC = () => {
   const messages = [
-    "Your document remains encrypted throughout processing.",
+    "Your document is discarded after processing — nothing is stored on our servers.",
     "Nothing is permanently stored in our databases.",
     "Extracting text from your document...",
     "Applying AY 2026-27 slabs to your figures..."

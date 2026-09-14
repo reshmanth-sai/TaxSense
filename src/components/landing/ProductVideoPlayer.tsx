@@ -816,7 +816,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
                     <div className="space-y-2 relative z-10">
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Your Filing Workspace is Ready</h3>
                       <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto font-medium leading-relaxed">
-                        All calculations, compliance checks and encryption have been completed successfully.
+                        All calculations and compliance checks have been completed successfully.
                       </p>
                     </div>
 

@@ -365,12 +365,6 @@ export default function App() {
   const ingestionState = useTaxStore((state) => state.ingestionState);
   const uploadedFiles = useTaxStore((state) => state.uploadedFiles) || [];
 
-  // Invariant Assertion Check: Ledger files count must match timeline log count
-  const timelineLogsCount = uploadedFiles.length;
-  if (uploadedFiles.length !== timelineLogsCount) {
-    console.error(`Assertion failed: State contradiction. Ledger files: ${uploadedFiles.length}, timeline log count: ${timelineLogsCount}`);
-  }
-
   const [showStickyContinue, setShowStickyContinue] = useState(false);
   const mainContentRef = useRef<HTMLDivElement>(null);
 
@@ -807,7 +801,7 @@ export default function App() {
           <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
             <Calculator className="h-5 w-5 text-emerald-400 animate-pulse" />
           </div>
-          <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest">Encrypting Connection...</span>
+          <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest">Loading your workspace...</span>
         </div>
       </div>
     );
