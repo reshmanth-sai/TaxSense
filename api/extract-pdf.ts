@@ -60,11 +60,11 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
     });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: [
         {
           inlineData: {

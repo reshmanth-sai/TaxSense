@@ -7,3 +7,6 @@ coverage/
 .env*
 !.env.example
 .superpowers/
+AGENTS.md
+CLAUDE.md
+

@@ -50,7 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       const responseStream = await generateContentStreamWithLogging({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         contents,
         config: {
           systemInstruction: systemPrompt,
