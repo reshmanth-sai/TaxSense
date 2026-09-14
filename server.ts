@@ -2,7 +2,6 @@ import compression from 'compression';
 import express from 'express';
 import path from 'path';
 import healthHandler from './api/health.js';
-import financeNewsHandler from './api/finance-news.js';
 import extractPdfHandler from './api/extract-pdf.js';
 import extractHandler from './api/extract.js';
 import chatHandler from './api/chat.js';
@@ -30,7 +29,6 @@ app.set('trust proxy', 1);
 // too. The `as any` casts are the same Vercel-handler/Express-handler param
 // mismatch api/extract-pdf.ts already works around locally.
 app.get('/api/health', healthHandler as any);
-app.get('/api/finance-news', financeNewsHandler as any);
 app.post('/api/extract-pdf', extractPdfHandler as any);
 app.post('/api/extract', extractHandler as any);
 app.post('/api/chat', chatHandler as any);

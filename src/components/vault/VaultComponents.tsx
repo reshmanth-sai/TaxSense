@@ -173,7 +173,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
           <div className="space-y-2">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Drag & Drop your Form 16</h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed font-medium">
-              Supports PDF, JPG and PNG • Maximum size: 20 MB<br />
+              Supports PDF, JPG and PNG • Maximum size: 3 MB<br />
               Average processing time: 15–30 seconds
             </p>
           </div>

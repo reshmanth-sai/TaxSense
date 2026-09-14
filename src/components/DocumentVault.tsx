@@ -38,6 +38,9 @@ import {
 import { DocumentPreviewModal } from './dashboard/DashboardComponents';
 import { SmartDocumentChecklist } from './SmartDocumentChecklist';
 
+const MAX_UPLOAD_MB = 3;
+const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
+
 interface DocumentVaultProps {
   onFileUpload: (fileText: string) => void;
   setActiveStep?: (step: number) => void;
@@ -329,6 +332,14 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
     const sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
     setActiveFileName(file.name);
     setActiveFileSize(sizeStr);
+
+    // Vercel serverless functions reject request bodies over 4.5 MB at the edge
+    // (413, before our handler runs), and base64 inflates the file by ~33%, so
+    // the largest document that can actually reach /api/extract-pdf is ~3.3 MB.
+    if (isDocument && file.size > MAX_UPLOAD_BYTES) {
+      setErrorMessage(`This file is ${(file.size / (1024 * 1024)).toFixed(1)} MB. Maximum upload size is ${MAX_UPLOAD_MB} MB — try a smaller scan, or paste the text instead.`);
+      return;
+    }
 
     if (isDocument) {
       try {

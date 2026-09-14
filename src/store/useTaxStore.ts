@@ -3,7 +3,11 @@ import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { useState, useEffect } from 'react';
 import { TaxData } from '../types';
 
-const secureStorage: StateStorage = {
+// Plain localStorage, gated by the incognito flag. Nothing here is encrypted --
+// anyone with DevTools on this machine can read it -- which is why the raw
+// Form 16 text is deliberately NOT in `partialize` below: only the extracted
+// figures survive a reload, never the source document.
+const sessionCacheStorage: StateStorage = {
   getItem: (name) => {
     if (typeof window === 'undefined') return null;
     if (sessionStorage.getItem('taxsense_incognito') === 'true') {
@@ -636,9 +640,15 @@ export const useTaxStore = create<TaxStoreState>()(
     }),
     {
       name: 'taxsense_session_cache',
-      storage: createJSONStorage(() => secureStorage),
-      version: 1,
+      storage: createJSONStorage(() => sessionCacheStorage),
+      version: 2,
       migrate: (persistedState: any, version: number) => {
+        // v1 persisted the raw Form 16 text; scrub it from caches written
+        // before that stopped.
+        if (version < 2 && persistedState && typeof persistedState === 'object') {
+          const { rawForm16Text: _dropped, ...rest } = persistedState;
+          return rest;
+        }
         return persistedState;
       },
       partialize: (state) => ({
@@ -654,7 +664,6 @@ export const useTaxStore = create<TaxStoreState>()(
         uploadedFiles: state.uploadedFiles,
         ingestionState: state.ingestionState,
         chatHistory: state.chatHistory,
-        rawForm16Text: state.rawForm16Text,
         user: state.user,
         authMode: state.authMode,
       }),

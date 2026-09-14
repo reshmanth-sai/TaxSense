@@ -3,6 +3,10 @@ import { generateContentWithRetryAndFallback, mapError } from '../services/ai/go
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
+// A real Form 16 is 5-15k characters; this is generous headroom, not a
+// budget for arbitrary prompt bodies against the Gemini quota.
+const MAX_TEXT_CHARS = 100_000;
+
 function sendResponse(res: any, statusCode: number, data: any) {
   try {
     if (typeof res.status === 'function' && typeof res.json === 'function') {
@@ -33,6 +37,9 @@ export default async function handler(req: any, res: any) {
     const { text } = req.body || {};
     if (!text || typeof text !== 'string') {
       return sendResponse(res, 400, { error: 'Text content from Form 16 is required.' });
+    }
+    if (text.length > MAX_TEXT_CHARS) {
+      return sendResponse(res, 413, { error: `Form 16 text is too long (max ${MAX_TEXT_CHARS.toLocaleString()} characters).` });
     }
 
     const response = await generateContentWithRetryAndFallback({

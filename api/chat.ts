@@ -4,6 +4,11 @@ import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBui
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
+// Bounds on what a single request may send to Gemini. The client trims its
+// own history, so hitting these means a caller is bypassing the UI.
+const MAX_MESSAGES = 30;
+const MAX_MESSAGE_CHARS = 4_000;
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const requestId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
   const correlationId = (req.headers['x-correlation-id'] as string) || requestId;
@@ -29,6 +34,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       res.write(`data: ${JSON.stringify({ error: 'Conversation messages array is required.' })}\n\n`);
       res.end();
       return;
+    }
+    if (messages.length > MAX_MESSAGES) {
+      res.write(`data: ${JSON.stringify({ error: `Conversation too long (max ${MAX_MESSAGES} messages).` })}\n\n`);
+      res.end();
+      return;
+    }
+    for (const msg of messages) {
+      if (!msg || typeof msg.content !== 'string' || msg.content.length > MAX_MESSAGE_CHARS) {
+        res.write(`data: ${JSON.stringify({ error: `Each message must be a string of at most ${MAX_MESSAGE_CHARS} characters.` })}\n\n`);
+        res.end();
+        return;
+      }
     }
 
     // See services/ai/promptBuilder.ts: the system prompt is built here from

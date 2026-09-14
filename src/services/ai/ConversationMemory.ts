@@ -4,15 +4,22 @@ export class ConversationMemory {
   /**
    * Formats the local chat history into the structure expected by the Gemini API
    */
+  // Must stay <= MAX_MESSAGES in api/chat.ts, which rejects longer payloads.
+  // Older turns are dropped from the front; the system prompt carries the
+  // user's tax context separately, so nothing load-bearing is lost.
+  static readonly MAX_HISTORY = 30;
+
   static formatForAPI(history: ChatMessageItem[]): Array<{ role: string; content: string }> {
+    const recent = history.slice(-ConversationMemory.MAX_HISTORY);
+
     // Filter out the initial welcome message or any leading assistant messages
     // to ensure the conversation history sent to Gemini starts with a user turn.
     let startIndex = 0;
-    while (startIndex < history.length && history[startIndex].role === 'assistant') {
+    while (startIndex < recent.length && recent[startIndex].role === 'assistant') {
       startIndex++;
     }
 
-    return history.slice(startIndex).map(msg => ({
+    return recent.slice(startIndex).map(msg => ({
       role: msg.role === 'assistant' ? 'assistant' : 'user',
       content: msg.content
     }));

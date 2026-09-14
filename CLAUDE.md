@@ -4,7 +4,7 @@ Stack: React / TypeScript
 
 ## Key Directories
 - `src/`
-- `lib/`
+- `services/` (server-side Gemini client, rate limiting, prompt builder)
 - `api/`
 
 ## Config Files
@@ -22,7 +22,7 @@ Project memory at .ijfw/memory/. Call `ijfw_memory_prelude` for full context.
 Your portable working profile (derived from what you've said/edited; style + expertise only):
 style.formality: casual
 style.energy: measured
-style.terseness: moderate
+style.terseness: expansive
 style.emoji_use: rare
 expertise.html: novice
 expertise.typescript: novice

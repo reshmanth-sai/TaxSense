@@ -21,13 +21,10 @@ export class GoogleAuthService {
 
       // Check if script element or global google namespace already exists
       if (this.isScriptLoaded || document.getElementById('google-gsi-client') || (window as any).google?.accounts?.oauth2) {
-        console.log('[GIS] Script already present or SDK loaded.');
         this.isScriptLoaded = true;
         resolve();
         return;
       }
-
-      console.log('[GIS] Script Injected');
       const script = document.createElement('script');
       script.id = 'google-gsi-client';
       script.src = 'https://accounts.google.com/gsi/client';
@@ -35,7 +32,6 @@ export class GoogleAuthService {
       script.defer = true;
       
       script.onload = () => {
-        console.log('[GIS] Script Loaded');
         
         // Wait until window.google.accounts.oauth2 namespace is fully populated
         let checks = 0;
@@ -43,7 +39,6 @@ export class GoogleAuthService {
           checks++;
           if ((window as any).google?.accounts?.oauth2) {
             clearInterval(checkInterval);
-            console.log('[GIS] Google Object Ready');
             this.isScriptLoaded = true;
             resolve();
           } else if (checks > 50) { // 5.0 seconds timeout
@@ -83,16 +78,14 @@ export class GoogleAuthService {
         }
 
         if (!this.tokenClient) {
-          console.log('[GIS] Initializing Token Client');
           this.tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: clientId,
             scope: 'email profile',
             callback: async (tokenResponse: any) => {
-              console.log('[GIS] Token response received:', tokenResponse);
               
               // Check for user cancellation or errors
               if (tokenResponse.error) {
-                console.error('[GIS] OAuth Error:', tokenResponse.error);
+                console.error('[GIS] OAuth error:', tokenResponse.error);
                 let errMsg = tokenResponse.error_description || tokenResponse.error;
                 if (tokenResponse.error === 'access_denied') {
                   errMsg = 'popup_closed_by_user';
@@ -105,14 +98,12 @@ export class GoogleAuthService {
 
               if (tokenResponse.access_token) {
                 try {
-                  console.log('[GIS] Fetching userinfo from Google API');
                   const userInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokenResponse.access_token}`);
                   if (!userInfoResponse.ok) {
                     throw new Error('Failed to retrieve user profile information.');
                   }
                   
                   const userInfo = await userInfoResponse.json();
-                  console.log('[GIS] Userinfo fetched successfully:', userInfo);
 
                   const profile = {
                     uid: userInfo.sub,
@@ -140,8 +131,6 @@ export class GoogleAuthService {
             }
           });
         }
-
-        console.log('[GIS] Triggering popup requestAccessToken');
         this.tokenClient.requestAccessToken();
       } catch (err) {
         console.error('[GIS] Exception during signIn:', err);
@@ -157,7 +146,6 @@ export class GoogleAuthService {
     if (typeof window !== 'undefined' && (window as any).google?.accounts?.oauth2) {
       try {
         // Clear active tokens if possible, or disable automatic selections
-        console.log('[GIS] Revoked session');
       } catch (e) {
         console.error('[GIS] Error revoking session:', e);
       }

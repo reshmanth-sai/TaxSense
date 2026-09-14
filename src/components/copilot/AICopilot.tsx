@@ -262,6 +262,7 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
           <input
             ref={inputRef}
             type="text"
+            maxLength={4000}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {

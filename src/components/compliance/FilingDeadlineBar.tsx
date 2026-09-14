@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { FILING_DEADLINES } from '../../config';
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 import { 
   Calendar, 
   Clock, 
@@ -36,8 +40,9 @@ export const FilingDeadlineBar: React.FC<FilingDeadlineBarProps> = ({ className 
     return () => clearInterval(timer);
   }, []);
 
-  // Primary ITR-1/ITR-2 Filing Deadline: July 31, 2026 23:59:59
-  const itrDeadline = useMemo(() => new Date('2026-07-31T23:59:59'), []);
+  // Primary ITR-1/ITR-2 filing deadline -- single source of truth in config.ts
+  // so this bar can never disagree with the landing-page DeadlineBanner.
+  const itrDeadline = FILING_DEADLINES.dueDate;
 
   // Compute countdown time remaining
   const countdown = useMemo(() => {
@@ -58,8 +63,8 @@ export const FilingDeadlineBar: React.FC<FilingDeadlineBarProps> = ({ className 
     {
       id: 'itr_due',
       title: 'ITR-1 / ITR-2 Income Tax Return Filing',
-      dueDateStr: 'July 31, 2026',
-      targetDate: new Date('2026-07-31T23:59:59'),
+      dueDateStr: formatDate(FILING_DEADLINES.dueDate),
+      targetDate: FILING_DEADLINES.dueDate,
       sectionRef: 'Sec 139(1)',
       description: 'Primary statutory due date for non-audit individual taxpayers to file return without penalty.',
       isPrimary: true
@@ -83,8 +88,8 @@ export const FilingDeadlineBar: React.FC<FilingDeadlineBarProps> = ({ className 
     {
       id: 'revised_itr',
       title: 'Belated / Revised Return Deadline',
-      dueDateStr: 'December 31, 2026',
-      targetDate: new Date('2026-12-31T23:59:59'),
+      dueDateStr: formatDate(FILING_DEADLINES.belatedCutoff),
+      targetDate: FILING_DEADLINES.belatedCutoff,
       sectionRef: 'Sec 139(4) / 139(5)',
       description: 'Final deadline to file a belated ITR or revise errors in your original filed return.'
     },
