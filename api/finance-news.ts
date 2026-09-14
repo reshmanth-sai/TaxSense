@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
 import { generateContentWithRetryAndFallback, mapError, logStructured } from '../services/ai/googleClient';
+import { enforceRateLimit, API_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
 // In-memory cache for news (warm lambdas will share this cache)
@@ -18,6 +19,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       res.status(405).json({ error: 'Method Not Allowed' });
       return;
     }
+
+    if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
 
     const now = Date.now();
     if (cachedNews && (now - lastNewsFetchTime < CACHE_DURATION_MS)) {

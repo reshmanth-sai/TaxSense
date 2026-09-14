@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
 import { generateContentWithRetryAndFallback, mapError } from '../services/ai/googleClient';
+import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -12,6 +13,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       res.status(405).json({ error: 'Method Not Allowed' });
       return;
     }
+
+    if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
+    if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
     const { text } = req.body;
     if (!text || typeof text !== 'string') {

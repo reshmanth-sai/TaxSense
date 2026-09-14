@@ -4,7 +4,6 @@ import { X, Send, Bot, User, Sparkles, ChevronDown, Plus, Copy, Check, RotateCcw
 import ReactMarkdown from 'react-markdown';
 import { useTaxStore } from '../../store/useTaxStore';
 import { ContextService } from '../../services/ai/ContextService';
-import { PromptBuilder } from '../../services/ai/PromptBuilder';
 import { StreamingService } from '../../services/ai/StreamingService';
 import { ConversationMemory } from '../../services/ai/ConversationMemory';
 
@@ -62,11 +61,10 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
 
     try {
       const context = ContextService.getCurrentContext();
-      const systemPrompt = PromptBuilder.buildSystemPrompt(context);
-      
+
       const payload = {
         messages: ConversationMemory.formatForAPI([...historySnapshot, { role: 'user', content: userMsg }]),
-        systemPrompt
+        context
       };
 
       await StreamingService.streamResponse(

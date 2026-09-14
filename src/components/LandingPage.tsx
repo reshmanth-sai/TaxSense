@@ -42,7 +42,7 @@ const LazySection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div ref={ref} className="w-full">
-      {true || isIntersecting ? children : <div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}
+      {isIntersecting ? children : <div className="min-h-[70vh] bg-transparent opacity-0" aria-hidden="true" />}
     </div>
   );
 };

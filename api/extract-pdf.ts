@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Multer from 'multer';
 import { getAI, mapError, logStructured } from '../services/ai/googleClient';
+import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
 const upload = Multer({
@@ -36,6 +37,9 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
+    if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
+    if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
+
     await runMiddleware(req, res, upload.single('file'));
 
     if (!req.file) {
@@ -56,11 +60,11 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
     });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: [
         {
           inlineData: {
