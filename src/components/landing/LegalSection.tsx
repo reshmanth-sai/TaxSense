@@ -100,7 +100,7 @@ export const LegalSection: React.FC = React.memo(() => {
             Signing in is optional and only keeps the same workspace data described above saved in this browser (instead of clearing it after 30 minutes) -- it does not add any new category of data collection, and nothing is uploaded to our servers. We never access your Drive or Gmail, and your data is never used to train an AI model.
           </LegalCard>
           <LegalCard icon={<EyeOff className="w-5 h-5" />} title="What we don't do" tone="emerald" delay={0.25}>
-            We run no analytics or advertising trackers on this site, we don't sell or share your data with anyone beyond the Gemini extraction request above, and we never ask for your e-filing portal login or OTP.
+            We run no advertising trackers and set no cookies. The only measurement is Vercel's cookieless page-view counter, which records that a page was visited — never who visited, what you typed, or any figure from your return. We don't sell or share your data with anyone beyond the Gemini extraction request above, and we never ask for your e-filing portal login or OTP.
           </LegalCard>
           <LegalCard icon={<Github className="w-5 h-5" />} title="Questions" tone="purple" delay={0.3}>
             TaxSense is open source. Read the code or open an issue at <a href="https://github.com/reshmanth-sai/TaxSense" target="_blank" rel="noopener noreferrer" className={linkClass}>github.com/reshmanth-sai/TaxSense</a>.

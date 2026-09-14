@@ -293,15 +293,15 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         </div>
 
         {/* 5-Column Grid Filing Journey Timeline Bar (Zero Scrollbars) */}
-        <div className="p-2.5 sm:p-3 bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.08] rounded-2xl grid grid-cols-5 gap-1 sm:gap-2 text-[11px] sm:text-xs font-mono relative shadow-xs">
+        <div className="p-2.5 sm:p-3 bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.08] rounded-2xl grid grid-cols-1 sm:grid-cols-5 gap-1 sm:gap-2 text-[11px] sm:text-xs font-mono relative shadow-xs">
           {journeyDetails.map((item) => (
             <div
               key={item.stage}
-              className="relative group cursor-pointer col-span-1 flex items-center justify-center"
+              className="relative group cursor-pointer col-span-1 flex items-center justify-start sm:justify-center"
               onMouseEnter={() => setHoveredJourneyStage(item.stage)}
               onMouseLeave={() => setHoveredJourneyStage(null)}
             >
-              <div className={`flex items-center gap-1 sm:gap-1.5 font-bold truncate px-1.5 py-0.5 rounded-lg transition-all duration-150 group-hover:ring-1 group-hover:ring-slate-300 dark:group-hover:ring-white/15 group-hover:bg-white dark:group-hover:bg-white/[0.06] ${
+              <div className={`w-full sm:w-auto flex items-center gap-1 sm:gap-1.5 font-bold truncate px-1.5 py-1 sm:py-0.5 rounded-lg transition-all duration-150 group-hover:ring-1 group-hover:ring-slate-300 dark:group-hover:ring-white/15 group-hover:bg-white dark:group-hover:bg-white/[0.06] ${
                 item.status === 'VERIFIED' ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10' :
                 item.status === 'COMPLETED' ? 'text-purple-700 dark:text-purple-400 bg-purple-500/10' :
                 item.status === 'PENDING' ? 'text-amber-700 dark:text-amber-400 bg-amber-500/10' : 'text-slate-600 dark:text-slate-400'
@@ -311,11 +311,12 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                  item.status === 'PENDING' ? <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" /> :
                  <span className="w-3 h-3 rounded-full border border-slate-500 flex items-center justify-center text-[8px] font-mono shrink-0">{item.stage}</span>}
                 <span className="truncate">{item.stage}. {item.name}</span>
+                <span className="sm:hidden ml-auto pl-3 font-sans font-normal text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[55%]">{item.details}</span>
               </div>
 
               {/* Hover Popover */}
               <AnimatePresence>
-                {hoveredJourneyStage === item.stage && (
+                {hoveredJourneyStage === item.stage && typeof window !== 'undefined' && window.matchMedia('(min-width: 640px)').matches && (
                   <motion.div
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -397,7 +398,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
 
         <button
           onClick={() => onOpenCommandPalette && onOpenCommandPalette()}
-          className="p-3 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/50 rounded-2xl transition-all duration-200 hover:-translate-y-0.5 text-left flex items-center gap-2.5 cursor-pointer group col-span-2 sm:col-span-1"
+          className="hidden sm:flex p-3 bg-blue-600/10 dark:bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/50 rounded-2xl transition-all duration-200 hover:-translate-y-0.5 text-left flex items-center gap-2.5 cursor-pointer group col-span-2 sm:col-span-1"
         >
           <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Command className="w-4 h-4" />
@@ -925,14 +926,14 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
       {/* 7. REFINED FOOTER STATUS                              */}
       {/* ---------------------------------------------------- */}
       <motion.div variants={itemVariants} className="pt-2 border-t border-slate-200/60 dark:border-white/[0.04] flex flex-wrap items-center justify-between text-[10px] text-slate-400 font-mono gap-2">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
           <span className="flex items-center gap-1 text-emerald-500 font-bold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {hasIncome ? '✔ Figures up to date' : '○ Waiting for your income figures'}
           </span>
-          <span>•</span>
+          <span className="hidden sm:inline">•</span>
           <span>✔ CBDT Rules: AY 2026-27 Active</span>
-          <span>•</span>
+          <span className="hidden sm:inline">•</span>
           <span>✔ Storage: this browser only, no server database</span>
         </div>
 

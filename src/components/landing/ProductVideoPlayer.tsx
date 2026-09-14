@@ -365,7 +365,7 @@ export const ProductVideoPlayer: React.FC<ProductVideoPlayerProps> = ({ onStartF
             <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
             <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
             <span className="ml-3 text-xs font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-medium">
-              <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> taxsense.in / demo
+              <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> taxsense-copilot.vercel.app / demo
             </span>
           </div>
 

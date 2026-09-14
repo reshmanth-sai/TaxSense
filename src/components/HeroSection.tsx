@@ -529,7 +529,7 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
       >
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:bg-[#10B981]/10 dark:border-[#10B981]/25 dark:text-[#34D399] text-2xs font-bold tracking-wider uppercase backdrop-blur-md shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>AI Tax Ingestion Platform • FY 2025–26 (AY 2026–27)</span>
+          <span className="hidden sm:inline">AI Tax Ingestion Platform • FY 2025–26 (AY 2026–27)</span><span className="sm:hidden">AY 2026–27 • AI Tax Platform</span>
         </div>
 
         {/* Type scale: H1=60 (src/index.css). Two lines at desktop width instead

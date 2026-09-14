@@ -9,6 +9,10 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        // jsPDF's optional .html() plugin dynamically imports html2canvas
+        // (47 kB gz). ExportService only uses the text/table API, so point
+        // the import at an empty module and keep it out of the build.
+        html2canvas: path.resolve(__dirname, 'src/lib/empty-module.ts'),
       },
     },
     build: {

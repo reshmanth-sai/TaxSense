@@ -29,6 +29,7 @@ import { useTaxStore, useTaxStoreHydrated, UserProfile } from './store/useTaxSto
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { pathForStep, stepForPath, HOME_PATH } from './routes/stepRoutes';
+import { NotFoundPage } from './components/NotFoundPage';
 import {
   DashboardCard,
   SectionHeader,
@@ -157,6 +158,7 @@ export default function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const isNotFound = location.pathname !== HOME_PATH && stepForPath(location.pathname) === null;
 
   // Single choke point for every "go to step N" call in the app. Most real
   // navigation call sites across App.tsx and its children funnel through
@@ -339,9 +341,8 @@ export default function App() {
     }
     const match = stepForPath(location.pathname);
     if (!match) {
-      // Unknown path -- there is no 404 screen in this app yet, so land
-      // on the landing page rather than showing a blank render.
-      navigate(HOME_PATH, { replace: true });
+      // Unknown path: rendered as a real not-found screen (see `isNotFound`
+      // in the render) instead of silently bouncing to the landing page.
       return;
     }
     if (match.activeStep >= 3 && authMode === null) {
@@ -811,6 +812,10 @@ export default function App() {
     return <LandingPage onStart={() => { navigateToStep(2); }} />;
   }
 
+  if (isNotFound) {
+    return <NotFoundPage onHome={() => navigate(HOME_PATH)} onDashboard={() => navigate(pathForStep(11))} />;
+  }
+
   return (
     <div id="taxsense-app" className="min-h-screen bg-gradient-to-b from-sky-100 via-slate-50 to-emerald-50 text-slate-900 dark:bg-[#020202] dark:from-transparent dark:via-transparent dark:to-transparent dark:text-slate-100 flex font-sans select-none antialiased relative overflow-hidden" style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
 
@@ -1044,7 +1049,7 @@ export default function App() {
                     </div>
                   </div>
 
-                  <main className={`flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-8 ${isPrivacyBlurred ? 'privacy-blur-active' : ''}`}>
+                  <main className={`flex-1 max-w-7xl w-full mx-auto p-6 pb-28 md:p-8 md:pb-28 space-y-8 ${isPrivacyBlurred ? 'privacy-blur-active' : ''}`}>
 
                     {/* Dialog Trigger: Extraction Confirmation */}
                     <AnimatePresence>
@@ -1230,7 +1235,7 @@ export default function App() {
                   </main>
 
                   {/* Unified Footer */}
-                  <footer className="border-t border-slate-200/50 dark:border-white/[0.04] bg-white/30 dark:bg-[#040608]/30 backdrop-blur-md py-4 px-8 mt-auto shrink-0 z-10 relative select-none">
+                  <footer className="border-t border-slate-200/50 dark:border-white/[0.04] bg-white/30 dark:bg-[#040608]/30 backdrop-blur-md py-4 pb-20 sm:pb-4 px-8 mt-auto shrink-0 z-10 relative select-none">
                     <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 dark:text-slate-450 font-sans">
                       <p className="font-mono uppercase tracking-wider text-[8.5px] font-bold text-center sm:text-left">
                         © 2026 TaxSense Inc. <span className="text-slate-300 dark:text-slate-700/60 mx-1.5">|</span> Built for Indian salaried employees under AY 2026-27 rules.
@@ -1271,7 +1276,7 @@ export default function App() {
                       }
                     }}
                     title="Open TaxSense AI Copilot"
-                    className="fixed right-6 bottom-6 z-40 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.4)] dark:shadow-[0_6px_25px_rgba(139,92,246,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 border border-purple-400/30 ring-2 ring-purple-500/20 font-sans"
+                    className="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-40 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.4)] dark:shadow-[0_6px_25px_rgba(139,92,246,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 border border-purple-400/30 ring-2 ring-purple-500/20 font-sans"
                   >
                     <Sparkles className="w-4 h-4 text-purple-200 animate-pulse shrink-0 group-hover:rotate-12 transition-transform duration-300" />
                     <span>

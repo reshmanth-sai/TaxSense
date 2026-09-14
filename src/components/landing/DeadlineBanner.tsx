@@ -141,7 +141,8 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
             ) : (
               <ShieldAlert className={`w-3.5 h-3.5 ${accent.text}`} />
             )}
-            <span>{headline}</span>
+            <span className="hidden sm:inline">{headline}</span>
+            <span className="sm:hidden">{phase === 'open' ? 'Due 31 Jul' : phase === 'belated' ? 'Due date passed' : 'Window closed'}</span>
           </span>
           <span className="hidden md:inline text-slate-300 dark:text-slate-700">|</span>
           <span className="hidden md:inline text-slate-600 dark:text-slate-400 truncate" title={detailText}>{detail}</span>
@@ -161,7 +162,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
 
           <button
             onClick={onStart}
-            className="flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-2xs uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95"
+            className="hidden sm:flex items-center gap-1 px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-2xs uppercase tracking-wider rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-95"
           >
             <span>{phase === 'closed' ? 'Compare regimes' : 'File now'}</span>
             <ArrowRight className="w-3 h-3" />
