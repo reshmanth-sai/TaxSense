@@ -41,6 +41,37 @@ import { SmartDocumentChecklist } from './SmartDocumentChecklist';
 const MAX_UPLOAD_MB = 3;
 const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
 
+// Phone photos of a Form 16 are routinely 4-12 MB at 4000px+, far beyond what a
+// Gemini OCR pass needs. Re-encode anything over the cap as a JPEG whose longest
+// edge is 2200px -- still crisp enough to read 8pt PAN/TDS figures -- so users
+// can upload a photo straight from the camera roll instead of getting rejected.
+const DOWNSCALE_MAX_EDGE = 2200;
+const DOWNSCALE_JPEG_QUALITY = 0.85;
+
+async function downscaleImage(file: File): Promise<File> {
+  if (!file.type.startsWith('image/') || file.size <= MAX_UPLOAD_BYTES) return file;
+  if (typeof createImageBitmap !== 'function') return file;
+
+  const bitmap = await createImageBitmap(file);
+  try {
+    const scale = Math.min(1, DOWNSCALE_MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/jpeg', DOWNSCALE_JPEG_QUALITY)
+    );
+    if (!blob || blob.size >= file.size) return file;
+    return new File([blob], file.name.replace(/\.(png|jpe?g|webp|heic)$/i, '') + '.jpg', { type: 'image/jpeg' });
+  } finally {
+    bitmap.close();
+  }
+}
+
 interface DocumentVaultProps {
   onFileUpload: (fileText: string) => void;
   setActiveStep?: (step: number) => void;
@@ -323,14 +354,26 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
     }, 250);
   };
 
-  const processFile = async (file: File) => {
+  const processFile = async (originalFile: File) => {
     const myGeneration = ++processingGeneration;
     setErrorMessage(null);
-    const isDocument = file.type === 'application/pdf' || 
-      file.type.startsWith('image/') || 
-      /\.(pdf|png|jpe?g)$/i.test(file.name);
+    const isDocument = originalFile.type === 'application/pdf' || 
+      originalFile.type.startsWith('image/') || 
+      /\.(pdf|png|jpe?g)$/i.test(originalFile.name);
+    setActiveFileName(originalFile.name);
+    setActiveFileSize(`${(originalFile.size / 1024).toFixed(1)} KB`);
+
+    let file = originalFile;
+    if (isDocument && originalFile.size > MAX_UPLOAD_BYTES) {
+      setBackgroundStatusMessage('Optimising your photo for upload...');
+      try {
+        file = await downscaleImage(originalFile);
+      } catch {
+        // Fall through to the size check below with the original file.
+      }
+      if (myGeneration !== processingGeneration) return;
+    }
     const sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
-    setActiveFileName(file.name);
     setActiveFileSize(sizeStr);
 
     // Vercel serverless functions reject request bodies over 4.5 MB at the edge
