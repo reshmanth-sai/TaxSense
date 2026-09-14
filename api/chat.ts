@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateContentStreamWithLogging, mapError } from '../services/ai/googleClient';
+import { generateContentStreamWithLogging, mapError, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
 import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
@@ -50,7 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       const responseStream = await generateContentStreamWithLogging({
-        model: 'gemini-2.5-flash',
+        model: DEFAULT_GEMINI_MODEL,
         contents,
         config: {
           systemInstruction: systemPrompt,

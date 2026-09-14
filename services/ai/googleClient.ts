@@ -22,6 +22,8 @@ export function validateEnvironment(): void {
   isValidated = true;
 }
 
+export const DEFAULT_GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+
 /**
  * Returns the lazily-initialized GoogleGenAI singleton client.
  * Strictly requires standard Google AI Studio API keys (AIzaSy).
@@ -144,7 +146,8 @@ export async function generateContentWithRetryAndFallback(params: {
   requestId?: string;
   correlationId?: string;
 }) {
-  const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-pro'];
+  const primaryModel = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+  const modelsToTry = Array.from(new Set([primaryModel, 'gemini-3.6-flash', 'gemini-2.5-flash']));
   let lastError: any = null;
   let retryCount = 0;
   
@@ -237,7 +240,7 @@ export async function generateContentStreamWithLogging(params: {
   requestId?: string;
   correlationId?: string;
 }) {
-  const modelName = params.model || 'gemini-2.5-flash';
+  const modelName = params.model || DEFAULT_GEMINI_MODEL;
   const reqId = params.requestId || crypto.randomUUID();
   const corrId = params.correlationId || crypto.randomUUID();
   const startTime = Date.now();

@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import Multer from 'multer';
-import { getAI, mapError, logStructured } from '../services/ai/googleClient';
+import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
@@ -60,11 +60,11 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: DEFAULT_GEMINI_MODEL,
     });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: DEFAULT_GEMINI_MODEL,
       contents: [
         {
           inlineData: {
@@ -81,7 +81,7 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: DEFAULT_GEMINI_MODEL,
       latencyMs,
     });
 
@@ -94,7 +94,7 @@ export default async function handler(req: any, res: any) {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
-      model: 'gemini-2.5-flash',
+      model: DEFAULT_GEMINI_MODEL,
       latencyMs,
       errorCategory: appErr.category,
       errorMessage: error.message || String(error),
