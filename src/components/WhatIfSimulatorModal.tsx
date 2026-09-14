@@ -14,7 +14,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { useTaxStore } from '../store/useTaxStore';
-import { calculateTax, formatINR } from '../utils/taxCalculator';
+import { calculateTax, formatINR, buildTaxData } from '../utils/taxCalculator';
 import { TaxData } from '../types';
 
 interface WhatIfSimulatorModalProps {
@@ -47,25 +47,7 @@ export const WhatIfSimulatorModal: React.FC<WhatIfSimulatorModalProps> = ({ isOp
 
   // Baseline Tax Data derived from current store state
   const baselineData: TaxData = useMemo(() => {
-    return {
-      assessmentYear: '2026-27',
-      grossSalary: incomeProfile.grossSalary || 850000,
-      basicSalary: incomeProfile.basicSalary || Math.round((incomeProfile.grossSalary || 850000) * 0.4),
-      hraExemption: confirmedDeductions['HRA exemption'] || 0,
-      ltaExemption: 0,
-      standardDeductionOld: 50000,
-      standardDeductionNew: 75000,
-      otherIncome: incomeProfile.otherIncome || 0,
-      deduction80C: confirmedDeductions['80C'] || 0,
-      deduction80D: confirmedDeductions['80D'] || 0,
-      deduction80TTA: 10000,
-      deduction80G: 0,
-      section24b: confirmedDeductions['section24b'] || 0,
-      deduction80CCD1B: confirmedDeductions['80CCD(1B)'] || 0,
-      tdsDeducted: incomeProfile.tdsDeducted || 15000,
-      stcg: incomeProfile.stcg || 0,
-      ltcg: incomeProfile.ltcg || 0,
-    };
+    return buildTaxData(incomeProfile, confirmedDeductions);
   }, [incomeProfile, confirmedDeductions]);
 
   // Baseline calculation

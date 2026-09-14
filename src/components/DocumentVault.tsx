@@ -44,9 +44,14 @@ interface DocumentVaultProps {
   onViewExtractedFields?: () => void;
 }
 
-// Module-level interval ID storage so background compilation timer ticks 
+// Module-level interval ID storage so background compilation timer ticks
 // are shared across React component mount / unmount lifecycle routes.
 let activeProcessingInterval: NodeJS.Timeout | null = null;
+
+// Bumped on every new upload and on cancel, so an in-flight extraction flow
+// can tell it was superseded/cancelled and skip writing its result to the
+// store once its pending fetches finally resolve.
+let processingGeneration = 0;
 
 export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtractedFields }: DocumentVaultProps) {
   const incomeProfile = useTaxStore((state) => state.incomeProfile);
@@ -132,6 +137,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
 
   // Safe cancellation
   const cancelProcessing = () => {
+    processingGeneration++;
     if (activeProcessingInterval) {
       clearInterval(activeProcessingInterval);
       activeProcessingInterval = null;
@@ -233,6 +239,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
   };
 
   const executeExtractionFlow = async (fileName: string, fileSize: string, text: string) => {
+    const myGeneration = ++processingGeneration;
     setErrorMessage(null);
     setBackgroundProcessing(true);
     setIngestionState('UPLOADING');
@@ -265,6 +272,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         
         try {
           const result = await extractPromise;
+          if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
           if (!result || !result.success || !result.data) {
             throw new Error(result?.error || 'Gemini returned invalid or missing structured data.');
           }
@@ -275,6 +283,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
 
           validateAndStoreTaxData(result.data, fileName, fileSize, text, 1);
         } catch (err: any) {
+          if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
           setBackgroundProcessing(false);
           setIngestionState('IDLE');
           setBackgroundProgress(0);
@@ -297,6 +306,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
   };
 
   const processFile = async (file: File) => {
+    const myGeneration = ++processingGeneration;
     setErrorMessage(null);
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
     const sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
@@ -345,6 +355,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
         }, 300);
 
         const response = await responsePromise;
+        if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
           throw new Error(errData.error || 'Failed to extract PDF content.');
@@ -383,6 +394,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
           activeProcessingInterval = null;
         }
 
+        if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
+
         if (data) {
           setBackgroundProgress(100);
           setBackgroundProcessing(false);
@@ -398,6 +411,7 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
           clearInterval(activeProcessingInterval);
           activeProcessingInterval = null;
         }
+        if (myGeneration !== processingGeneration) return; // cancelled or superseded while awaiting
         console.error('PDF ingestion error:', err);
         setErrorMessage(err.message || "We couldn't verify this document. Please upload another copy or use manual raw text entry.");
         setBackgroundProcessing(false);
@@ -596,8 +610,8 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
 
             {/* Privacy & Trust Assurances */}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-6 border-t border-slate-900/50">
-              <SecurityBadge icon={Lock} text="Bank-grade encryption" />
-              <SecurityBadge icon={Cpu} text="Processed locally" />
+              <SecurityBadge icon={Lock} text="Stored locally in your browser" />
+              <SecurityBadge icon={Cpu} text="Analyzed via Gemini AI" />
               <SecurityBadge icon={ShieldCheck} text="No permanent storage" />
               <SecurityBadge icon={RefreshCw} text="Encrypted transmission" />
               <SecurityBadge icon={Sparkles} text="Verified AI extraction" />

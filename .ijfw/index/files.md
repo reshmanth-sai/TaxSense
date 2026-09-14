@@ -1,236 +1,16 @@
 <!-- ijfw schema:1 codebase-index -->
 # Codebase index
 
-Generated: 2026-08-26T04:09:12Z
+Generated: 2026-09-14T04:34:24Z
 Root: .
 
-Files: 322
+Files: 103
 
 ## By file
 
 - `./.agents/AGENTS.md` (42 lines, .md) -- Follow this philosophy throughout every code change, UI layout, and feature refinement:
-- `./.claude/worktrees/nice-chaum-1a8a16/.agents/AGENTS.md` (42 lines, .md) -- Follow this philosophy throughout every code change, UI layout, and feature refinement:
-- `./.claude/worktrees/nice-chaum-1a8a16/AGENTS.md` (56 lines, .md) -- ijfw_version: 1.3.2
-- `./.claude/worktrees/nice-chaum-1a8a16/CLAUDE.md` (20 lines, .md) -- Stack: React / TypeScript
-- `./.claude/worktrees/nice-chaum-1a8a16/README.md` (410 lines, .md) -- <div align=\"center\">
-- `./.claude/worktrees/nice-chaum-1a8a16/api/chat.ts` (71 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/nice-chaum-1a8a16/api/extract-pdf.ts` (102 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/nice-chaum-1a8a16/api/extract.ts` (97 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/nice-chaum-1a8a16/api/finance-news.ts` (100 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/nice-chaum-1a8a16/api/health.ts` (19 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/nice-chaum-1a8a16/api/index.ts` (3 lines, .ts) -- import app from '../server';
-- `./.claude/worktrees/nice-chaum-1a8a16/lib/taxEngine.js` (183 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
-- `./.claude/worktrees/nice-chaum-1a8a16/remove-claude.sh` (8 lines, .sh) -- git filter-repo --force --commit-callback '
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_env.js` (6 lines, .js) -- import dotenv from 'dotenv';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_extract.ts` (36 lines, .ts) -- import { GoogleGenAI, Type } from '@google/genai';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_fetch.js` (19 lines, .js) -- import fetch from 'node-fetch'; // wait, node 25 has native fetch, but let's just use native fetch first
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_gemini.ts` (29 lines, .ts) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_gemini_pure.js` (29 lines, .js) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_headers.js` (59 lines, .js) -- import http from 'http';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_headers_direct.js` (33 lines, .js) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_pipeline.ts` (73 lines, .ts) -- import handler from '../api/extract';
-- `./.claude/worktrees/nice-chaum-1a8a16/scratch/test_validation.js` (38 lines, .js) -- import { validateEnvironment } from '../services/ai/googleClient.ts';
-- `./.claude/worktrees/nice-chaum-1a8a16/server.ts` (403 lines, .ts) -- import express from 'express';
-- `./.claude/worktrees/nice-chaum-1a8a16/services/ai/googleClient.ts` (287 lines, .ts) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/App.tsx` (1600 lines, .tsx) -- import React, { useState, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/AIFilingWorkspaceModal.tsx` (479 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/AIReasoningDrawer.tsx` (887 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/CommandPalette.tsx` (170 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/CountUp.tsx` (31 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/DeductionCard.tsx` (1405 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/DocumentVault.tsx` (926 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/ErrorBoundary.tsx` (79 lines, .tsx) -- import React, { Component, ErrorInfo, ReactNode } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/ExportControl.tsx` (537 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/ExtractionConfirm.tsx` (621 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/FilingGuide.tsx` (602 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/FilingReviewCard.tsx` (365 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/GenerateReturnCard.tsx` (185 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/GlowBorder.tsx` (165 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/HeroSection.tsx` (603 lines, .tsx) -- import React, { useState, useEffect, useRef, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/HistoryArchive.tsx` (797 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/LandingPage.tsx` (621 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/RegimeComparison.tsx` (488 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/SmartDocumentChecklist.tsx` (529 lines, .tsx) -- import React, { useState, useMemo, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/VisualTaxBreakdown.tsx` (362 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/WhatIfSimulatorModal.tsx` (662 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/WorkspaceSelection.tsx` (615 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/compliance/FilingDeadlineBar.tsx` (236 lines, .tsx) -- import React, { useState, useEffect, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/copilot/AICopilot.tsx` (290 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/dashboard/AIFilingReadinessEngine.tsx` (345 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/dashboard/CTCEfficiencyScorecard.tsx` (154 lines, .tsx) -- import React, { useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/dashboard/DashboardCommandCenter.tsx` (719 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/dashboard/DashboardComponents.tsx` (788 lines, .tsx) -- import React, { useState, useRef, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/export/PDFComputationExporter.tsx` (287 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/ComparisonSection.tsx` (162 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/CopilotSection.tsx` (420 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/DeadlineBanner.tsx` (65 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/FAQSection.tsx` (178 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/GetStartedSection.tsx` (54 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/InteractiveShowcaseSection.tsx` (234 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/JourneySection.tsx` (207 lines, .tsx) -- import React, { useState, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/Navbar.tsx` (286 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/ProductVideoPlayer.tsx` (858 lines, .tsx) -- import React, { useState, useEffect, useRef, useMemo } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/RefundFinderWidget.tsx` (198 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/SecuritySection.tsx` (129 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/ShareSavingsModal.tsx` (113 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/TestimonialsSection.tsx` (122 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/TippingPointVisualizer.tsx` (176 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/AnimatedCounter.tsx` (36 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/CardSpotlight.tsx` (42 lines, .tsx) -- import React, { useRef, useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/CountUp.tsx` (37 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/PremiumCard.tsx` (109 lines, .tsx) -- import React, { useState, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/RollingText.tsx` (30 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/helpers/ThinkingDots.tsx` (12 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/landing/index.ts` (15 lines, .ts) -- export { JourneySection } from './JourneySection';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/profile/FamilyProfileSwitcher.tsx` (349 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/security/SecurityInspectorModal.tsx` (106 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/CollapseButton.tsx` (35 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/SearchModal.tsx` (175 lines, .tsx) -- import React, { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/Sidebar.tsx` (476 lines, .tsx) -- import React, { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/SidebarGroup.tsx` (52 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/SidebarHeader.tsx` (154 lines, .tsx) -- import React, { useState, useRef, useEffect } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/SidebarItem.tsx` (148 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/Tooltip.tsx` (50 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/UserProfile.tsx` (89 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/sidebar/useSidebarStore.ts` (122 lines, .ts) -- import { create } from 'zustand';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/components/vault/VaultComponents.tsx` (2558 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/config.ts` (6 lines, .ts) -- export const TAX_CONFIG = {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/hooks/useSessionTimeout.ts` (56 lines, .ts) -- import { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/lib/supabase.ts` (24 lines, .ts) -- import { createClient } from '@supabase/supabase-js';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/lib/taxEngine.js` (234 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/main.tsx` (13 lines, .tsx) -- import {StrictMode} from 'react';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/ExportService.ts` (299 lines, .ts) -- import { jsPDF } from 'jspdf';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/GoogleAuthService.ts` (166 lines, .ts) -- export class GoogleAuthService {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/ai/ContextService.ts` (98 lines, .ts) -- import { useTaxStore } from '../../store/useTaxStore';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/ai/ConversationMemory.ts` (38 lines, .ts) -- import { ChatMessageItem } from '../../store/useTaxStore';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/ai/PromptBuilder.ts` (68 lines, .ts) -- import { AIContextPayload } from './ContextService';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/services/ai/StreamingService.ts` (91 lines, .ts) -- export class StreamingService {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/store/useTaxStore.ts` (657 lines, .ts) -- import { create } from 'zustand';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/types.ts` (77 lines, .ts) -- export interface TaxData {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/utils/audioPool.ts` (57 lines, .ts) -- class AudioPoolManager {
-- `./.claude/worktrees/nice-chaum-1a8a16/src/utils/taxCalculator.ts` (255 lines, .ts) -- import { TaxData, TaxCalculation, TaxRegimeBreakdown } from '../types';
-- `./.claude/worktrees/nice-chaum-1a8a16/src/vite-env.d.ts` (1 lines, .ts) -- <empty>
-- `./.claude/worktrees/nice-chaum-1a8a16/vite.config.ts` (22 lines, .ts) -- import tailwindcss from '@tailwindcss/vite';
-- `./.claude/worktrees/routing-migration/.agents/AGENTS.md` (42 lines, .md) -- Follow this philosophy throughout every code change, UI layout, and feature refinement:
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/progress.md` (72 lines, .md) -- - Worktree: `/Users/sai/TAXSENSE/.claude/worktrees/routing-migration`, branch `feat/routing-migration`, base `2c6376e` (
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-1-brief.md` (75 lines, .md) -- - Modify: `package.json` (dependency added by npm, don't hand-edit)
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-1-report.md` (57 lines, .md) -- DONE
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-2-brief.md` (68 lines, .md) -- - Create: `src/routes/stepRoutes.ts`
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-2-report.md` (51 lines, .md) -- Successfully created `src/routes/stepRoutes.ts` with the exact code specified in the task brief. The file implements a r
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-3-brief.md` (251 lines, .md) -- - Modify: `src/App.tsx`
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-3-report.md` (441 lines, .md) -- Implemented all 6 required steps of the brief (Steps 1-6) plus manual verification
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-4-brief.md` (50 lines, .md) -- - Modify: `src/App.tsx`
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-4-report.md` (67 lines, .md) -- - Confirmed exact line numbers via grep:
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-5-brief.md` (33 lines, .md) -- - No file changes expected — this is a verification-only task. If verification fails, the fix belongs in `src/App.tsx`
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-5-report.md` (45 lines, .md) -- The task's `.claude/launch.json` `\"dev\"` config, when started via `preview_start`, spawned `npm run dev` with **cwd `/
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-6-brief.md` (39 lines, .md) -- - Modify: `src/App.tsx`
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-6-report.md` (199 lines, .md) -- Task 4 successfully replaced all uses of the dead global with the real `?redirect=` parameter.
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-7-brief.md` (37 lines, .md) -- - No file changes expected unless a bug is found.
-- `./.claude/worktrees/routing-migration/.superpowers/sdd/2026-08-25-routing-migration/task-7-report.md` (83 lines, .md) -- Status: **DONE_WITH_CONCERNS**
-- `./.claude/worktrees/routing-migration/AGENTS.md` (56 lines, .md) -- ijfw_version: 1.3.2
-- `./.claude/worktrees/routing-migration/README.md` (410 lines, .md) -- <div align=\"center\">
-- `./.claude/worktrees/routing-migration/api/chat.ts` (71 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/routing-migration/api/extract-pdf.ts` (102 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/routing-migration/api/extract.ts` (97 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/routing-migration/api/finance-news.ts` (100 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/routing-migration/api/health.ts` (19 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
-- `./.claude/worktrees/routing-migration/api/index.ts` (3 lines, .ts) -- import app from '../server';
-- `./.claude/worktrees/routing-migration/docs/superpowers/plans/2026-08-25-routing-migration.md` (620 lines, .md) -- > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:
-- `./.claude/worktrees/routing-migration/lib/taxEngine.js` (183 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
-- `./.claude/worktrees/routing-migration/remove-claude.sh` (8 lines, .sh) -- git filter-repo --force --commit-callback '
-- `./.claude/worktrees/routing-migration/scratch/test_env.js` (6 lines, .js) -- import dotenv from 'dotenv';
-- `./.claude/worktrees/routing-migration/scratch/test_extract.ts` (36 lines, .ts) -- import { GoogleGenAI, Type } from '@google/genai';
-- `./.claude/worktrees/routing-migration/scratch/test_fetch.js` (19 lines, .js) -- import fetch from 'node-fetch'; // wait, node 25 has native fetch, but let's just use native fetch first
-- `./.claude/worktrees/routing-migration/scratch/test_gemini.ts` (29 lines, .ts) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/routing-migration/scratch/test_gemini_pure.js` (29 lines, .js) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/routing-migration/scratch/test_headers.js` (59 lines, .js) -- import http from 'http';
-- `./.claude/worktrees/routing-migration/scratch/test_headers_direct.js` (33 lines, .js) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/routing-migration/scratch/test_pipeline.ts` (73 lines, .ts) -- import handler from '../api/extract';
-- `./.claude/worktrees/routing-migration/scratch/test_validation.js` (38 lines, .js) -- import { validateEnvironment } from '../services/ai/googleClient.ts';
-- `./.claude/worktrees/routing-migration/server.ts` (403 lines, .ts) -- import express from 'express';
-- `./.claude/worktrees/routing-migration/services/ai/googleClient.ts` (287 lines, .ts) -- import { GoogleGenAI } from '@google/genai';
-- `./.claude/worktrees/routing-migration/src/App.tsx` (1682 lines, .tsx) -- import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/AIFilingWorkspaceModal.tsx` (479 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/AIReasoningDrawer.tsx` (887 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/CommandPalette.tsx` (170 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/CountUp.tsx` (31 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/DeductionCard.tsx` (1405 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/DocumentVault.tsx` (926 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/ErrorBoundary.tsx` (79 lines, .tsx) -- import React, { Component, ErrorInfo, ReactNode } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/ExportControl.tsx` (537 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/ExtractionConfirm.tsx` (621 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/FilingGuide.tsx` (602 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/FilingReviewCard.tsx` (365 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/GenerateReturnCard.tsx` (185 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/GlowBorder.tsx` (165 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/HeroSection.tsx` (603 lines, .tsx) -- import React, { useState, useEffect, useRef, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/HistoryArchive.tsx` (797 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/LandingPage.tsx` (621 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/RegimeComparison.tsx` (500 lines, .tsx) -- import React, { useState, useMemo, useCallback } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/SmartDocumentChecklist.tsx` (541 lines, .tsx) -- import React, { useState, useMemo, useRef, useCallback } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/VisualTaxBreakdown.tsx` (362 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/WhatIfSimulatorModal.tsx` (662 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/WorkspaceSelection.tsx` (615 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/compliance/FilingDeadlineBar.tsx` (236 lines, .tsx) -- import React, { useState, useEffect, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/copilot/AICopilot.tsx` (290 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/dashboard/AIFilingReadinessEngine.tsx` (345 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/dashboard/CTCEfficiencyScorecard.tsx` (154 lines, .tsx) -- import React, { useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/dashboard/DashboardCommandCenter.tsx` (719 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/dashboard/DashboardComponents.tsx` (788 lines, .tsx) -- import React, { useState, useRef, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/export/PDFComputationExporter.tsx` (287 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/ComparisonSection.tsx` (162 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/CopilotSection.tsx` (420 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/DeadlineBanner.tsx` (65 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/FAQSection.tsx` (178 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/GetStartedSection.tsx` (54 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/InteractiveShowcaseSection.tsx` (234 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/JourneySection.tsx` (207 lines, .tsx) -- import React, { useState, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/Navbar.tsx` (286 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/ProductVideoPlayer.tsx` (858 lines, .tsx) -- import React, { useState, useEffect, useRef, useMemo } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/RefundFinderWidget.tsx` (198 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/SecuritySection.tsx` (129 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/ShareSavingsModal.tsx` (113 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/TestimonialsSection.tsx` (122 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/TippingPointVisualizer.tsx` (176 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/AnimatedCounter.tsx` (36 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/CardSpotlight.tsx` (42 lines, .tsx) -- import React, { useRef, useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/CountUp.tsx` (37 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/PremiumCard.tsx` (109 lines, .tsx) -- import React, { useState, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/RollingText.tsx` (30 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/helpers/ThinkingDots.tsx` (12 lines, .tsx) -- import React, { useState, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/landing/index.ts` (15 lines, .ts) -- export { JourneySection } from './JourneySection';
-- `./.claude/worktrees/routing-migration/src/components/profile/FamilyProfileSwitcher.tsx` (349 lines, .tsx) -- import React, { useState } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/security/SecurityInspectorModal.tsx` (106 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/CollapseButton.tsx` (35 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/SearchModal.tsx` (175 lines, .tsx) -- import React, { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/Sidebar.tsx` (466 lines, .tsx) -- import React, { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/SidebarGroup.tsx` (52 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/SidebarHeader.tsx` (154 lines, .tsx) -- import React, { useState, useRef, useEffect } from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/SidebarItem.tsx` (148 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/Tooltip.tsx` (50 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/UserProfile.tsx` (89 lines, .tsx) -- import React from 'react';
-- `./.claude/worktrees/routing-migration/src/components/sidebar/useSidebarStore.ts` (122 lines, .ts) -- import { create } from 'zustand';
-- `./.claude/worktrees/routing-migration/src/components/vault/VaultComponents.tsx` (2558 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/config.ts` (6 lines, .ts) -- export const TAX_CONFIG = {
-- `./.claude/worktrees/routing-migration/src/hooks/useSessionTimeout.ts` (56 lines, .ts) -- import { useEffect, useState, useRef } from 'react';
-- `./.claude/worktrees/routing-migration/src/lib/supabase.ts` (24 lines, .ts) -- import { createClient } from '@supabase/supabase-js';
-- `./.claude/worktrees/routing-migration/src/lib/taxEngine.js` (234 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
-- `./.claude/worktrees/routing-migration/src/main.tsx` (16 lines, .tsx) -- import {StrictMode} from 'react';
-- `./.claude/worktrees/routing-migration/src/routes/stepRoutes.ts` (37 lines, .ts) -- import type { CurrentStep } from '../store/useTaxStore';
-- `./.claude/worktrees/routing-migration/src/services/ExportService.ts` (299 lines, .ts) -- import { jsPDF } from 'jspdf';
-- `./.claude/worktrees/routing-migration/src/services/GoogleAuthService.ts` (166 lines, .ts) -- export class GoogleAuthService {
-- `./.claude/worktrees/routing-migration/src/services/ai/ContextService.ts` (98 lines, .ts) -- import { useTaxStore } from '../../store/useTaxStore';
-- `./.claude/worktrees/routing-migration/src/services/ai/ConversationMemory.ts` (38 lines, .ts) -- import { ChatMessageItem } from '../../store/useTaxStore';
-- `./.claude/worktrees/routing-migration/src/services/ai/PromptBuilder.ts` (68 lines, .ts) -- import { AIContextPayload } from './ContextService';
-- `./.claude/worktrees/routing-migration/src/services/ai/StreamingService.ts` (91 lines, .ts) -- export class StreamingService {
-- `./.claude/worktrees/routing-migration/src/store/useTaxStore.ts` (657 lines, .ts) -- import { create } from 'zustand';
-- `./.claude/worktrees/routing-migration/src/types.ts` (77 lines, .ts) -- export interface TaxData {
-- `./.claude/worktrees/routing-migration/src/utils/audioPool.ts` (57 lines, .ts) -- class AudioPoolManager {
-- `./.claude/worktrees/routing-migration/src/utils/taxCalculator.ts` (255 lines, .ts) -- import { TaxData, TaxCalculation, TaxRegimeBreakdown } from '../types';
-- `./.claude/worktrees/routing-migration/src/vite-env.d.ts` (1 lines, .ts) -- <empty>
-- `./.claude/worktrees/routing-migration/vite.config.ts` (22 lines, .ts) -- import tailwindcss from '@tailwindcss/vite';
 - `./AGENTS.md` (56 lines, .md) -- ijfw_version: 1.3.2
-- `./CLAUDE.md` (20 lines, .md) -- Stack: React / TypeScript
+- `./CLAUDE.md` (33 lines, .md) -- Stack: React / TypeScript
 - `./README.md` (410 lines, .md) -- <div align=\"center\">
 - `./api/chat.ts` (71 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
 - `./api/extract-pdf.ts` (102 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
@@ -238,7 +18,7 @@ Files: 322
 - `./api/finance-news.ts` (100 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
 - `./api/health.ts` (19 lines, .ts) -- import { VercelRequest, VercelResponse } from '@vercel/node';
 - `./api/index.ts` (3 lines, .ts) -- import app from '../server';
-- `./docs/superpowers/plans/2026-08-25-routing-migration.md` (511 lines, .md) -- > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:
+- `./docs/superpowers/plans/2026-08-25-routing-migration.md` (620 lines, .md) -- > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:
 - `./lib/taxEngine.js` (183 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
 - `./remove-claude.sh` (8 lines, .sh) -- git filter-repo --force --commit-callback '
 - `./scratch/test_env.js` (6 lines, .js) -- import dotenv from 'dotenv';
@@ -252,13 +32,13 @@ Files: 322
 - `./scratch/test_validation.js` (38 lines, .js) -- import { validateEnvironment } from '../services/ai/googleClient.ts';
 - `./server.ts` (403 lines, .ts) -- import express from 'express';
 - `./services/ai/googleClient.ts` (287 lines, .ts) -- import { GoogleGenAI } from '@google/genai';
-- `./src/App.tsx` (1591 lines, .tsx) -- import React, { useState, useEffect, useMemo, lazy, Suspense, useRef } from 'react';
+- `./src/App.tsx` (1678 lines, .tsx) -- import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense, useRef } from 'react';
 - `./src/components/AIFilingWorkspaceModal.tsx` (479 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/AIReasoningDrawer.tsx` (887 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
 - `./src/components/CommandPalette.tsx` (170 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/CountUp.tsx` (31 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/DeductionCard.tsx` (1405 lines, .tsx) -- import React from 'react';
-- `./src/components/DocumentVault.tsx` (911 lines, .tsx) -- import React, { useState, useEffect } from 'react';
+- `./src/components/DocumentVault.tsx` (925 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/ErrorBoundary.tsx` (79 lines, .tsx) -- import React, { Component, ErrorInfo, ReactNode } from 'react';
 - `./src/components/ExtractionConfirm.tsx` (621 lines, .tsx) -- import React from 'react';
 - `./src/components/FilingGuide.tsx` (602 lines, .tsx) -- import React, { useState, useEffect } from 'react';
@@ -268,10 +48,10 @@ Files: 322
 - `./src/components/HeroSection.tsx` (607 lines, .tsx) -- import React, { useState, useEffect, useRef, useMemo } from 'react';
 - `./src/components/HistoryArchive.tsx` (957 lines, .tsx) -- import React from 'react';
 - `./src/components/LandingPage.tsx` (617 lines, .tsx) -- import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-- `./src/components/RegimeComparison.tsx` (488 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./src/components/SmartDocumentChecklist.tsx` (529 lines, .tsx) -- import React, { useState, useMemo, useRef } from 'react';
-- `./src/components/VisualTaxBreakdown.tsx` (362 lines, .tsx) -- import React, { useState, useMemo } from 'react';
-- `./src/components/WhatIfSimulatorModal.tsx` (662 lines, .tsx) -- import React, { useState, useMemo } from 'react';
+- `./src/components/RegimeComparison.tsx` (500 lines, .tsx) -- import React, { useState, useMemo, useCallback } from 'react';
+- `./src/components/SmartDocumentChecklist.tsx` (524 lines, .tsx) -- import React, { useState, useMemo, useRef, useCallback } from 'react';
+- `./src/components/VisualTaxBreakdown.tsx` (344 lines, .tsx) -- import React, { useState, useMemo } from 'react';
+- `./src/components/WhatIfSimulatorModal.tsx` (644 lines, .tsx) -- import React, { useState, useMemo } from 'react';
 - `./src/components/WorkspaceSelection.tsx` (615 lines, .tsx) -- import React, { useState, useEffect } from 'react';
 - `./src/components/compliance/FilingDeadlineBar.tsx` (236 lines, .tsx) -- import React, { useState, useEffect, useMemo } from 'react';
 - `./src/components/copilot/AICopilot.tsx` (290 lines, .tsx) -- import React, { useState, useEffect, useRef } from 'react';
@@ -279,7 +59,7 @@ Files: 322
 - `./src/components/dashboard/CTCEfficiencyScorecard.tsx` (166 lines, .tsx) -- import React, { useMemo } from 'react';
 - `./src/components/dashboard/DashboardCommandCenter.tsx` (949 lines, .tsx) -- import React, { useState } from 'react';
 - `./src/components/dashboard/DashboardComponents.tsx` (813 lines, .tsx) -- import React, { useState, useRef, useEffect } from 'react';
-- `./src/components/export/PDFComputationExporter.tsx` (287 lines, .tsx) -- import React, { useState, useMemo } from 'react';
+- `./src/components/export/PDFComputationExporter.tsx` (274 lines, .tsx) -- import React, { useState, useMemo } from 'react';
 - `./src/components/landing/ComparisonSection.tsx` (171 lines, .tsx) -- import React from 'react';
 - `./src/components/landing/CopilotSection.tsx` (420 lines, .tsx) -- import React, { useState } from 'react';
 - `./src/components/landing/DeadlineBanner.tsx` (172 lines, .tsx) -- import React, { useState, useEffect } from 'react';
@@ -317,14 +97,15 @@ Files: 322
 - `./src/hooks/useSessionTimeout.ts` (56 lines, .ts) -- import { useEffect, useState, useRef } from 'react';
 - `./src/lib/supabase.ts` (24 lines, .ts) -- import { createClient } from '@supabase/supabase-js';
 - `./src/lib/taxEngine.js` (234 lines, .js) -- export function calculateHRAExemption(hraReceived, basicSalary, rentPaid, isMetro = false) {
-- `./src/main.tsx` (13 lines, .tsx) -- import {StrictMode} from 'react';
+- `./src/main.tsx` (16 lines, .tsx) -- import {StrictMode} from 'react';
+- `./src/routes/stepRoutes.ts` (37 lines, .ts) -- import type { CurrentStep } from '../store/useTaxStore';
 - `./src/services/ExportService.ts` (299 lines, .ts) -- import { jsPDF } from 'jspdf';
 - `./src/services/GoogleAuthService.ts` (166 lines, .ts) -- export class GoogleAuthService {
 - `./src/services/ai/ContextService.ts` (98 lines, .ts) -- import { useTaxStore } from '../../store/useTaxStore';
 - `./src/services/ai/ConversationMemory.ts` (38 lines, .ts) -- import { ChatMessageItem } from '../../store/useTaxStore';
 - `./src/services/ai/PromptBuilder.ts` (68 lines, .ts) -- import { AIContextPayload } from './ContextService';
 - `./src/services/ai/StreamingService.ts` (91 lines, .ts) -- export class StreamingService {
-- `./src/store/useTaxStore.ts` (658 lines, .ts) -- import { create } from 'zustand';
+- `./src/store/useTaxStore.ts` (661 lines, .ts) -- import { create } from 'zustand';
 - `./src/types.ts` (77 lines, .ts) -- export interface TaxData {
 - `./src/utils/audioPool.ts` (57 lines, .ts) -- class AudioPoolManager {
 - `./src/utils/taxCalculator.ts` (297 lines, .ts) -- import { TaxData, TaxCalculation, TaxRegimeBreakdown } from '../types';
@@ -332,8 +113,8 @@ Files: 322
 - `./vite.config.ts` (22 lines, .ts) -- import tailwindcss from '@tailwindcss/vite';
 
 ## By language
-- .tsx: 182
-- .ts: 85
-- .md: 28
-- .js: 24
-- .sh: 3
+- .tsx: 60
+- .ts: 29
+- .js: 8
+- .md: 5
+- .sh: 1

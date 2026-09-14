@@ -19,7 +19,7 @@ const SPRING_CONFIG = { type: 'spring' as const, stiffness: 220, damping: 24, ma
 const LOADING_STEPS = [
   'Signing in securely...',
   'Connecting workspace...',
-  'Encrypting session...'
+  'Preparing your workspace...'
 ];
 
 interface Feature {

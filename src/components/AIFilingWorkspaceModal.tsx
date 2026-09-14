@@ -77,7 +77,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
     "Calculating deductions under Sec 80C & 80D...",
     "Comparing Old vs New Regime tax slabs...",
     "Validating AIS & 26AS data integrity...",
-    "Encrypting local browser workspace payload...",
+    "Assembling local browser workspace payload...",
     "Generating verified JSON return package...",
     "Assembling your filing summary..."
   ];
@@ -180,8 +180,8 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                 
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
                   {isComplete 
-                    ? 'Everything has been verified against AY 2026–27 tax rules, encrypted, and assembled locally on your device.'
-                    : 'Your encrypted filing environment is being assembled securely on your device.'
+                    ? 'Everything has been verified against AY 2026–27 tax rules and assembled locally on your device.'
+                    : 'Your filing environment is being assembled securely on your device.'
                   }
                 </p>
               </div>
@@ -321,7 +321,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                       <div className="flex items-center justify-between text-[10px] font-mono text-slate-600 dark:text-slate-300 pt-1">
                         <span className={`px-2 py-0.5 rounded font-bold ${generationStep >= 1 ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>Device</span>
                         <span className="text-slate-400 dark:text-slate-600">➔</span>
-                        <span className={`px-2 py-0.5 rounded font-bold ${generationStep >= 3 ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>Cipher</span>
+                        <span className={`px-2 py-0.5 rounded font-bold ${generationStep >= 3 ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>Compute</span>
                         <span className="text-slate-400 dark:text-slate-600">➔</span>
                         <span className={`px-2 py-0.5 rounded font-bold ${generationStep >= 5 ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>Workspace</span>
                       </div>
@@ -338,7 +338,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
                   </div>
 
                   <div className="grid grid-cols-5 gap-2">
-                    {['Verify', 'Compute', 'Encrypt', 'Workspace', 'Launch'].map((label, idx) => {
+                    {['Verify', 'Compute', 'Structure', 'Workspace', 'Launch'].map((label, idx) => {
                       const isLit = generationStep > idx;
                       return (
                         <div key={label} className="space-y-1">
@@ -463,7 +463,7 @@ export const AIFilingWorkspaceModal: React.FC<AIFilingWorkspaceModalProps> = ({
             <div className="flex items-center justify-between text-[9.5px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider pt-3 border-t border-slate-200 dark:border-white/[0.04]">
               <div className="flex items-center gap-1.5">
                 <Lock className="w-3 h-3 text-slate-500" />
-                <span>Zero-Knowledge Encryption Active</span>
+                <span>Stored Locally On Your Device</span>
               </div>
               <span>AY 2026–27 Rules</span>
             </div>

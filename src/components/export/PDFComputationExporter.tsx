@@ -13,7 +13,7 @@ import {
   UserCheck
 } from 'lucide-react';
 import { useTaxStore } from '../../store/useTaxStore';
-import { calculateTax, formatINR } from '../../utils/taxCalculator';
+import { calculateTax, formatINR, buildTaxData } from '../../utils/taxCalculator';
 
 interface PDFComputationExporterProps {
   isOpen: boolean;
@@ -29,23 +29,10 @@ export const PDFComputationExporter: React.FC<PDFComputationExporterProps> = ({ 
 
   const activeProfile = taxProfiles.find(p => p.id === activeProfileId) || taxProfiles[0];
 
-  const taxData = useMemo(() => ({
-    assessmentYear: '2026-27',
-    grossSalary: incomeProfile.grossSalary || 850000,
-    basicSalary: incomeProfile.basicSalary || Math.round((incomeProfile.grossSalary || 850000) * 0.4),
-    hraExemption: confirmedDeductions['HRA exemption'] || 0,
-    ltaExemption: 0,
-    standardDeductionOld: 50000,
-    standardDeductionNew: 75000,
-    otherIncome: incomeProfile.otherIncome || 0,
-    deduction80C: confirmedDeductions['80C'] || 0,
-    deduction80D: confirmedDeductions['80D'] || 0,
-    deduction80TTA: 10000,
-    deduction80G: 0,
-    section24b: confirmedDeductions['section24b'] || 0,
-    deduction80CCD1B: confirmedDeductions['80CCD(1B)'] || 0,
-    tdsDeducted: incomeProfile.tdsDeducted || 15000,
-  }), [incomeProfile, confirmedDeductions]);
+  const taxData = useMemo(
+    () => buildTaxData(incomeProfile, confirmedDeductions),
+    [incomeProfile, confirmedDeductions]
+  );
 
   const calculation = useMemo(() => calculateTax(taxData), [taxData]);
   const activeRegime = calculation.recommendedRegime;
