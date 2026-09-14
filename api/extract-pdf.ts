@@ -1,30 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import Multer from 'multer';
 import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
-
-const upload = Multer({
-  storage: Multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-});
-
-function runMiddleware(req: any, res: any, fn: any) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
-
-export const config = {
-  api: {
-    bodyParser: false, // Disables standard body parsing so multer can handle multipart stream
-  },
-};
 
 export default async function handler(req: any, res: any) {
   const requestId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
@@ -40,23 +17,44 @@ export default async function handler(req: any, res: any) {
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
     if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
-    await runMiddleware(req, res, upload.single('file'));
+    let base64Data: string = '';
+    let mimeType: string = 'application/pdf';
 
-    if (!req.file) {
-      res.status(400).json({ error: 'No file uploaded.' });
+    // 1. Preferred serverless path: standard JSON payload containing base64 data
+    if (req.body && (req.body.fileBase64 || req.body.data)) {
+      base64Data = req.body.fileBase64 || req.body.data;
+      mimeType = req.body.mimeType || 'application/pdf';
+    } else if (req.headers['content-type']?.includes('multipart/form-data')) {
+      // 2. Fallback to multipart parser if requested
+      try {
+        const Multer = (await import('multer')).default;
+        const upload = Multer({ storage: Multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+        await new Promise((resolve, reject) => {
+          upload.single('file')(req, res, (err: any) => (err ? reject(err) : resolve(null)));
+        });
+        if (req.file?.buffer) {
+          base64Data = req.file.buffer.toString('base64');
+          mimeType = req.file.mimetype || 'application/pdf';
+        }
+      } catch (multerErr) {
+        console.warn('Multer multipart fallback failed:', multerErr);
+      }
+    }
+
+    if (!base64Data) {
+      res.status(400).json({ error: 'No file data received. Please upload a PDF, JPG, or PNG document.' });
       return;
     }
 
-    logStructured('info', `PDF received. File size: ${req.file.size} bytes`, {
+    logStructured('info', `Document received for extraction. Size: ~${Math.round(base64Data.length * 0.75)} bytes, type: ${mimeType}`, {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
     });
 
-    const base64Data = req.file.buffer.toString('base64');
     const ai = getAI();
 
-    logStructured('info', 'Sending PDF buffer to Gemini for extraction...', {
+    logStructured('info', 'Sending document buffer to Gemini for extraction...', {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
@@ -69,15 +67,15 @@ export default async function handler(req: any, res: any) {
         {
           inlineData: {
             data: base64Data,
-            mimeType: 'application/pdf'
+            mimeType: mimeType.includes('image/') ? mimeType : 'application/pdf'
           }
         },
-        'Please extract all text content from this Form 16 PDF document. Return ONLY the plain text characters from the document, preserving labels and values. Do not summarize or format as JSON.'
+        'Please extract all text content from this Form 16 document. Return ONLY the plain text characters from the document, preserving labels and values. Do not summarize or format as JSON.'
       ]
     });
 
     const latencyMs = Date.now() - startTime;
-    logStructured('info', 'Successfully extracted PDF text content using Gemini', {
+    logStructured('info', 'Successfully extracted document text content using Gemini', {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',
@@ -90,7 +88,7 @@ export default async function handler(req: any, res: any) {
     const latencyMs = Date.now() - startTime;
     const appErr = mapError(error);
     
-    logStructured('error', 'Error during PDF parsing / extraction', {
+    logStructured('error', 'Error during document parsing / extraction', {
       requestId,
       correlationId,
       endpoint: 'extract-pdf',

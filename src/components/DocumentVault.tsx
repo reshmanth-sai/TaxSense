@@ -323,25 +323,39 @@ export default function DocumentVault({ onFileUpload, setActiveStep, onViewExtra
   const processFile = async (file: File) => {
     const myGeneration = ++processingGeneration;
     setErrorMessage(null);
-    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    const isDocument = file.type === 'application/pdf' || 
+      file.type.startsWith('image/') || 
+      /\.(pdf|png|jpe?g)$/i.test(file.name);
     const sizeStr = `${(file.size / 1024).toFixed(1)} KB`;
     setActiveFileName(file.name);
     setActiveFileSize(sizeStr);
 
-    if (isPdf) {
+    if (isDocument) {
       try {
         setBackgroundProcessing(true);
         setIngestionState('UPLOADING');
         setBackgroundProgress(15);
         setBackgroundStatusMessage('Uploading your document securely...');
 
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        // Non-blocking background fetch of PDF text
+        // Convert file to base64 for fast, reliable JSON transmission
+        const fileBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const res = reader.result as string;
+            resolve(res.split(',')[1] || '');
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        // Non-blocking background fetch of document text via JSON POST
         const responsePromise = fetch('/api/extract-pdf', {
           method: 'POST',
-          body: formData,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileBase64,
+            mimeType: file.type || 'application/pdf',
+          }),
         });
 
         if (activeProcessingInterval) clearInterval(activeProcessingInterval);

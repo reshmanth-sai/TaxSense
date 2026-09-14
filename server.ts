@@ -17,7 +17,8 @@ const app = express();
 // compression honours by skipping it, so token-by-token streaming is unaffected.
 app.use(compression());
 
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
 // Trust proxy if deployed behind a reverse proxy (e.g. Vercel, Cloudflare, Nginx)
 app.set('trust proxy', 1);
