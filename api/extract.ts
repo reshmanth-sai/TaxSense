@@ -4,23 +4,36 @@ import { generateContentWithRetryAndFallback, mapError } from '../services/ai/go
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const requestId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
-  const correlationId = (req.headers['x-correlation-id'] as string) || requestId;
+function sendResponse(res: any, statusCode: number, data: any) {
+  try {
+    if (typeof res.status === 'function' && typeof res.json === 'function') {
+      return res.status(statusCode).json(data);
+    }
+  } catch {}
+  try {
+    res.statusCode = statusCode;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(data));
+  } catch (err) {
+    console.error('sendResponse error:', err);
+  }
+}
+
+export default async function handler(req: any, res: any) {
+  const requestId = (req.headers && req.headers['x-request-id']) || crypto.randomUUID();
+  const correlationId = (req.headers && req.headers['x-correlation-id']) || requestId;
 
   try {
     if (req.method !== 'POST') {
-      res.status(405).json({ error: 'Method Not Allowed' });
-      return;
+      return sendResponse(res, 405, { error: 'Method Not Allowed' });
     }
 
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
     if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
-    const { text } = req.body;
+    const { text } = req.body || {};
     if (!text || typeof text !== 'string') {
-      res.status(400).json({ error: 'Text content from Form 16 is required.' });
-      return;
+      return sendResponse(res, 400, { error: 'Text content from Form 16 is required.' });
     }
 
     const response = await generateContentWithRetryAndFallback({
@@ -102,9 +115,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (safeData.deduction80TTA != null) safeData.deduction80TTA = Math.min(safeData.deduction80TTA, 10000);
     if (safeData.section24b != null) safeData.section24b = Math.min(safeData.section24b, 200000);
 
-    res.status(200).json({ success: true, data: safeData });
+    return sendResponse(res, 200, { success: true, data: safeData });
   } catch (error: any) {
     const appErr = mapError(error);
-    res.status(appErr.status).json({ error: appErr.message });
+    return sendResponse(res, appErr.status || 500, { error: appErr.message });
   }
 }

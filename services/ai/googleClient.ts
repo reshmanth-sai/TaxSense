@@ -108,7 +108,11 @@ export function mapError(error: any): AppError {
   let category = 'INTERNAL_ERROR';
   let userMessage = 'An unexpected error occurred while communicating with the AI service. Please try again.';
 
-  if (statusStr === 'UNAUTHENTICATED' || statusStr === '401' || message.includes('401') || message.includes('UNAUTHENTICATED') || message.includes('API key')) {
+  if (message.includes('GEMINI_API_KEY') || message.includes('API_KEY') || message.includes('missing or empty')) {
+    status = 500;
+    category = 'MISSING_API_KEY';
+    userMessage = 'GEMINI_API_KEY is not configured in your Vercel environment variables. Please add GEMINI_API_KEY to Vercel Project Settings > Environment Variables and redeploy.';
+  } else if (statusStr === 'UNAUTHENTICATED' || statusStr === '401' || message.includes('401') || message.includes('UNAUTHENTICATED') || message.includes('API key')) {
     status = 401;
     category = 'UNAUTHENTICATED';
     userMessage = 'Authentication failed. Please verify your API settings and try again.';

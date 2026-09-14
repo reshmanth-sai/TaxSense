@@ -3,15 +3,29 @@ import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../service
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
 
+function sendResponse(res: any, statusCode: number, data: any) {
+  try {
+    if (typeof res.status === 'function' && typeof res.json === 'function') {
+      return res.status(statusCode).json(data);
+    }
+  } catch {}
+  try {
+    res.statusCode = statusCode;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(data));
+  } catch (err) {
+    console.error('sendResponse error:', err);
+  }
+}
+
 export default async function handler(req: any, res: any) {
-  const requestId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
-  const correlationId = (req.headers['x-correlation-id'] as string) || requestId;
+  const requestId = (req.headers && req.headers['x-request-id']) || crypto.randomUUID();
+  const correlationId = (req.headers && req.headers['x-correlation-id']) || requestId;
   const startTime = Date.now();
 
   try {
     if (req.method !== 'POST') {
-      res.status(405).json({ error: 'Method Not Allowed' });
-      return;
+      return sendResponse(res, 405, { error: 'Method Not Allowed' });
     }
 
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
@@ -20,12 +34,12 @@ export default async function handler(req: any, res: any) {
     let base64Data: string = '';
     let mimeType: string = 'application/pdf';
 
-    // 1. Preferred serverless path: standard JSON payload containing base64 data
+    // 1. JSON payload containing base64 data (standard serverless mode)
     if (req.body && (req.body.fileBase64 || req.body.data)) {
       base64Data = req.body.fileBase64 || req.body.data;
       mimeType = req.body.mimeType || 'application/pdf';
-    } else if (req.headers['content-type']?.includes('multipart/form-data')) {
-      // 2. Fallback to multipart parser if requested
+    } else if (req.headers && req.headers['content-type']?.includes('multipart/form-data')) {
+      // 2. Fallback to multipart if raw form-data stream is supplied
       try {
         const Multer = (await import('multer')).default;
         const upload = Multer({ storage: Multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -42,8 +56,7 @@ export default async function handler(req: any, res: any) {
     }
 
     if (!base64Data) {
-      res.status(400).json({ error: 'No file data received. Please upload a PDF, JPG, or PNG document.' });
-      return;
+      return sendResponse(res, 400, { error: 'No file data received. Please upload a PDF, JPG, or PNG document.' });
     }
 
     logStructured('info', `Document received for extraction. Size: ~${Math.round(base64Data.length * 0.75)} bytes, type: ${mimeType}`, {
@@ -83,7 +96,7 @@ export default async function handler(req: any, res: any) {
       latencyMs,
     });
 
-    res.status(200).json({ text: response.text || '' });
+    return sendResponse(res, 200, { text: response.text || '' });
   } catch (error: any) {
     const latencyMs = Date.now() - startTime;
     const appErr = mapError(error);
@@ -99,6 +112,6 @@ export default async function handler(req: any, res: any) {
       stackTrace: error.stack,
     });
 
-    res.status(appErr.status).json({ error: appErr.message });
+    return sendResponse(res, appErr.status || 500, { error: appErr.message });
   }
 }
