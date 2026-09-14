@@ -173,12 +173,14 @@ const RecommendationCard: React.FC<RecommendationCardProps> = React.memo(({
   const isRegime = type === 'REGIME';
 
   return (
-    <div className={`border rounded-2xl p-[16px] flex flex-col justify-between hover:shadow-[0_12px_24px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_24px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-[3px] duration-200 group ${
+    <div className={`border rounded-2xl p-[16px] flex flex-col justify-between hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] dark:hover:shadow-none transition-all hover:-translate-y-[3px] duration-200 group ${
       isPrimary 
-        ? 'md:col-span-2 md:p-[20px] bg-gradient-to-br from-emerald-50/40 via-white to-white dark:from-[#0B1020] dark:to-slate-900/10 border-emerald-550/20 dark:border-emerald-500/15' 
+        // `via-` needs its own dark override: without it the gradient passes
+        // through pure white in dark mode and paints a diagonal white streak.
+        ? 'md:col-span-2 md:p-[20px] bg-gradient-to-br from-emerald-50/40 via-white to-white dark:from-[#0B1020] dark:via-[#0E131B] dark:to-[#0E131B] border-emerald-550/20 dark:border-emerald-500/15 dark:hover:border-emerald-500/35' 
         : isOpportunity 
-          ? 'bg-blue-50/20 dark:bg-[#0E1527] border-blue-200 dark:border-blue-500/20 shadow-[0_0_12px_rgba(37,99,235,0.02)]' 
-          : 'bg-white dark:bg-[#0E131B] border-slate-200 dark:border-white/[0.04] hover:border-slate-300 dark:hover:border-white/[0.08]'
+          ? 'bg-blue-50/20 dark:bg-[#0E1527] border-blue-200 dark:border-blue-500/20 shadow-[0_0_12px_rgba(37,99,235,0.02)] dark:hover:border-blue-500/40' 
+          : 'bg-white dark:bg-[#0E131B] border-slate-200 dark:border-white/[0.04] hover:border-slate-300 dark:hover:border-white/[0.12]'
     }`}>
       
       {/* Header */}

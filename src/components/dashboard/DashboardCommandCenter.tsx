@@ -293,7 +293,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
         </div>
 
         {/* 5-Column Grid Filing Journey Timeline Bar (Zero Scrollbars) */}
-        <div className="p-2.5 sm:p-3 bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.08] rounded-2xl grid grid-cols-5 gap-1 sm:gap-2 text-[11px] sm:text-xs font-mono relative shadow-xs overflow-hidden">
+        <div className="p-2.5 sm:p-3 bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.08] rounded-2xl grid grid-cols-5 gap-1 sm:gap-2 text-[11px] sm:text-xs font-mono relative shadow-xs">
           {journeyDetails.map((item) => (
             <div
               key={item.stage}
@@ -301,7 +301,7 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
               onMouseEnter={() => setHoveredJourneyStage(item.stage)}
               onMouseLeave={() => setHoveredJourneyStage(null)}
             >
-              <div className={`flex items-center gap-1 sm:gap-1.5 font-bold truncate px-1 py-0.5 rounded-lg ${
+              <div className={`flex items-center gap-1 sm:gap-1.5 font-bold truncate px-1.5 py-0.5 rounded-lg transition-all duration-150 group-hover:ring-1 group-hover:ring-slate-300 dark:group-hover:ring-white/15 group-hover:bg-white dark:group-hover:bg-white/[0.06] ${
                 item.status === 'VERIFIED' ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10' :
                 item.status === 'COMPLETED' ? 'text-purple-700 dark:text-purple-400 bg-purple-500/10' :
                 item.status === 'PENDING' ? 'text-amber-700 dark:text-amber-400 bg-amber-500/10' : 'text-slate-600 dark:text-slate-400'
@@ -320,10 +320,16 @@ export const DashboardCommandCenter: React.FC<DashboardCommandCenterProps> = ({
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-48 p-2.5 bg-slate-900 text-white border border-white/10 rounded-xl shadow-2xl z-40 text-[11px] font-sans text-center pointer-events-none"
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-52 p-3 rounded-xl z-40 text-[11px] font-sans text-center pointer-events-none bg-white text-slate-900 border border-slate-200 shadow-xl shadow-slate-900/10 dark:bg-[#0E131B] dark:text-slate-100 dark:border-white/10 dark:shadow-2xl dark:shadow-black/50"
                   >
-                    <div className="font-bold font-mono text-emerald-400">{item.stage}. {item.name}</div>
-                    <div className="text-slate-200 text-[10.5px] mt-0.5">{item.details}</div>
+                    <div className={`font-bold font-mono ${
+                      item.status === 'VERIFIED' ? 'text-emerald-600 dark:text-emerald-400' :
+                      item.status === 'COMPLETED' ? 'text-purple-600 dark:text-purple-400' :
+                      item.status === 'PENDING' ? 'text-amber-600 dark:text-amber-400' : 'text-slate-500 dark:text-slate-400'
+                    }`}>{item.stage}. {item.name}</div>
+                    <div className="text-slate-600 dark:text-slate-300 text-[10.5px] mt-0.5 leading-snug">{item.details}</div>
+                    {/* caret */}
+                    <div className="absolute left-1/2 top-full -translate-x-1/2 -mt-px w-2.5 h-2.5 rotate-45 bg-white border-r border-b border-slate-200 dark:bg-[#0E131B] dark:border-white/10" />
                   </motion.div>
                 )}
               </AnimatePresence>

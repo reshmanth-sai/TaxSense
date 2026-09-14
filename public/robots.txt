@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://taxsense20.vercel.app/sitemap.xml
+Sitemap: https://taxsense-copilot.vercel.app/sitemap.xml
