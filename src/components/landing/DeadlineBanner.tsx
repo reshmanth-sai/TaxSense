@@ -103,15 +103,24 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
       </>
     ) : phase === 'belated' ? (
       <>
-        You can still file a belated return under Sec 139(4). A{' '}
+        Belated return still open —{' '}
         <strong className="text-slate-900 dark:text-slate-200 font-semibold">
           ₹{FILING_DEADLINES.lateFee.toLocaleString('en-IN')} Sec 234F
         </strong>{' '}
-        fee applies (₹{FILING_DEADLINES.lateFeeReduced.toLocaleString('en-IN')} if your total income is under ₹5 lakh).
+        fee, ₹{FILING_DEADLINES.lateFeeReduced.toLocaleString('en-IN')} if income ≤ ₹5 lakh.
       </>
     ) : (
       <>The belated return window closed on 31 December. You can still compare regimes and plan for next year.</>
     );
+
+  // Plain-text twin of `detail` for the title tooltip, so the full sentence is
+  // still reachable when the truncate kicks in at narrower widths.
+  const detailText =
+    phase === 'open'
+      ? `File by 31 July to avoid the ₹${FILING_DEADLINES.lateFee.toLocaleString('en-IN')} Sec 234F late filing fee.`
+      : phase === 'belated'
+      ? `Belated return (Sec 139(4)) still open — ₹${FILING_DEADLINES.lateFee.toLocaleString('en-IN')} Sec 234F fee, ₹${FILING_DEADLINES.lateFeeReduced.toLocaleString('en-IN')} if income ≤ ₹5 lakh.`
+      : 'The belated return window closed on 31 December. You can still compare regimes and plan for next year.';
 
   const countdownLabel = phase === 'open' ? 'Due date' : 'Belated cut-off';
 
@@ -135,7 +144,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
             <span>{headline}</span>
           </span>
           <span className="hidden md:inline text-slate-300 dark:text-slate-700">|</span>
-          <span className="hidden md:inline text-slate-600 dark:text-slate-400 truncate">{detail}</span>
+          <span className="hidden md:inline text-slate-600 dark:text-slate-400 truncate" title={detailText}>{detail}</span>
         </div>
 
         {/* Right countdown & CTA group */}
@@ -143,7 +152,7 @@ export const DeadlineBanner: React.FC<DeadlineBannerProps> = ({ onStart, onVisib
           {phase !== 'closed' && (
             <div className="flex items-center gap-1.5 text-xs font-sans text-slate-600 dark:text-slate-400">
               <Clock className={`w-3.5 h-3.5 ${accent.text}`} />
-              <span className="hidden sm:inline text-slate-500 font-medium">{countdownLabel}:</span>
+              <span className="hidden xl:inline text-slate-500 font-medium">{countdownLabel}:</span>
               <span className={`font-mono border px-2 py-0.5 rounded-md font-bold text-xs tabular-nums ${accent.chip}`}>
                 {days}d {hours}h {minutes}m {seconds}s
               </span>
