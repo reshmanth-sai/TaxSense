@@ -46,9 +46,7 @@ export interface UploadedFile {
 }
 
 const isDev = typeof window !== 'undefined' && 
-  (window.location.hostname === 'localhost' || 
-   window.location.hostname === '127.0.0.1' || 
-   window.location.search.includes('demo=true'));
+   window.location.search.includes('demo=true');
 
 const defaultUploadedFiles: UploadedFile[] = isDev ? [
   {
@@ -599,6 +597,8 @@ export const useTaxStore = create<TaxStoreState>()(
           rawForm16Text: '',
           user: null,
           authMode: null,
+          taxProfiles: defaultTaxProfiles,
+          activeProfileId: 'self',
         }));
       },
 
@@ -626,6 +626,8 @@ export const useTaxStore = create<TaxStoreState>()(
           rawForm16Text: '',
           user: null,
           authMode: null,
+          taxProfiles: defaultTaxProfiles,
+          activeProfileId: 'self',
         }));
       },
     }),
