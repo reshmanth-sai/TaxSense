@@ -2,6 +2,11 @@ import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../service
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
+// Mirrors the 3 MB client-side cap (see DocumentVault.tsx) with base64's 4/3
+// overhead; Vercel would reject anything larger at the edge anyway.
+const MAX_BASE64_CHARS = 4 * 1024 * 1024 * 4 / 3;
+const ALLOWED_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp']);
+
 function sendResponse(res: any, statusCode: number, data: any) {
   try {
     if (typeof res.status === 'function' && typeof res.json === 'function') {
@@ -30,17 +35,18 @@ export default async function handler(req: any, res: any) {
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
     if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
-    let base64Data: string = '';
-    let mimeType: string = 'application/pdf';
+    const body = (req.body && typeof req.body === 'object') ? req.body : {};
+    const base64Data: unknown = body.fileBase64 ?? body.data;
+    const mimeType: string = typeof body.mimeType === 'string' ? body.mimeType.toLowerCase() : 'application/pdf';
 
-    // Standard JSON payload containing base64 data
-    if (req.body && (req.body.fileBase64 || req.body.data)) {
-      base64Data = req.body.fileBase64 || req.body.data;
-      mimeType = req.body.mimeType || 'application/pdf';
-    }
-
-    if (!base64Data) {
+    if (typeof base64Data !== 'string' || base64Data.length === 0) {
       return sendResponse(res, 400, { error: 'No file data received. Please upload a PDF, JPG, or PNG document.' });
+    }
+    if (base64Data.length > MAX_BASE64_CHARS) {
+      return sendResponse(res, 413, { error: 'File is too large. Maximum upload size is 3 MB.' });
+    }
+    if (!ALLOWED_MIME_TYPES.has(mimeType)) {
+      return sendResponse(res, 415, { error: 'Unsupported file type. Please upload a PDF, JPG, or PNG document.' });
     }
 
     logStructured('info', `Document received for extraction. Size: ~${Math.round(base64Data.length * 0.75)} bytes, type: ${mimeType}`, {
@@ -64,7 +70,7 @@ export default async function handler(req: any, res: any) {
         {
           inlineData: {
             data: base64Data,
-            mimeType: mimeType.includes('image/') ? mimeType : 'application/pdf'
+            mimeType
           }
         },
         'Please extract all text content from this Form 16 document. Return ONLY the plain text characters from the document, preserving labels and values. Do not summarize or format as JSON.'

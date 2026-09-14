@@ -34,12 +34,12 @@ export const ShareSavingsModal: React.FC<ShareSavingsModalProps> = ({
 
   const handleShareLinkedIn = () => {
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${encodeURIComponent(shareText)}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleShareTwitter = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
