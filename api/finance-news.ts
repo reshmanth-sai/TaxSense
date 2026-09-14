@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
-import { generateContentWithRetryAndFallback, mapError, logStructured } from '../services/ai/googleClient';
-import { enforceRateLimit, API_RATE_LIMIT } from '../services/rateLimit';
+import { generateContentWithRetryAndFallback, mapError, logStructured } from '../services/ai/googleClient.js';
+import { enforceRateLimit, API_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
 // In-memory cache for news (warm lambdas will share this cache)

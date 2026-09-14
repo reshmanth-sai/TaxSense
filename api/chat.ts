@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateContentStreamWithLogging, mapError, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
-import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder';
-import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
+import { generateContentStreamWithLogging, mapError, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient.js';
+import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder.js';
+import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

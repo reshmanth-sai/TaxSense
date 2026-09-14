@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { validateEnvironment } from '../services/ai/googleClient';
-import { enforceRateLimit, API_RATE_LIMIT } from '../services/rateLimit';
+import { validateEnvironment } from '../services/ai/googleClient.js';
+import { enforceRateLimit, API_RATE_LIMIT } from '../services/rateLimit.js';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;

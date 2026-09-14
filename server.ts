@@ -1,11 +1,11 @@
 import compression from 'compression';
 import express from 'express';
 import path from 'path';
-import healthHandler from './api/health';
-import financeNewsHandler from './api/finance-news';
-import extractPdfHandler from './api/extract-pdf';
-import extractHandler from './api/extract';
-import chatHandler from './api/chat';
+import healthHandler from './api/health.js';
+import financeNewsHandler from './api/finance-news.js';
+import extractPdfHandler from './api/extract-pdf.js';
+import extractHandler from './api/extract.js';
+import chatHandler from './api/chat.js';
 
 const app = express();
 
