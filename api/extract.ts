@@ -1,4 +1,3 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
 import { Type } from '@google/genai';
 import { generateContentWithRetryAndFallback, mapError } from '../services/ai/googleClient';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';

@@ -1,4 +1,4 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateContentStreamWithLogging, mapError, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
 import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';

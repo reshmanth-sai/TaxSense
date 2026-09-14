@@ -1,4 +1,3 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
 import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient';
 import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit';
 import crypto from 'crypto';
@@ -34,25 +33,10 @@ export default async function handler(req: any, res: any) {
     let base64Data: string = '';
     let mimeType: string = 'application/pdf';
 
-    // 1. JSON payload containing base64 data (standard serverless mode)
+    // Standard JSON payload containing base64 data
     if (req.body && (req.body.fileBase64 || req.body.data)) {
       base64Data = req.body.fileBase64 || req.body.data;
       mimeType = req.body.mimeType || 'application/pdf';
-    } else if (req.headers && req.headers['content-type']?.includes('multipart/form-data')) {
-      // 2. Fallback to multipart if raw form-data stream is supplied
-      try {
-        const Multer = (await import('multer')).default;
-        const upload = Multer({ storage: Multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
-        await new Promise((resolve, reject) => {
-          upload.single('file')(req, res, (err: any) => (err ? reject(err) : resolve(null)));
-        });
-        if (req.file?.buffer) {
-          base64Data = req.file.buffer.toString('base64');
-          mimeType = req.file.mimetype || 'application/pdf';
-        }
-      } catch (multerErr) {
-        console.warn('Multer multipart fallback failed:', multerErr);
-      }
     }
 
     if (!base64Data) {
