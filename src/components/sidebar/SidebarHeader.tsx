@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calculator, ChevronDown, Check, Plus, ShieldCheck } from 'lucide-react';
+import { Calculator, ChevronDown, Check, Plus, ShieldCheck, X } from 'lucide-react';
 import { useSidebarStore } from './useSidebarStore';
 import { useTaxStore } from '../../store/useTaxStore';
 import { CollapseButton } from './CollapseButton';
@@ -146,7 +146,18 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isExpanded }) => {
           >
             <ShieldCheck className="w-4 h-4 text-blue-500" />
           </button>
-          <CollapseButton />
+          <div className="md:hidden">
+            <button
+              onClick={() => useSidebarStore.getState().setMobileOpen(false)}
+              aria-label="Close navigation menu"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="hidden md:block">
+            <CollapseButton />
+          </div>
         </div>
       )}
     </div>

@@ -969,9 +969,85 @@ export default function App() {
               {/* Viewport Core Workspace Area */}
               <div className="flex-1 flex flex-col h-full overflow-hidden">
 
-                {/* Persistent Tax Summary HUD */}
+                {/* Mobile Pinned Header Bar (Outside mainContentRef so it never scrolls away) */}
+                <header className="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200/80 dark:border-white/[0.06] bg-white/90 dark:bg-[#080d17]/90 backdrop-blur-xl z-30 shrink-0 select-none">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      aria-label="Open navigation menu"
+                      onClick={() => useSidebarStore.getState().toggleMobileOpen()}
+                      className="p-2 -ml-1 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-white/[0.04] active:bg-slate-200 dark:active:bg-white/[0.08] border border-slate-200 dark:border-white/[0.06] rounded-xl transition-colors cursor-pointer"
+                    >
+                      <Menu className="w-5 h-5" />
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white">TaxSense</span>
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-md border border-blue-500/20">AY 2025-26</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {authMode === 'GUEST' ? (
+                      <button
+                        onClick={handleGoogleSignIn}
+                        className="px-2.5 py-1 text-[10px] font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-lg uppercase tracking-wider shadow-xs cursor-pointer transition-colors"
+                      >
+                        Sign In
+                      </button>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/[0.08] flex items-center justify-center">
+                        <User className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+                      </div>
+                    )}
+                  </div>
+                </header>
+
+                {/* Mobile Horizontal Tax Status Ribbon (Scrollable horizontally, pinned under mobile header) */}
                 {activeStep >= 3 && activeStep <= 9 && (
-                  <div className="w-full h-[60px] bg-white/80 dark:bg-slate-950/40 border-b border-slate-200/80 dark:border-white/[0.03] backdrop-blur-xl px-6 transition-colors duration-200 shadow-xs shrink-0 z-20 relative flex items-center">
+                  <div className="md:hidden flex items-center gap-2 overflow-x-auto scrollbar-none px-3.5 py-2 bg-slate-50/90 dark:bg-[#060a12]/90 border-b border-slate-200/60 dark:border-white/[0.04] shrink-0 z-20 select-none text-[10px]">
+                    <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[8px] shrink-0 mr-0.5">Status:</span>
+
+                    {/* Salary */}
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 rounded-md font-medium border border-slate-200 dark:border-white/[0.04] shrink-0">
+                      <span className="opacity-70 text-[8px] uppercase tracking-wider font-bold">Salary</span>
+                      <span className="font-mono font-bold text-slate-900 dark:text-slate-100">{formatINR(taxData.grossSalary)}</span>
+                    </div>
+
+                    {/* ITR */}
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 rounded-md font-medium border border-slate-200 dark:border-white/[0.04] shrink-0">
+                      <span className="opacity-70 text-[8px] uppercase tracking-wider font-bold">ITR</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100">{formType}</span>
+                    </div>
+
+                    {/* Claimed */}
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 rounded-md font-medium border border-slate-200 dark:border-white/[0.04] shrink-0">
+                      <span className="opacity-70 text-[8px] uppercase tracking-wider font-bold">Claimed</span>
+                      <span className="font-mono font-bold text-slate-900 dark:text-slate-100">
+                        {formatINR(
+                          taxData.deduction80C +
+                          taxData.deduction80D +
+                          taxData.hraExemption +
+                          taxData.section24b
+                        )}
+                      </span>
+                    </div>
+
+                    {/* Savings */}
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md font-bold shrink-0">
+                      <span className="opacity-75 text-[8px] uppercase tracking-wider font-bold">Savings</span>
+                      <span className="font-mono font-black">{formatINR(taxCalculationResult.savings)}</span>
+                    </div>
+
+                    {/* Regime */}
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-md font-bold shrink-0">
+                      <span className="opacity-75 text-[8px] uppercase tracking-wider font-bold">Regime</span>
+                      <span className="font-bold">{taxCalculationResult.recommendedRegime === 'NEW' ? 'New' : 'Old'}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Persistent Desktop Tax Summary HUD */}
+                {activeStep >= 3 && activeStep <= 9 && (
+                  <div className="hidden md:flex w-full h-[60px] bg-white/80 dark:bg-slate-950/40 border-b border-slate-200/80 dark:border-white/[0.03] backdrop-blur-xl px-6 transition-colors duration-200 shadow-xs shrink-0 z-20 relative items-center">
                     <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[11px]">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[9px] mr-1">Tax Status:</span>
@@ -1035,21 +1111,7 @@ export default function App() {
                   onScroll={handleMainScroll}
                   className="flex-1 overflow-y-auto flex flex-col justify-between relative bg-transparent z-10"
                 >
-                  {/* Mobile Header Bar */}
-                  <div className="md:hidden flex items-center justify-between p-4 border-b border-slate-200 dark:border-white/[0.04] bg-white/80 dark:bg-[#040608]/80 backdrop-blur-md z-30 shrink-0 select-none">
-                    <button
-                      onClick={() => useSidebarStore.getState().toggleCollapsed()}
-                      className="p-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 focus:outline-none cursor-pointer"
-                    >
-                      <Menu className="w-5 h-5" />
-                    </button>
-                    <span className="font-black text-xs uppercase tracking-wider text-slate-900 dark:text-slate-100 text-left flex-1 pl-3">TaxSense</span>
-                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/[0.05] flex items-center justify-center">
-                      <User className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                    </div>
-                  </div>
-
-                  <main className={`flex-1 max-w-7xl w-full mx-auto p-6 pb-28 md:p-8 md:pb-28 space-y-8 ${isPrivacyBlurred ? 'privacy-blur-active' : ''}`}>
+                  <main className={`flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 pb-28 md:pb-28 space-y-8 ${isPrivacyBlurred ? 'privacy-blur-active' : ''}`}>
 
                     {/* Dialog Trigger: Extraction Confirmation */}
                     <AnimatePresence>
@@ -1279,12 +1341,13 @@ export default function App() {
                     className="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-40 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.4)] dark:shadow-[0_6px_25px_rgba(139,92,246,0.6)] cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-2 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 border border-purple-400/30 ring-2 ring-purple-500/20 font-sans"
                   >
                     <Sparkles className="w-4 h-4 text-purple-200 animate-pulse shrink-0 group-hover:rotate-12 transition-transform duration-300" />
-                    <span>
+                    <span className="hidden sm:inline">
                       {activeStep === 11 ? 'Need help claiming 80D?' :
                        activeStep === 6 ? 'Explain my tax computation?' :
                        activeStep === 10 ? 'Ready to submit your return?' :
                        'Ask AI Copilot'}
                     </span>
+                    <span className="inline sm:hidden">AI Copilot</span>
                   </motion.button>
                 )}
               </AnimatePresence>

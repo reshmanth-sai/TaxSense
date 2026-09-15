@@ -94,12 +94,12 @@ Generated via TaxSense AI Copilot Workspace
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-3xl bg-white dark:bg-[#0c121e] border border-slate-200 dark:border-white/[0.08] rounded-3xl shadow-2xl overflow-hidden z-10 p-6 md:p-8 text-left space-y-6 print:border-none print:shadow-none print:p-0 print:max-w-none print:rounded-none"
+          className="relative w-full max-w-3xl bg-white dark:bg-[#0c121e] border border-slate-200 dark:border-white/[0.08] rounded-3xl shadow-2xl overflow-y-auto max-h-[92vh] z-10 p-5 sm:p-6 md:p-8 text-left space-y-6 print:border-none print:shadow-none print:p-0 print:max-w-none print:rounded-none"
         >
           {/* Header Bar */}
-          <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.06] pb-4 print:pb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4 print:pb-2">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 print:hidden">
+              <div className="w-10 h-10 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 print:hidden">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
@@ -112,7 +112,7 @@ Generated via TaxSense AI Copilot Workspace
               </div>
             </div>
 
-            <div className="flex items-center gap-2 print:hidden">
+            <div className="flex flex-wrap items-center justify-end gap-2 print:hidden">
               <button
                 onClick={handleCopyText}
                 className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5"

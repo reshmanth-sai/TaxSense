@@ -106,11 +106,23 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div 
-      className={`fixed top-0 right-0 h-screen bg-white/95 dark:bg-[#06080A]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/[0.05] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl ${
-        isOpen ? 'w-full sm:w-[460px] translate-x-0' : 'w-full sm:w-[460px] translate-x-full opacity-0 pointer-events-none'
-      }`}
-    >
+    <>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-[#060A10]/70 backdrop-blur-xs z-40 transition-opacity cursor-pointer"
+          />
+        )}
+      </AnimatePresence>
+      <div 
+        className={`fixed top-0 right-0 h-screen bg-white/95 dark:bg-[#06080A]/95 backdrop-blur-2xl border-l border-slate-200 dark:border-white/[0.05] flex flex-col z-50 transition-all duration-300 ease-in-out shadow-2xl ${
+          isOpen ? 'w-full sm:w-[460px] translate-x-0' : 'w-full sm:w-[460px] translate-x-full opacity-0 pointer-events-none'
+        }`}
+      >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-white/[0.05] bg-slate-50/80 dark:bg-[#040608]/90 relative overflow-hidden">
         {/* Glow ambient background */}
@@ -285,5 +297,6 @@ export const AICopilot: React.FC<AICopilotProps> = ({ isOpen, onClose }) => {
         </p>
       </div>
     </div>
+  </>
   );
 };

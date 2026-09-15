@@ -2289,8 +2289,8 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                     )}
                   </div>
 
-                  {/* Step Label */}
-                  <div className="mt-3 text-center px-1">
+                  {/* Step Label (Desktop & Tablet) */}
+                  <div className="hidden sm:block mt-3 text-center px-1">
                     <span
                       className={`text-[9.5px] uppercase tracking-widest font-extrabold transition-all duration-200 block leading-tight ${
                         isActive
@@ -2310,6 +2310,14 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                 </button>
               );
             })}
+          </div>
+
+          {/* Active Step Indicator on Mobile */}
+          <div className="sm:hidden mt-3 pt-2 border-t border-slate-200/60 dark:border-white/[0.04] text-center">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Step {guidedFilingStep} of {steps.length}:{' '}
+              <span className="text-slate-900 dark:text-white font-black">{steps[guidedFilingStep - 1]?.label}</span>
+            </span>
           </div>
         </div>
       </div>
@@ -2346,24 +2354,26 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* Left Side: Form Content Card */}
-          <div className="lg:col-span-8 bg-white/70 dark:bg-[#060A10]/70 border border-slate-200/80 dark:border-white/[0.06] rounded-3xl p-7 backdrop-blur-xl space-y-8 relative shadow-md">
+          <div className="lg:col-span-8 bg-white/70 dark:bg-[#060A10]/70 border border-slate-200/80 dark:border-white/[0.06] rounded-3xl p-5 sm:p-7 backdrop-blur-xl space-y-8 relative shadow-md">
 
-            {/* Reassurance Auto-save Badge */}
-            <div className="absolute top-7 right-7 flex items-center gap-1.5 text-[9.5px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              All changes saved
-            </div>
+            {/* Form Header with Auto-save Status */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left">
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                  {guidedFilingStep === 1 && "Personal Information"}
+                  {guidedFilingStep === 2 && "Income Summary"}
+                </h3>
+                <p className="text-[11.5px] text-slate-500 dark:text-slate-400 font-medium">
+                  {guidedFilingStep === 1 && "Verify your personal profile particulars extracted from Form 16."}
+                  {guidedFilingStep === 2 && "Configure and confirm ledger details of your gross taxable income."}
+                </p>
+              </div>
 
-            {/* Form Header */}
-            <div className="space-y-1 text-left">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                {guidedFilingStep === 1 && "Personal Information"}
-                {guidedFilingStep === 2 && "Income Summary"}
-              </h3>
-              <p className="text-[11.5px] text-slate-500 dark:text-slate-400 font-medium">
-                {guidedFilingStep === 1 && "Verify your personal profile particulars extracted from Form 16."}
-                {guidedFilingStep === 2 && "Configure and confirm ledger details of your gross taxable income."}
-              </p>
+              {/* Reassurance Auto-save Badge */}
+              <div className="self-start sm:self-auto flex items-center gap-1.5 text-[9.5px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full select-none shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                All changes saved
+              </div>
             </div>
 
             <div className="pt-2">
@@ -2378,7 +2388,7 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                         value={incomeProfile?.employeeName || ''}
                         placeholder="Add your name in the Document Vault"
                         readOnly
-                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
+                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 pl-4 pr-24 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />
                       <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9.5px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg flex items-center gap-1 select-none">
                         <Check className="w-3 h-3 text-emerald-500" />
@@ -2395,7 +2405,7 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                         value={incomeProfile?.pan || ''}
                         placeholder="Not detected"
                         readOnly
-                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
+                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 pl-4 pr-24 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />
                       <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9.5px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg flex items-center gap-1 select-none">
                         <Check className="w-3 h-3 text-emerald-500" />
@@ -2411,7 +2421,7 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                         type="text"
                         defaultValue="Private Sector Co."
                         disabled
-                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
+                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 pl-4 pr-24 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />
                       <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9.5px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg flex items-center gap-1 select-none">
                         <Check className="w-3 h-3 text-emerald-500" />
@@ -2427,7 +2437,7 @@ export const FilingWorkspacePanel: React.FC<FilingWorkspacePanelProps> = ({
                         type="text"
                         defaultValue="Resident Individual"
                         disabled
-                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 px-4 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
+                        className="w-full bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-white/[0.06] rounded-2xl py-3 pl-4 pr-24 text-xs font-semibold text-slate-900 dark:text-slate-100 cursor-not-allowed focus:outline-none"
                       />
                       <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[9.5px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg flex items-center gap-1 select-none">
                         <Check className="w-3 h-3 text-emerald-500" />

@@ -280,16 +280,16 @@ export const WhatIfSimulatorModal: React.FC<WhatIfSimulatorModalProps> = ({ isOp
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-          className="relative w-full max-w-4xl bg-white dark:bg-[#0c121e] border border-slate-200 dark:border-white/[0.08] rounded-3xl shadow-2xl overflow-hidden z-10 my-8 text-left"
+          className="relative w-full max-w-4xl bg-white dark:bg-[#0c121e] border border-slate-200 dark:border-white/[0.08] rounded-3xl shadow-2xl overflow-hidden z-10 my-4 sm:my-8 text-left max-h-[92vh] flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/50 dark:bg-white/[0.01]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/50 dark:bg-white/[0.01]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+              <div className="w-10 h-10 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
                 <SlidersHorizontal className="w-5 h-5" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                     “What-If” Tax Simulator
                   </h2>
@@ -304,7 +304,7 @@ export const WhatIfSimulatorModal: React.FC<WhatIfSimulatorModalProps> = ({ isOp
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2 self-end sm:self-auto">
               <button
                 onClick={handleReset}
                 className="px-3 py-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs font-semibold rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -387,7 +387,7 @@ export const WhatIfSimulatorModal: React.FC<WhatIfSimulatorModalProps> = ({ isOp
           {/* Modal Body Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[calc(85vh-220px)] overflow-y-auto">
             {/* Left Column: Interactive Sliders (7 cols) */}
-            <div className="lg:col-span-7 p-6 space-y-6 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-white/[0.06]">
+            <div className="lg:col-span-7 p-4 sm:p-6 space-y-6 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-white/[0.06]">
               {/* Quick Presets Row */}
               <div className="flex items-center gap-2 pb-2 overflow-x-auto scrollbar-none border-b border-slate-200/60 dark:border-white/[0.04]">
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 shrink-0 flex items-center gap-1">

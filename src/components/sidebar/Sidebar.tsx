@@ -21,6 +21,7 @@ import { SidebarItem } from './SidebarItem';
 import { UserProfile } from './UserProfile';
 import { SearchModal } from './SearchModal';
 import { FamilyProfileSwitcher } from '../profile/FamilyProfileSwitcher';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface SidebarProps {
   activeStep: number;
@@ -65,8 +66,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const sidebarBehavior = useSidebarStore((state) => state.sidebarBehavior);
   const setCollapsed = useSidebarStore((state) => state.setCollapsed);
   const toggleCollapsed = useSidebarStore((state) => state.toggleCollapsed);
+  const isMobileOpen = useSidebarStore((state) => state.isMobileOpen);
+  const setMobileOpen = useSidebarStore((state) => state.setMobileOpen);
   const theme = useSidebarStore((state) => state.theme);
   const setTheme = useSidebarStore((state) => state.setTheme);
+
+  const isMobile = useIsMobile();
 
   // Debounced hover state
   const [isHoverActive, setIsHoverActive] = useState(false);
@@ -122,28 +127,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  // Responsive layout tracking
+  // Responsive layout tracking (runs on window resize only)
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width < 768) {
+      if (width >= 768 && width < 1024) {
         setCollapsed(true);
-      } else if (width < 1024) {
-        setCollapsed(true);
-      } else {
-        // Desktop uses the persisted behavior setting
+      } else if (width >= 1024) {
         if (sidebarBehavior === 'pinned') {
           setCollapsed(false);
         } else {
           setCollapsed(true);
         }
       }
+      if (width >= 768) {
+        setMobileOpen(false);
+      }
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
-  }, [setCollapsed, sidebarBehavior]);
+  }, [setCollapsed, setMobileOpen, sidebarBehavior]);
 
   // Global key listener for Ctrl+B and Esc
   useEffect(() => {
@@ -153,15 +158,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         toggleCollapsed();
       }
 
-      if (e.key === 'Escape' && window.innerWidth < 768 && !isCollapsed) {
+      if (e.key === 'Escape' && isMobile && isMobileOpen) {
         e.preventDefault();
-        setCollapsed(true);
+        setMobileOpen(false);
       }
     };
 
     window.addEventListener('keydown', handleGlobalKeys);
     return () => window.removeEventListener('keydown', handleGlobalKeys);
-  }, [isCollapsed, toggleCollapsed, setCollapsed]);
+  }, [isMobile, isMobileOpen, toggleCollapsed, setMobileOpen]);
 
   // Menu Keyboard navigation (Up/Down arrow key focus)
   const handleNavKeyDown = (e: React.KeyboardEvent) => {
@@ -190,10 +195,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   // Visual expansion state (Unifies manual collapse/expand with hover expansion)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const isExpandedVisual = isMobile
-    ? !isCollapsed
+    ? true
     : (sidebarBehavior === 'pinned' || (sidebarBehavior === 'auto_hover' && isHoverActive));
+
+  // Navigation action wrappers that auto-dismiss mobile drawer
+  const handleItemNav = (step: number) => {
+    setActiveStep(step);
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
+  const handleItemAction = (action?: () => void) => {
+    if (action) action();
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
 
   return (
     <>
@@ -208,29 +227,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Mobile Backdrop Overlay */}
       <AnimatePresence>
-        {isMobile && !isCollapsed && (
+        {isMobile && isMobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setCollapsed(true)}
-            className="fixed inset-0 bg-[#060A10]/70 backdrop-blur-sm z-30 md:hidden"
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 bg-[#060A10]/80 backdrop-blur-sm z-40 md:hidden cursor-pointer"
           />
         )}
       </AnimatePresence>
 
-      {/* Main Collapsible Sidebar Panel */}
+      {/* Main Sidebar Panel */}
       <motion.aside
         initial={false}
-        animate={{
+        animate={isMobile ? {
+          width: 280,
+          x: isMobileOpen ? 0 : -300
+        } : {
           width: isExpandedVisual ? 220 : 60,
-          // Slide completely off-screen on mobile when collapsed
-          x: isMobile && isCollapsed ? -220 : 0
+          x: 0
         }}
-        transition={{ type: 'spring', stiffness: 220, damping: 26 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="glass-sidebar-blur flex flex-col justify-between shrink-0 z-40 fixed top-3 bottom-3 left-3 h-[calc(100vh-24px)] rounded-3xl overflow-hidden font-sans"
+        className={`glass-sidebar-blur flex flex-col justify-between shrink-0 font-sans z-50 overflow-hidden ${
+          isMobile
+            ? 'fixed top-0 bottom-0 left-0 h-screen w-[280px] rounded-r-3xl shadow-2xl border-r border-slate-200/80 dark:border-white/[0.08] bg-white/95 dark:bg-[#0c121e]/95 backdrop-blur-2xl'
+            : 'fixed top-3 bottom-3 left-3 h-[calc(100vh-24px)] rounded-3xl z-40'
+        }`}
       >
         {/* Top Scrollable Navigation Section */}
         <div className="flex flex-col flex-1 min-h-0">
@@ -262,7 +287,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={LayoutDashboard}
                 isActive={activeStep === 11}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(11)}
+                onClick={() => handleItemNav(11)}
                 isPrimary={true}
               />
               <SidebarItem
@@ -270,7 +295,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={Award}
                 isActive={activeStep === 5}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(5)}
+                onClick={() => handleItemNav(5)}
                 isPrimary={true}
               />
               <SidebarItem
@@ -278,7 +303,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={ListTodo}
                 isActive={activeStep === 6}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(6)}
+                onClick={() => handleItemNav(6)}
                 isPrimary={true}
               />
             </nav>
@@ -304,14 +329,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={BrainCircuit}
                 isActive={activeStep === 4}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(4)}
+                onClick={() => handleItemNav(4)}
               />
               <SidebarItem
                 label="What-if Simulator"
                 icon={SlidersHorizontal}
                 isActive={false}
                 isExpanded={isExpandedVisual}
-                onClick={() => onOpenWhatIf && onOpenWhatIf()}
+                onClick={() => handleItemAction(onOpenWhatIf)}
               />
             </nav>
 
@@ -336,21 +361,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 icon={FileUp}
                 isActive={activeStep === 3}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(3)}
+                onClick={() => handleItemNav(3)}
               />
               <SidebarItem
                 label="Export & Reports"
                 icon={History}
                 isActive={activeStep === 10}
                 isExpanded={isExpandedVisual}
-                onClick={() => setActiveStep(10)}
+                onClick={() => handleItemNav(10)}
               />
               <SidebarItem
                 label="Filing Guide"
                 icon={BookOpen}
                 isActive={false}
                 isExpanded={isExpandedVisual}
-                onClick={() => onOpenFilingGuide && onOpenFilingGuide()}
+                onClick={() => handleItemAction(onOpenFilingGuide)}
               />
             </nav>
           </div>
@@ -363,7 +388,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             isCollapsed && !isExpandedVisual ? (
               <div className="relative group/guest-item flex justify-center">
                 <button
-                  onClick={onGoogleSignIn}
+                  onClick={() => handleItemAction(onGoogleSignIn)}
                   className="w-9 h-9 flex items-center justify-center bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/25 hover:bg-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400 transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500/50 shadow-xs"
                 >
                   <AlertCircle className="w-4 h-4 text-amber-500 animate-pulse" />
@@ -384,7 +409,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </div>
                 <button
-                  onClick={onGoogleSignIn}
+                  onClick={() => handleItemAction(onGoogleSignIn)}
                   className="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold rounded-lg text-[8px] uppercase tracking-wider cursor-pointer transition-colors shadow-sm"
                 >
                   Sign In
@@ -411,7 +436,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               icon={Settings}
               isActive={isSettingsOpen}
               isExpanded={isExpandedVisual}
-              onClick={() => setIsSettingsOpen(true)}
+              onClick={() => handleItemAction(() => setIsSettingsOpen(true))}
               showFavoriteOption={false}
             />
 

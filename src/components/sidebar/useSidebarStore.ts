@@ -14,6 +14,7 @@ interface SidebarState {
   activeWorkspace: string;
   theme: SidebarTheme;
   isSearchOpen: boolean;
+  isMobileOpen: boolean;
   
   // Actions
   toggleCollapsed: () => void;
@@ -25,6 +26,8 @@ interface SidebarState {
   setWorkspace: (workspace: string) => void;
   setTheme: (theme: SidebarTheme) => void;
   setSearchOpen: (open: boolean) => void;
+  setMobileOpen: (open: boolean) => void;
+  toggleMobileOpen: () => void;
 }
 
 export const useSidebarStore = create<SidebarState>()(
@@ -41,6 +44,10 @@ export const useSidebarStore = create<SidebarState>()(
       activeWorkspace: 'TaxSense',
       theme: 'dark',
       isSearchOpen: false,
+      isMobileOpen: false,
+
+      setMobileOpen: (open) => set({ isMobileOpen: open }),
+      toggleMobileOpen: () => set((state) => ({ isMobileOpen: !state.isMobileOpen })),
 
       setSidebarBehavior: (behavior) => set((state) => {
         const isCollapsed = behavior !== 'pinned';
