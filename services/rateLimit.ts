@@ -23,6 +23,33 @@ interface Bucket {
 
 const buckets = new Map<string, Bucket>();
 
+// Memory safeguard: bound in-memory rate-limit buckets to prevent memory exhaustion DoS
+const MAX_BUCKETS = 10_000;
+let lastPrune = Date.now();
+const PRUNE_INTERVAL_MS = 60_000; // prune at most once every 60 seconds
+
+export function pruneExpiredBuckets(now = Date.now()): void {
+  if (now - lastPrune < PRUNE_INTERVAL_MS && buckets.size < MAX_BUCKETS) {
+    return;
+  }
+  lastPrune = now;
+
+  for (const [key, bucket] of buckets.entries()) {
+    if (now >= bucket.resetAt) {
+      buckets.delete(key);
+    }
+  }
+
+  // Hard eviction safeguard if still over cap
+  if (buckets.size > MAX_BUCKETS) {
+    let toDelete = buckets.size - MAX_BUCKETS;
+    for (const key of buckets.keys()) {
+      buckets.delete(key);
+      if (--toDelete <= 0) break;
+    }
+  }
+}
+
 interface MinimalRequest {
   headers: Record<string, string | string[] | undefined>;
 }
@@ -35,11 +62,30 @@ interface MinimalResponse {
 function clientKey(req: MinimalRequest): string {
   const forwarded = req.headers['x-forwarded-for'];
   const value = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-  return value?.split(',')[0]?.trim() || 'unknown';
+  if (value) {
+    const clientIp = value.split(',')[0]?.trim();
+    if (clientIp) return clientIp;
+  }
+
+  const realIp = req.headers['x-real-ip'];
+  const realValue = Array.isArray(realIp) ? realIp[0] : realIp;
+  if (realValue && typeof realValue === 'string' && realValue.trim()) {
+    return realValue.trim();
+  }
+
+  const cfIp = req.headers['cf-connecting-ip'];
+  const cfValue = Array.isArray(cfIp) ? cfIp[0] : cfIp;
+  if (cfValue && typeof cfValue === 'string' && cfValue.trim()) {
+    return cfValue.trim();
+  }
+
+  return 'fallback-ip';
 }
 
 function check(bucketKey: string, windowMs: number, max: number) {
   const now = Date.now();
+  pruneExpiredBuckets(now);
+
   const bucket = buckets.get(bucketKey);
   if (!bucket || now >= bucket.resetAt) {
     buckets.set(bucketKey, { count: 1, resetAt: now + windowMs });
@@ -51,6 +97,58 @@ function check(bucketKey: string, windowMs: number, max: number) {
     remaining: Math.max(0, max - bucket.count),
     resetAt: bucket.resetAt,
   };
+}
+
+/**
+ * Verifies that the request originates from the same site / host, protecting
+ * API endpoints against unauthorized cross-site requests (CSRF / cross-site quota draining).
+ * Returns true if the request was blocked (403 sent), false if allowed.
+ */
+export function enforceSameOrigin(
+  req: MinimalRequest,
+  res: MinimalResponse
+): boolean {
+  // 1. Check Sec-Fetch-Site (supported by modern Chromium, Firefox, and Safari browsers)
+  const secFetchSite = req.headers['sec-fetch-site'];
+  const fetchSiteValue = Array.isArray(secFetchSite) ? secFetchSite[0] : secFetchSite;
+  if (fetchSiteValue === 'cross-site') {
+    res.status(403).json({
+      error: 'Cross-site requests to AI endpoints are forbidden.',
+      status: 403,
+    });
+    return true;
+  }
+
+  // 2. If Origin header is present (POST/PUT/DELETE requests in browsers), validate domain
+  const origin = req.headers['origin'];
+  const originValue = Array.isArray(origin) ? origin[0] : origin;
+  if (originValue && typeof originValue === 'string') {
+    try {
+      const url = new URL(originValue);
+      const hostHeader = req.headers['host'];
+      const hostValue = Array.isArray(hostHeader) ? hostHeader[0] : hostHeader;
+
+      const isLocalhost = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+      const isHostMatch = hostValue && (url.host === hostValue || hostValue.startsWith(`${url.host}:`));
+      const isVercelDeploy = url.hostname.endsWith('.vercel.app');
+
+      if (!isLocalhost && !isHostMatch && !isVercelDeploy) {
+        res.status(403).json({
+          error: 'Unauthorized origin for API requests.',
+          status: 403,
+        });
+        return true;
+      }
+    } catch {
+      res.status(403).json({
+        error: 'Invalid request origin header.',
+        status: 403,
+      });
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export interface RateLimitOptions {

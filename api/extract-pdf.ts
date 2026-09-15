@@ -1,11 +1,51 @@
 import { getAI, mapError, logStructured, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient.js';
-import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
+import { enforceRateLimit, enforceSameOrigin, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
 // Mirrors the 3 MB client-side cap (see DocumentVault.tsx) with base64's 4/3
 // overhead; Vercel would reject anything larger at the edge anyway.
 const MAX_BASE64_CHARS = 4 * 1024 * 1024 * 4 / 3;
 const ALLOWED_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp']);
+
+/**
+ * Validates the file's binary magic bytes against its declared MIME type.
+ * Decodes only the leading bytes of the base64 string for memory efficiency.
+ */
+function validateFileSignature(base64Data: string, mimeType: string): boolean {
+  try {
+    const prefixBuffer = Buffer.from(base64Data.slice(0, 64), 'base64');
+    if (prefixBuffer.length < 4) return false;
+
+    // PDF: %PDF- (0x25, 0x50, 0x44, 0x46)
+    if (mimeType === 'application/pdf') {
+      return prefixBuffer.subarray(0, 4).toString('ascii') === '%PDF';
+    }
+    // PNG: 0x89, 0x50, 0x4E, 0x47 (\x89PNG)
+    if (mimeType === 'image/png') {
+      return (
+        prefixBuffer[0] === 0x89 &&
+        prefixBuffer[1] === 0x50 &&
+        prefixBuffer[2] === 0x4e &&
+        prefixBuffer[3] === 0x47
+      );
+    }
+    // JPEG: 0xFF, 0xD8, 0xFF
+    if (mimeType === 'image/jpeg') {
+      return prefixBuffer[0] === 0xff && prefixBuffer[1] === 0xd8 && prefixBuffer[2] === 0xff;
+    }
+    // WEBP: RIFF....WEBP
+    if (mimeType === 'image/webp') {
+      return (
+        prefixBuffer.length >= 12 &&
+        prefixBuffer.subarray(0, 4).toString('ascii') === 'RIFF' &&
+        prefixBuffer.subarray(8, 12).toString('ascii') === 'WEBP'
+      );
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 function sendResponse(res: any, statusCode: number, data: any) {
   try {
@@ -32,6 +72,7 @@ export default async function handler(req: any, res: any) {
       return sendResponse(res, 405, { error: 'Method Not Allowed' });
     }
 
+    if (enforceSameOrigin(req, res)) return;
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
     if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 
@@ -47,6 +88,11 @@ export default async function handler(req: any, res: any) {
     }
     if (!ALLOWED_MIME_TYPES.has(mimeType)) {
       return sendResponse(res, 415, { error: 'Unsupported file type. Please upload a PDF, JPG, or PNG document.' });
+    }
+    if (!validateFileSignature(base64Data, mimeType)) {
+      return sendResponse(res, 400, {
+        error: 'Invalid file format or corrupted file signature. Please upload a genuine PDF, JPG, PNG, or WebP document.',
+      });
     }
 
     logStructured('info', `Document received for extraction. Size: ~${Math.round(base64Data.length * 0.75)} bytes, type: ${mimeType}`, {

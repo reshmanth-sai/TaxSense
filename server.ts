@@ -14,6 +14,27 @@ const app = express();
 // any route so it covers both the static bundle and the JSON/SSE API responses.
 // The SSE chat stream sets `Cache-Control: no-transform` (see /api/chat), which
 // compression honours by skipping it, so token-by-token streaming is unaffected.
+// Disable Express header disclosure
+app.disable('x-powered-by');
+
+// Security headers: mirror vercel.json for direct Node.js/container hosting
+app.use((_req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com; connect-src 'self' https://www.googleapis.com https://accounts.google.com; frame-src https://accounts.google.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+    );
+  }
+  next();
+});
+
 app.use(compression());
 
 app.use(express.json({ limit: '15mb' }));

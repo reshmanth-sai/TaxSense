@@ -611,35 +611,49 @@ export default function App() {
     }
   }, [hydrated, location.pathname, location.search, authMode, navigate]);
 
-  // Guest Session Inactivity Expiry (15 minutes)
+  // Active Tax Session Inactivity Expiry (15 minutes)
   useEffect(() => {
-    if (authMode === 'GUEST') {
+    if (authMode) {
+      const maxInactiveMs = 15 * 60 * 1000; // 15 minutes of inactivity
+
       const checkExpiry = () => {
-        const lastActive = localStorage.getItem('taxsense_last_active');
-        if (lastActive) {
-          const inactiveMs = Date.now() - parseInt(lastActive, 10);
-          const maxInactiveMs = 15 * 60 * 1000; // 15 minutes of inactivity
-          if (inactiveMs > maxInactiveMs) {
-            clearSession();
-            navigateToStep(2);
-            alert("Your guest session has expired due to 15 minutes of inactivity.");
+        try {
+          const lastActiveStr = sessionStorage.getItem('taxsense_last_active') || localStorage.getItem('taxsense_last_active');
+          if (lastActiveStr) {
+            const inactiveMs = Date.now() - parseInt(lastActiveStr, 10);
+            if (inactiveMs > maxInactiveMs) {
+              clearSession();
+              sessionStorage.removeItem('taxsense_last_active');
+              localStorage.removeItem('taxsense_last_active');
+              navigateToStep(2);
+              alert("Your tax session has expired after 15 minutes of inactivity for privacy and security.");
+            }
           }
-        }
+        } catch {}
       };
 
-      // Set initial activity
-      localStorage.setItem('taxsense_last_active', Date.now().toString());
+      // Check immediately on mount/re-focus
+      checkExpiry();
+
+      // Set initial activity in sessionStorage
+      const now = Date.now();
+      try {
+        sessionStorage.setItem('taxsense_last_active', now.toString());
+        localStorage.removeItem('taxsense_last_active');
+      } catch {}
 
       // Setup interval to check inactivity
       const interval = setInterval(checkExpiry, 30000); // Check every 30 seconds
 
       // Listen to user interaction events to refresh inactivity timer (throttled to once per 5s)
-      let lastWrite = 0;
+      let lastWrite = now;
       const refreshActivity = () => {
-        const now = Date.now();
-        if (now - lastWrite > 5000) {
-          localStorage.setItem('taxsense_last_active', now.toString());
-          lastWrite = now;
+        const current = Date.now();
+        if (current - lastWrite > 5000) {
+          try {
+            sessionStorage.setItem('taxsense_last_active', current.toString());
+          } catch {}
+          lastWrite = current;
         }
       };
 

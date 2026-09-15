@@ -111,7 +111,9 @@ export function mapError(error: any): AppError {
   if (message.includes('GEMINI_API_KEY') || message.includes('API_KEY') || message.includes('missing or empty')) {
     status = 500;
     category = 'MISSING_API_KEY';
-    userMessage = 'GEMINI_API_KEY is not configured in your Vercel environment variables. Please add GEMINI_API_KEY to Vercel Project Settings > Environment Variables and redeploy.';
+    userMessage = process.env.NODE_ENV === 'production'
+      ? 'AI service configuration is currently unavailable. Please contact support.'
+      : 'GEMINI_API_KEY is not configured in your Vercel environment variables. Please add GEMINI_API_KEY to Vercel Project Settings > Environment Variables and redeploy.';
   } else if (statusStr === 'UNAUTHENTICATED' || statusStr === '401' || message.includes('401') || message.includes('UNAUTHENTICATED') || message.includes('API key')) {
     status = 401;
     category = 'UNAUTHENTICATED';

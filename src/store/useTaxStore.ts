@@ -3,27 +3,49 @@ import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { useState, useEffect } from 'react';
 import { TaxData } from '../types';
 
-// Plain localStorage, gated by the incognito flag. Nothing here is encrypted --
-// anyone with DevTools on this machine can read it -- which is why the raw
-// Form 16 text is deliberately NOT in `partialize` below: only the extracted
-// figures survive a reload, never the source document.
+// Session-scoped storage (sessionStorage) with automatic legacy migration.
+// Storing sensitive financial PII in sessionStorage ensures that all tax data
+// is automatically scrubbed by the browser when the tab or window is closed,
+// preventing taxpayer records from lingering unencrypted in persistent storage.
 const sessionCacheStorage: StateStorage = {
   getItem: (name) => {
     if (typeof window === 'undefined') return null;
     if (sessionStorage.getItem('taxsense_incognito') === 'true') {
       return null;
     }
-    return localStorage.getItem(name);
+    // Check sessionStorage first
+    const sessionVal = sessionStorage.getItem(name);
+    if (sessionVal !== null) return sessionVal;
+
+    // Migrate from legacy localStorage if present, then scrub legacy entry
+    try {
+      const legacyVal = localStorage.getItem(name);
+      if (legacyVal !== null) {
+        sessionStorage.setItem(name, legacyVal);
+        localStorage.removeItem(name);
+        return legacyVal;
+      }
+    } catch {
+      // Ignore storage access exceptions
+    }
+    return null;
   },
   setItem: (name, value) => {
     if (typeof window === 'undefined') return;
     if (sessionStorage.getItem('taxsense_incognito') !== 'true') {
-      localStorage.setItem(name, value);
+      sessionStorage.setItem(name, value);
     }
+    // Ensure sensitive PII does not linger in persistent localStorage
+    try {
+      localStorage.removeItem(name);
+    } catch {}
   },
   removeItem: (name) => {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem(name);
+    sessionStorage.removeItem(name);
+    try {
+      localStorage.removeItem(name);
+    } catch {}
   },
 };
 
@@ -562,6 +584,7 @@ export const useTaxStore = create<TaxStoreState>()(
         if (typeof window !== 'undefined') {
           if (val) {
             sessionStorage.setItem('taxsense_incognito', 'true');
+            sessionStorage.removeItem('taxsense_session_cache');
             localStorage.removeItem('taxsense_session_cache');
           } else {
             sessionStorage.removeItem('taxsense_incognito');
@@ -576,6 +599,7 @@ export const useTaxStore = create<TaxStoreState>()(
       
       purgeSession: () => {
         if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('taxsense_session_cache');
           localStorage.removeItem('taxsense_session_cache');
           sessionStorage.removeItem('taxsense_incognito');
         }
@@ -607,8 +631,9 @@ export const useTaxStore = create<TaxStoreState>()(
       },
 
       clearSession: () => {
-        // Clear from localStorage explicitly
+        // Clear from both sessionStorage and localStorage explicitly
         if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('taxsense_session_cache');
           localStorage.removeItem('taxsense_session_cache');
         }
         // Reset state (preserves history)

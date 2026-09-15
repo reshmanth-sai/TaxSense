@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateContentStreamWithLogging, mapError, DEFAULT_GEMINI_MODEL } from '../services/ai/googleClient.js';
 import { buildSystemPrompt, validateChatContext } from '../services/ai/promptBuilder.js';
-import { enforceRateLimit, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
+import { enforceRateLimit, enforceSameOrigin, API_RATE_LIMIT, AI_RATE_LIMIT } from '../services/rateLimit.js';
 import crypto from 'crypto';
 
 // Bounds on what a single request may send to Gemini. The client trims its
@@ -19,6 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
+    if (enforceSameOrigin(req, res)) return;
     if (enforceRateLimit(req, res, 'api', API_RATE_LIMIT)) return;
     if (enforceRateLimit(req, res, 'ai', AI_RATE_LIMIT)) return;
 

@@ -287,10 +287,18 @@ export default function FilingGuide({ isOpen, onClose }: FilingGuideProps) {
   const formType = useTaxStore((state) => state.formType);
   const [selectedItr, setSelectedItr] = useState<'itr1' | 'itr2'>('itr1');
 
-  // Load state from localStorage on mount
+  // Load state from sessionStorage on mount (with legacy localStorage migration)
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('taxsense_filing_guide_progress');
+      let stored = sessionStorage.getItem('taxsense_filing_guide_progress');
+      if (!stored) {
+        const legacyStored = localStorage.getItem('taxsense_filing_guide_progress');
+        if (legacyStored) {
+          sessionStorage.setItem('taxsense_filing_guide_progress', legacyStored);
+          localStorage.removeItem('taxsense_filing_guide_progress');
+          stored = legacyStored;
+        }
+      }
       if (stored) {
         setCompletedItems(JSON.parse(stored));
       }
@@ -308,13 +316,16 @@ export default function FilingGuide({ isOpen, onClose }: FilingGuideProps) {
     }
   }, [formType]);
 
-  // Sync state to localStorage on modification
+  // Sync state to sessionStorage on modification
   const toggleItem = (id: string) => {
     setCompletedItems(prev => {
       const updated = prev.includes(id) 
         ? prev.filter(item => item !== id)
         : [...prev, id];
-      localStorage.setItem('taxsense_filing_guide_progress', JSON.stringify(updated));
+      try {
+        sessionStorage.setItem('taxsense_filing_guide_progress', JSON.stringify(updated));
+        localStorage.removeItem('taxsense_filing_guide_progress');
+      } catch {}
       return updated;
     });
   };
@@ -322,7 +333,10 @@ export default function FilingGuide({ isOpen, onClose }: FilingGuideProps) {
   const resetProgress = () => {
     if (window.confirm('Are you sure you want to reset your checklist progress?')) {
       setCompletedItems([]);
-      localStorage.removeItem('taxsense_filing_guide_progress');
+      try {
+        sessionStorage.removeItem('taxsense_filing_guide_progress');
+        localStorage.removeItem('taxsense_filing_guide_progress');
+      } catch {}
     }
   };
 

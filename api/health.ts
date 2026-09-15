@@ -14,9 +14,10 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (error: any) {
     console.error('Health Check Failed:', error);
+    const isProd = process.env.NODE_ENV === 'production';
     res.status(500).json({ 
       status: 'error', 
-      message: error.message || 'Environment validation failed' 
+      message: isProd ? 'Environment health check failed.' : (error.message || 'Environment validation failed')
     });
   }
 }

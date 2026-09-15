@@ -49,7 +49,10 @@ export class ErrorBoundary extends Component<Props, State> {
               <button
                 onClick={() => {
                   // Purge cache and retry
-                  localStorage.removeItem('taxsense_session_cache');
+                  try {
+                    sessionStorage.removeItem('taxsense_session_cache');
+                    localStorage.removeItem('taxsense_session_cache');
+                  } catch {}
                   window.location.reload();
                 }}
                 className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-450 text-slate-950 font-black text-xs rounded-xl flex items-center justify-center gap-1.5 active:scale-98 transition-all cursor-pointer shadow-lg"
